@@ -36,21 +36,21 @@ const Review = () => {
             fullname: "John Doe", rule: "General Manager", desc: `Lorem Ipsum is simply dummy text of the printing and
           typesetting industry. Lorem Ipsum has been the industry's standard dummy text
           ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen` , avatar: "https://loopinfosol.in/themeforest/ekka-html-v3/ekka-html/assets/images/testimonial/1.jpg"
+          scrambled it to make a type specimen` , avatar: "/assets/imgs/ws-profile-1.jpg"
         },
 
         {
             fullname: "John Doe", rule: "General Manager", desc: `Lorem Ipsum is simply dummy text of the printing and
           typesetting industry. Lorem Ipsum has been the industry's standard dummy text
           ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen` , avatar: "https://loopinfosol.in/themeforest/ekka-html-v3/ekka-html/assets/images/testimonial/2.jpg"
+          scrambled it to make a type specimen` , avatar: "/assets/imgs/ws-profile-2.jpg"
         },
 
         {
             fullname: "John Doe", rule: "General Manager", desc: `Lorem Ipsum is simply dummy text of the printing and
           typesetting industry. Lorem Ipsum has been the industry's standard dummy text
           ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen` , avatar: "https://loopinfosol.in/themeforest/ekka-html-v3/ekka-html/assets/images/testimonial/3.jpg"
+          scrambled it to make a type specimen` , avatar: "/assets/imgs/ws-profile-3.jpg"
         }
     ]
 
@@ -82,7 +82,7 @@ const Review = () => {
                                         return (
                                             <li key={ti} className="ec-test-item">
 
-                                                <img src="https://loopinfosol.in/themeforest/ekka-html-v3/ekka-html/assets/images/testimonial/top-quotes.svg" className="svg_img test_svg top"
+                                                <img src="/assets/imgs/ws-top-quotes.svg" className="svg_img test_svg top"
                                                     alt="" />
                                                     
                                                 <div className="ec-test-inner">
@@ -103,7 +103,7 @@ const Review = () => {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <img src="https://loopinfosol.in/themeforest/ekka-html-v3/ekka-html/assets/images/testimonial/bottom-quotes.svg" className="svg_img test_svg bottom"
+                                                <img src="/assets/imgs/ws-bottom-quotes.svg" className="svg_img test_svg bottom"
                                                     alt="" />
                                             </li>
                                         )

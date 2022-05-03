@@ -204,7 +204,7 @@ const Checkout = () => {
                 country, city, postcode, state, comment, shipping, products, 
                 transactionId , transactionState , authorization))
 
-                           alert("your payment was successful please check your orders")
+                toast.success(t("your payment was successful please check your orders"))
 
 
         }
