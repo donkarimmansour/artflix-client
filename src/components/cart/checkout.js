@@ -16,6 +16,8 @@ import { CLEAR_MESSAGE } from "../../redux/constans/message";
 const Checkout = () => {
     const navigate = useNavigate()
     const formiRef = useRef()
+    const { t } = useTranslation();
+    const dispatch = useDispatch()
 
     const { isAuth , token , user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
@@ -36,9 +38,6 @@ const Checkout = () => {
     const [ShippingCost, setShippingCost] = useState(0)
     const [Comment, setComment] = useState("...")
     const [Amount, setAmount] = useState(0)
-
-    const { t } = useTranslation();
-    const dispatch = useDispatch()
 
     const { carts } = useSelector(state => state.carts)
     const { loading } = useSelector(state => state.loading)

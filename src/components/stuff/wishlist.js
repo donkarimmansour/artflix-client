@@ -47,12 +47,12 @@ const Wishlist = (props) => {
 
     const addToCart = (product) => {
        dispatch(create_carts(product))  
-       toast.success(t("Added"))
+       toast.info(t("Added"))
     }
 
     const removeFromWishList = (id) => {
         dispatch(delete_wishlist(id , authorization))
-        toast.success(t("Removed"))
+        toast.info(t("Removed"))
     }
 
     const quickView = (productId) => {
@@ -107,7 +107,7 @@ const Wishlist = (props) => {
                                                         {mwishlist.productId.condition == "new" && <span className="new">{t("New")}</span>}
                                                     </span>
 
-                                                    {mwishlist.productId.oldprice && <span className="percentage">{Math.ceil(mwishlist.productId.price * (mwishlist.productId.oldprice / 100))}%</span>}
+                                                    {mwishlist.productId.oldprice && <span className="percentage">{Math.floor( Math.floor(mwishlist.productId.price * Math.floor(mwishlist.productId.oldprice - mwishlist.productId.price) ) / 100 )}%</span>}
 
                                                     <div className="ec-pro-actions">
                                                         <button title="Add To Cart" className="ec-btn-group compare"  onClick={() => {addToCart(mwishlist.productId)}}><i className="fas fa-cart-plus"></i></button>
