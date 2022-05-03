@@ -9,8 +9,9 @@ import { create_wishlist } from "../../redux/actions/wishlist";
 import { create_carts } from "../../redux/actions/carts";
 import { getLocalStorage } from "../../shared/localStorage";
 import { getCookie } from "../../shared/cookie";
-import { isAuthentication } from "../../shared/auth";
+import { isAuthentication } from "../../redux/actions/auth"
 import { get_catigories } from "../../redux/actions/categories";
+import { toast } from "react-toastify";
 
 
 
@@ -35,6 +36,13 @@ const Category = (props) => {
     const dispatch = useDispatch()
     const { filters, count, sizes, colors } = useSelector(state => state.products)
     const { catigories } = useSelector(state => state.catigories)
+    const { isAuth, token, user } = useSelector((state) => state.auth);
+    const authorization = { "Authorization": `bearer ${token}` }
+
+    useEffect(() => {
+        dispatch(isAuthentication());
+    }, [dispatch]);
+
 
 
     useEffect(() => {
@@ -262,21 +270,18 @@ const Category = (props) => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-        alert(t("Added"))
+        toast.info(t("Added"))
 
     }
-
-    const authorization = isAuthentication() ? { "Authorization": `bearer ${getCookie("token")}` } : [{ _id: "" }]
-    const userId = localStorage.getItem("user") ? getLocalStorage("user") : [{ _id: "" }]
 
 
     const addToWishList = (productId, userId) => {
 
-        if (!isAuthentication()) {
+        if (!isAuth) {
             navigate("/login")
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
-            alert(t("Added"))
+            toast.info(t("Added"))
 
         }
 
@@ -407,7 +412,7 @@ const Category = (props) => {
 
                                                                     <div className="ec-pro-actions">
                                                                         <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(product) }}><i className="fas fa-cart-plus"></i></button>
-                                                                        <button className="ec-btn-group wishlist" title="Wishlist" onClick={() => { addToWishList(product._id, userId._id) }}><i className="far fa-heart"></i></button >
+                                                                        <button className="ec-btn-group wishlist" title="Wishlist" onClick={() => { addToWishList(product._id, user._id) }}><i className="far fa-heart"></i></button >
                                                                     </div>
                                                                     <a href="javascript:void(0);" className="quickview" title="Quick view" onClick={() => { quickView(product._id) }}><i className="far fa-eye"></i></a>
 

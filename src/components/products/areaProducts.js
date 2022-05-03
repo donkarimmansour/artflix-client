@@ -159,7 +159,7 @@ const AreaProducts = (props) => {
                                                                                 {prdct.product.condition == "new" && <span className="new">{t("New")}</span>}
                                                                             </span>
 
-                                                                            {prdct.product.oldprice && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
+                                                                            {prdct.product.oldprice && <span className="percentage">{Math.floor( Math.floor(prdct.product.price * Math.floor(prdct.product.oldprice - prdct.product.price) ) / 100 )}%</span>}
 
                                                                             <div className="ec-pro-actions">
                                                                                 <button title="Add To Cart" className="ec-btn-group compare" onClick={() => {addToCart(prdct.product)}}><i className="fas fa-cart-plus"></i></button>
