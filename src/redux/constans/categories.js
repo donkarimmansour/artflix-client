@@ -1,0 +1,5 @@
+const GET_CATIGORIES = "GET_CATIGORIES" ;
+
+export {
+    GET_CATIGORIES
+}
