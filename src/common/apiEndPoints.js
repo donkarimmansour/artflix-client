@@ -1,7 +1,7 @@
 
 const Host = {
   ROOT: "http://localhost:3000",
-  BACKEND: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3001" : "https://cheap-shop-api.herokuapp.com" ,
+  BACKEND: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3001" : "https://artflix-back.herokuapp.com" ,
   PREFIX: "/v1/api", 
 };
  

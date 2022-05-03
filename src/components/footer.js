@@ -319,7 +319,7 @@ const Footer = () => {
                                 <div className="col-sm-12 col-lg-3 ec-footer-contact">
                                     <div className="ec-footer-widget">
 
-                                        <div className="ec-footer-logo"><img src="/assets/imgs/ws-logo.png" alt="" /></div>
+                                        <div className="ec-footer-logo"><img src="/assets/imgs/ws-artflix.png" alt="" /></div>
                                             
                                     
                                         <h4 className="ec-footer-heading">{t("Contact us")} <div className='ec-heading-res' onClick={(e) => {handleDropdown(e)}}><i className='ecicon eci-angle-down'></i></div></h4>
