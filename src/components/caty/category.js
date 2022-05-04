@@ -269,7 +269,7 @@ const Category = (props) => {
     }
 
     const addToCart = (product) => {
-        dispatch(create_carts(product))
+        dispatch(create_carts(product)) 
         toast.info(t("Added"))
 
     }
@@ -392,7 +392,7 @@ const Category = (props) => {
 
                                                 return (
 
-                                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 pro-gl-content" data-aos="flip-up">
+                                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 pro-gl-content" >
 
                                                         <div className="ec-product-inner">
                                                             <div className="ec-pro-image-outer">

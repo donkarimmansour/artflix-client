@@ -45,14 +45,14 @@ const SingleProduct = () => {
         rows: 1,
     };
 
-
+ 
     
     const dispatch = useDispatch()
     const { singleproduct, extraproducts } = useSelector(state => state.products)//, sort : '{ "uptatedAt": 1 }'
     const { isAuth , token , user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
 
-
+ 
     useEffect(() => {
         dispatch(isAuthentication());
 

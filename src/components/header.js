@@ -364,14 +364,14 @@ const Header = () => {
                             {/* <!-- Ec Header Logo Start --> */}
                             <div className="col">
                                 <div className="header-logo">
-                                    <a href="index">
+                                    <Link to="/">
                                         <img
                                             src="/assets/imgs/ws-artflix.png"
                                             alt="Site Logo" />
                                         <img className="dark-logo"
                                             src="/assets/imgs/ws-artflix.png"
                                             alt="Site Logo" style={{ display: "none" }} />
-                                    </a>
+                                    </Link>
                                 </div>
                             </div>
                             {/* <!-- Ec Header Logo End -->

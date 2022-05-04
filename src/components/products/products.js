@@ -58,7 +58,7 @@ const Products = (props) => {
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
             toast.info(t("Added"))
-
+ 
         }
 
     }
@@ -104,7 +104,7 @@ const Products = (props) => {
                         
                                 return (
 
-                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content" data-aos="flip-up">
+                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content" >
  
                                         <div className="ec-product-inner">
                                             <div className="ec-pro-image-outer">

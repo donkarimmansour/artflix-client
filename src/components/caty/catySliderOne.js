@@ -103,7 +103,7 @@ const CatySlideOne = (props) => {
                                             }
                                             return (
                                              
-                                                    <div key={i} className="ec_cat_slider" data-aos="flip-left">
+                                                    <div key={i} className="ec_cat_slider" >
                                                         <div className="ec_cat_content" style={{ width: "100%", display: "inline-block" }}>
                                                             <div className="ec_cat_inner">
                                                                 <div className="ec-cat-image">

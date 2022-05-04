@@ -109,7 +109,7 @@ const FeatureAndLimit = (props) => {
     const addToWishList = (productId, userId) => {
 
         if (!isAuth) {
-            navigate("/login")
+            navigate("/login") 
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
             toast.info(t("Added"))
@@ -133,7 +133,7 @@ const FeatureAndLimit = (props) => {
             <div className="container">
                 <div className="row">
                     {/* <!--  Feature Section Start --> */}
-                    <div className="ec-fre-section col-lg-6 col-md-6 col-sm-6 margin-b-30" data-aos="flip-right">
+                    <div className="ec-fre-section col-lg-6 col-md-6 col-sm-6 margin-b-30" >
                         <div className="col-md-12 text-left">
                             <div className="section-title">
                                 <h2 className="ec-bg-title">{t("Feature Items")}</h2>
@@ -228,7 +228,7 @@ const FeatureAndLimit = (props) => {
 
 
                 <!--  Special Section Start --> */}
-                    <div className="ec-spe-section col-lg-6 col-md-6 col-sm-6" data-aos="flip-left"
+                    <div className="ec-spe-section col-lg-6 col-md-6 col-sm-6" 
                         data-animated="true">
                         <div className="col-md-12 text-left">
                             <div className="section-title">

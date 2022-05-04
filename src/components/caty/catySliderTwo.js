@@ -73,7 +73,7 @@ const CatySlideTwo = (props) => {
 
     return (
 
-
+ 
         <Fragment>
             {Products && Products.length > 0 &&
 
@@ -105,7 +105,7 @@ const CatySlideTwo = (props) => {
 
 
                                     return (
-                                        <div key={i} className="col-lg-2 col-md-4 col-sm-12" data-aos="flip-left">
+                                        <div key={i} className="col-lg-2 col-md-4 col-sm-12">
                                             <div className="cat-card">
                                                 <div className="card-img">
                                                     <img className="cat-icon"
