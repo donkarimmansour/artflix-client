@@ -30,9 +30,9 @@ const Footer = () => {
 
     useEffect(() => {
 
-        AOS.init({
-            duration: 2000
-        });
+        // AOS.init({
+        // //    duration: 2000
+        // });
 
 
         const clearPupup = setInterval(() => {
