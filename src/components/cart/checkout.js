@@ -28,7 +28,7 @@ const Checkout = () => {
 
     useEffect(() => {
         if (!isAuth) {
-            navigate("/");
+            navigate("/login");
         }
     }, [isAuth]);
 
@@ -205,14 +205,14 @@ const Checkout = () => {
                 transactionId , transactionState , authorization))
 
                 toast.success(t("your payment was successful please check your orders"))
-
+                navigate("/profile")
 
         }
     }
 
     return (
         // <!-- Start checkout page -->
-        <section className="ec-page-content section-space-p">
+        <section className="ec-page-content section-space-p checkout_page">
             {loading && loader()}
 
             <div className="container"> 

@@ -8,6 +8,7 @@ import { create_wishlist } from "../../redux/actions/wishlist";
 import Slider from "react-slick";
 import { isAuthentication} from "../../redux/actions/auth"
 import { toast } from "react-toastify";
+import AOS from 'aos';
 
 const FeatureAndLimit = (props) => {
     const { t } = useTranslation();
@@ -29,13 +30,14 @@ const FeatureAndLimit = (props) => {
     const { isAuth , token , user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
 
+
+    useEffect(() => { AOS.init({ duration: 800 }); }, []);
+
     useEffect(() => {
         dispatch(isAuthentication());
       }, [dispatch]);
     
-      
-
-
+    
 
     useEffect(() => {
         dispatch(get_feature_products({ filter: {}, limit, skip, sort: '{"viewcount" : -1}' }))
@@ -146,7 +148,7 @@ const FeatureAndLimit = (props) => {
                                 FeatureProducts.map((product, pi) => {
                                     return (
 
-                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }}>
+                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }} data-aos="fade-left">
                                             <div className="ec-fs-pro-inner">
 
                                                 <div className="ec-fs-pro-image-outer col-lg-6 col-md-6 col-sm-6">
@@ -232,7 +234,7 @@ const FeatureAndLimit = (props) => {
                         data-animated="true">
                         <div className="col-md-12 text-left">
                             <div className="section-title">
-                                <h2 className="ec-bg-title">{t("Limited Time Offer")}</h2>
+                                 <h2 className="ec-bg-title">{t("Limited Time Offer")}</h2>
                                 <h2 className="ec-title">{t("Limited Time Offer")}</h2>
                             </div>
                         </div>
@@ -245,7 +247,7 @@ const FeatureAndLimit = (props) => {
                                     return (
 
 
-                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }}>
+                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }} data-aos="fade-right">
                                             <div className="ec-fs-pro-inner">
 
                                                 <div className="ec-fs-pro-image-outer col-lg-6 col-md-6 col-sm-6">

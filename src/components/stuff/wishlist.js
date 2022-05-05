@@ -8,7 +8,7 @@ import { Link , useNavigate} from "react-router-dom";import { create_carts } fro
 import { delete_wishlist, get_wishlist } from "../../redux/actions/wishlist";
 import { isAuthentication} from "../../redux/actions/auth"
 import { toast } from "react-toastify";
-
+import AOS from 'aos';
 
 const Wishlist = (props) => {
     const { t } = useTranslation();
@@ -25,7 +25,9 @@ const Wishlist = (props) => {
     const { isAuth , token , user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
 
-    useEffect(() => {
+    useEffect(() => { AOS.init({ duration: 800 }); }, []);
+
+      useEffect(() => {
         dispatch(isAuthentication());
       }, [dispatch]);
     
@@ -91,7 +93,7 @@ const Wishlist = (props) => {
 
                                 return (
 
-                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content flipInY" >
+                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content" data-aos="fade-up">
 
                                         <div className="ec-product-inner">
                                             <div className="ec-pro-image-outer">
@@ -113,7 +115,7 @@ const Wishlist = (props) => {
                                                         <button title="Add To Cart" className="ec-btn-group compare"  onClick={() => {addToCart(mwishlist.productId)}}><i className="fas fa-cart-plus"></i></button>
                                                         <button className="ec-btn-group wishlist" title="Wishlist" onClick={() => {removeFromWishList(mwishlist._id)}}><i className="fa-solid fa-heart-crack"></i></button >
                                                     </div>
-                                                    <a href="#" className="quickview" title="Quick view"  data-toggle="modal" data-target="#ec_quickview_modal" onClick={() => {quickView(mwishlist.productId._id)}}><i className="far fa-eye"></i></a>
+                                                    <a href="javascript:void(0)" className="quickview" title="Quick view"  data-toggle="modal" data-target="#ec_quickview_modal" onClick={() => {quickView(mwishlist.productId._id)}}><i className="far fa-eye"></i></a>
 
                                                 </div>
                                             </div>
@@ -143,7 +145,7 @@ const Wishlist = (props) => {
                                                     {mwishlist.productId.color.length > 0 &&
                                                         <div className="ec-pro-color">
                                                             <span className="ec-pro-opt-label">{t("Color")}</span>
-                                                            <ul className="ec-opt-swatch ec-change-img">
+                                                             <ul className="ec-opt-swatch ec-change-img">
 
                                                                  {mwishlist.productId.color.map((color, index) => {
                                                                     return (

@@ -12,7 +12,7 @@ import { getCookie } from "../../shared/cookie";
 import { isAuthentication } from "../../redux/actions/auth"
 import { get_catigories } from "../../redux/actions/categories";
 import { toast } from "react-toastify";
-
+import AOS from 'aos';
 
 
 const Category = (props) => {
@@ -38,6 +38,8 @@ const Category = (props) => {
     const { catigories } = useSelector(state => state.catigories)
     const { isAuth, token, user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
+
+    useEffect(() => { AOS.init({ duration: 800 }); }, []);
 
     useEffect(() => {
         dispatch(isAuthentication());
@@ -392,7 +394,7 @@ const Category = (props) => {
 
                                                 return (
 
-                                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 pro-gl-content" >
+                                                    <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 pro-gl-content" data-aos="fade-up">
 
                                                         <div className="ec-product-inner">
                                                             <div className="ec-pro-image-outer">
@@ -441,7 +443,7 @@ const Category = (props) => {
                                                                 {/* <div className="ec-pro-rating">
                                                                         {
                                                                             calculateRating().map((star, i) => {
-                                                                                return (
+                                                                                 return (
                                                                                     <i key={i} className={star} style={{ color: "#eec317" }}></i>
                                                                                 )
                                                                             })

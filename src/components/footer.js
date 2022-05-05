@@ -12,7 +12,6 @@ import { CLEAR_MESSAGE } from "../redux/constans/message"
 import { Link } from "react-router-dom"
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
-import AOS from 'aos';
 
 const Footer = () => {
     const { t } = useTranslation();
@@ -29,11 +28,6 @@ const Footer = () => {
     const { count, randomproduct } = useSelector(state => state.products)
 
     useEffect(() => {
-
-        // AOS.init({
-        // //    duration: 2000
-        // });
-
 
         const clearPupup = setInterval(() => {
             setPupup(true)

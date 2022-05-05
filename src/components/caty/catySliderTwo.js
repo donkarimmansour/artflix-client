@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { get_catytwo } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
-
+import AOS from 'aos';
 
 const CatySlideTwo = (props) => {
     const { t } = useTranslation();
@@ -18,6 +18,7 @@ const CatySlideTwo = (props) => {
     const dispatch = useDispatch()
     const { catytwo } = useSelector(state => state.products)
 
+    useEffect(() => { AOS.init({ duration: 500 }); }, []);
 
     useEffect(() => {
         dispatch(get_catytwo({ filter: caty, limit, skip, sort, catyName: props.caty }))
@@ -104,8 +105,8 @@ const CatySlideTwo = (props) => {
                                         }
 
 
-                                    return (
-                                        <div key={i} className="col-lg-2 col-md-4 col-sm-12">
+                                     return (
+                                        <div key={i} className="col-lg-2 col-md-4 col-sm-12" data-aos="flip-up">
                                             <div className="cat-card">
                                                 <div className="card-img">
                                                     <img className="cat-icon"

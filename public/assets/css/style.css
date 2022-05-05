@@ -33520,3 +33520,65 @@ input[type=email]:focus::-webkit-input-placeholder {
   color: #db4040;
   text-align: center;
 }
+
+.labelformat {
+    float: left;
+    width: auto;
+    font-size: 16px;
+    color: #555555;
+    line-height: 1.4;
+}
+
+.displaySection {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    background-color: #f7f7f7;
+    min-width: 60px;
+    padding: 10px 5px;
+}
+
+.numberDisplay {
+    font-size: 18px;
+    min-height: unset;
+    min-width: auto;
+    color: #777;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    background-color: transparent;
+}
+
+.numberDisplay {
+    font-size: 18px;
+    min-height: unset;
+    min-width: auto;
+    color: #777;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 500;
+    letter-spacing: 0;
+    line-height: 1.2;
+    margin-bottom: 5px;
+    background-color: transparent;
+}
+
+.numberDisplay {
+    color: #686868;
+    background-color: #fff;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 10px;
+}
+.periodDisplay {
+    font-weight: 400;
+}
+
+

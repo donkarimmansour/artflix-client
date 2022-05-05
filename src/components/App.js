@@ -144,7 +144,7 @@ const App = () => {
               </Suspense> 
 
               <Suspense fallback={<IndexPage />}>
-                <AreaProducts caty='["attract the attention" , "boku no hero academian" , "kimetsu no yaiba" , "hunter × hunter"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
+                <AreaProducts caty='["attract the attention" , "boku no hero academian"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
               </Suspense>
 
               <Suspense fallback={<IndexPage />}>

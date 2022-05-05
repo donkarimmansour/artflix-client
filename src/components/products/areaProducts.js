@@ -9,6 +9,7 @@ import { create_wishlist } from "../../redux/actions/wishlist";
 import { create_carts } from "../../redux/actions/carts";
 import { isAuthentication } from "../../redux/actions/auth";
 import { toast } from "react-toastify";
+import AOS from 'aos';
 
 
 const AreaProducts = (props) => {
@@ -28,6 +29,7 @@ const AreaProducts = (props) => {
     const { isAuth , token , user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
 
+    useEffect(() => { AOS.init({ duration: 800 }); }, []);
 
     useEffect(() => {
         dispatch(isAuthentication()); 
@@ -143,7 +145,7 @@ const AreaProducts = (props) => {
 
                                                         return (
 
-                                                            <div key={ii} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content" >
+                                                            <div key={ii} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content" data-aos="fade-up">
 
                                                                 <div className="ec-product-inner">
                                                                     <div className="ec-pro-image-outer">
@@ -165,7 +167,7 @@ const AreaProducts = (props) => {
                                                                                 <button title="Add To Cart" className="ec-btn-group compare" onClick={() => {addToCart(prdct.product)}}><i className="fas fa-cart-plus"></i></button>
                                                                                 <button className="ec-btn-group wishlist" title="Wishlist" onClick={() => {addToWishList(prdct.product._id , user._id)}}><i className="far fa-heart"></i></button >
                                                                             </div>
-                                                                            <a href="#" className="quickview" title="Quick view" onClick={() => {quickView(prdct.product._id)}}><i className="far fa-eye"></i></a>
+                                                                            <a href="javascript:void(0)" className="quickview" title="Quick view" onClick={() => {quickView(prdct.product._id)}}><i className="far fa-eye"></i></a>
 
                                                                         </div>
                                                                     </div>
@@ -180,7 +182,7 @@ const AreaProducts = (props) => {
                                                                                         <i key={i} className={star} style={{ color: "#eec317" }}></i>
                                                                                     )
                                                                                 })
-
+  
                                                                             }
 
                                                                         </div>} */}

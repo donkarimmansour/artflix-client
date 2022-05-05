@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_catyone } from "../../redux/actions/products";
 import Slider from "react-slick";
+import AOS from 'aos';
 
 
 const CatySlideOne = (props) => {
@@ -18,6 +19,7 @@ const CatySlideOne = (props) => {
     const dispatch = useDispatch()
     const { catyone } = useSelector(state => state.products)
 
+    useEffect(() => { AOS.init({ duration: 500 }); }, []);
 
     useEffect(() => {
         dispatch(get_catyone({ filter: caty, limit, skip, sort, catyName: props.caty }))
@@ -103,7 +105,7 @@ const CatySlideOne = (props) => {
                                             }
                                             return (
                                              
-                                                    <div key={i} className="ec_cat_slider" >
+                                                     <div key={i} className="ec_cat_slider" data-aos="flip-up">
                                                         <div className="ec_cat_content" style={{ width: "100%", display: "inline-block" }}>
                                                             <div className="ec_cat_inner">
                                                                 <div className="ec-cat-image">
