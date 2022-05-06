@@ -135,7 +135,12 @@ const FeatureAndLimit = (props) => {
             <div className="container">
                 <div className="row">
                     {/* <!--  Feature Section Start --> */}
-                    <div className="ec-fre-section col-lg-6 col-md-6 col-sm-6 margin-b-30" >
+                    <div className="ec-fre-section col-lg-6 col-md-6 col-sm-6 margin-b-30" data-aos="fade-left" >
+
+                    {FeatureProducts && FeatureProducts.length > 0 &&
+
+                    <> 
+
                         <div className="col-md-12 text-left">
                             <div className="section-title">
                                 <h2 className="ec-bg-title">{t("Feature Items")}</h2>
@@ -144,11 +149,11 @@ const FeatureAndLimit = (props) => {
                         </div>
 
                         <Slider {...settingsFeature} className="ec-fre-products">
-                            {FeatureProducts && FeatureProducts.length > 0 &&
-                                FeatureProducts.map((product, pi) => {
+                         
+                            {   FeatureProducts.map((product, pi) => {
                                     return (
 
-                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }} data-aos="fade-left">
+                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }} >
                                             <div className="ec-fs-pro-inner">
 
                                                 <div className="ec-fs-pro-image-outer col-lg-6 col-md-6 col-sm-6">
@@ -157,7 +162,7 @@ const FeatureAndLimit = (props) => {
                                                             tabIndex="0"><img className="main-image"
                                                                 src={ImageLink(product.images.imagesUrl[0])}
                                                                 alt="Product" /></Link>
-                                                        <a href="#" className="quickview" title="Quick view" onClick={() => { quickView(product._id) }}><i style={{ color: "black" }} className="far fa-eye"></i></a>
+                                                        <a href="javascript:void(0);" className="quickview" title="Quick view" onClick={() => { quickView(product._id) }}><i style={{ color: "black" }} className="far fa-eye"></i></a>
 
                                                     </div>
                                                 </div>
@@ -203,10 +208,12 @@ const FeatureAndLimit = (props) => {
 
                                                     }
 
+                                                  
+
                                                     <div className="ec-fs-pro-desc">{extractDesk(product.description, 60)}</div>
                                                     <div className="ec-fs-pro-btn">
-                                                        <a href="#" className="btn btn-lg btn-secondary" onClick={() => { addToCart(product) }} >{t('Add To Cart')}</a>
-                                                        <a href="#" className="btn btn-lg btn-primary" onClick={() => { addToWishList(product._id, user._id) }}>{t('Wishlist')}</a>
+                                                        <a href="javascript:void(0);" className="btn btn-lg btn-secondary" onClick={() => { addToCart(product) }} >{t('Add To Cart')}</a>
+                                                        <a href="javascript:void(0);" className="btn btn-lg btn-primary" onClick={() => { addToWishList(product._id, user._id) }}>{t('Wishlist')}</a>
                                                     </div>
 
 
@@ -221,6 +228,10 @@ const FeatureAndLimit = (props) => {
 
                         </Slider>
 
+                        </>
+
+                    }
+
                     </div>
                     {/* <!--  Feature Section End -->
 
@@ -230,8 +241,11 @@ const FeatureAndLimit = (props) => {
 
 
                 <!--  Special Section Start --> */}
-                    <div className="ec-spe-section col-lg-6 col-md-6 col-sm-6" 
-                        data-animated="true">
+                    <div className="ec-spe-section col-lg-6 col-md-6 col-sm-6"  data-aos="fade-right">
+
+                    {FeatureProducts && FeatureProducts.length > 0 &&
+                    <>
+
                         <div className="col-md-12 text-left">
                             <div className="section-title">
                                  <h2 className="ec-bg-title">{t("Limited Time Offer")}</h2>
@@ -242,12 +256,12 @@ const FeatureAndLimit = (props) => {
 
                         <Slider {...settingsLimited} className="ec-spe-products">
 
-                            {FeatureProducts && FeatureProducts.length > 0 &&
-                                FeatureProducts.map((product, pi) => {
+                          
+                                {FeatureProducts.map((product, pi) => {
                                     return (
 
 
-                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }} data-aos="fade-right">
+                                        <div key={pi} className="ec-fs-product" style={{ width: "100%", display: "inline-block" }} >
                                             <div className="ec-fs-pro-inner">
 
                                                 <div className="ec-fs-pro-image-outer col-lg-6 col-md-6 col-sm-6">
@@ -256,7 +270,7 @@ const FeatureAndLimit = (props) => {
                                                             tabIndex="0"><img className="main-image"
                                                                 src={ImageLink(product.images.imagesUrl[0])}
                                                                 alt="Product" /></Link>
-                                                        <a href="#" className="quickview" title="Quick view" onClick={() => { quickView(product._id) }}><i style={{ color: "black" }} className="far fa-eye"></i></a>
+                                                        <a href="javascript:void(0);" className="quickview" title="Quick view" onClick={() => { quickView(product._id) }}><i style={{ color: "black" }} className="far fa-eye"></i></a>
 
                                                     </div>
                                                 </div>
@@ -304,8 +318,8 @@ const FeatureAndLimit = (props) => {
 
                                                     <div className="ec-fs-pro-desc">{extractDesk(product.description, 60)}</div>
                                                     <div className="ec-fs-pro-btn">
-                                                        <a href="#" className="btn btn-lg btn-secondary" onClick={() => { addToCart(product) }} >{t('Add To Cart')}</a>
-                                                        <a href="#" className="btn btn-lg btn-primary" onClick={() => { addToWishList(product._id, user._id) }}>{t('Wishlist')}</a>
+                                                        <a href="javascript:void(0);" className="btn btn-lg btn-secondary" onClick={() => { addToCart(product) }} >{t('Add To Cart')}</a>
+                                                        <a href="javascript:void(0);" className="btn btn-lg btn-primary" onClick={() => { addToWishList(product._id, user._id) }}>{t('Wishlist')}</a>
                                                     </div>
 
 
@@ -320,6 +334,7 @@ const FeatureAndLimit = (props) => {
                             }
 
                         </Slider>
+                        </>  }
 
 
                     </div>

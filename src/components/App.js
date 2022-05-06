@@ -137,25 +137,25 @@ const App = () => {
 
               <Suspense fallback={<IndexPage />}>
                 <MainSlider skip="0" limit="10" sort={'{"updatedAt" : -1}'}/>
-              </Suspense>
+              {/* </Suspense>
 
-               <Suspense fallback={<IndexPage />}>
+               <Suspense fallback={<IndexPage />}> */}
                 <Products caty="avatar" skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
-              </Suspense> 
+              {/* </Suspense> 
 
-              <Suspense fallback={<IndexPage />}>
+              <Suspense fallback={<IndexPage />}> */}
                 <AreaProducts caty='["attract the attention" , "boku no hero academian"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
-              </Suspense>
+              {/* </Suspense>
 
-              <Suspense fallback={<IndexPage />}>
+              <Suspense fallback={<IndexPage />}> */}
                 <CatySlideOne caty="attract the attention" skip="0" limit="10" sort={'{"updatedAt" : -1}'} />
-              </Suspense>
+              {/* </Suspense>
 
-              <Suspense fallback={<IndexPage />}>
+              <Suspense fallback={<IndexPage />}> */}
                 <CatySlideTwo  caty="attract the attention" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/>
-              </Suspense> 
+              {/* </Suspense> 
 
-              <Suspense fallback={<IndexPage />}>
+              <Suspense fallback={<IndexPage />}> */}
               <FeatureAndLimit skip="0" limit="4" sort='{"updatedAt" : 1}' />  
               </Suspense> 
 

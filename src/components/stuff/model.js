@@ -236,7 +236,7 @@ const Model = () => {
                                                                     <li key={index}
                                                                         className={myClassNames({ "active": index == 0 })}
                                                                         onClick={(e) => { handleSize(size.price, index, e) }}>
-                                                                        <a href="#" className="ec-opt-sz" >{size.size}</a>
+                                                                        <a href="javascript:void(0);" className="ec-opt-sz" >{size.size}</a>
                                                                     </li>
                                                                 );
                                                             })}

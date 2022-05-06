@@ -409,7 +409,7 @@ const Checkout = () => {
 
                                                                             {cart.product.color.map((color, ci) => {
                                                                                 return (
-                                                                                    <li key={ci} className={myClassname({ "active": color == cart.color })}><a href="#" className="ec-opt-clr-img" ><span style={{ backgroundColor: color }}></span></a>
+                                                                                    <li key={ci} className={myClassname({ "active": color == cart.color })}><a href="javascript:void(0);" className="ec-opt-clr-img" ><span style={{ backgroundColor: color }}></span></a>
                                                                                     </li>)
                                                                             })}
 
@@ -422,7 +422,7 @@ const Checkout = () => {
 
                                                                             {cart.product.size.map((size, si) => {
                                                                                 return (
-                                                                                    <li key={si} className={myClassname({ "active": size.size == cart.size })}><a href="#" className="ec-opt-sz" >{size.size}</a></li>
+                                                                                    <li key={si} className={myClassname({ "active": size.size == cart.size })}><a href="javascript:void(0);" className="ec-opt-sz" >{size.size}</a></li>
                                                                                 )
                                                                             })}
 
@@ -487,7 +487,7 @@ const Checkout = () => {
                                                 <span className="ec-pay-opt-head">{t("Add Comments About Your Order")}</span>
                                                 <textarea onChange={(e) => { setComment(e.target.value) }} name="your-commemt" placeholder="Comments" value={Comment}></textarea>
                                             </span>
-                                            <span className="ec-pay-agree"><input type="checkbox" /><a href="#">{t("I have read and agree")}</a><span className="checked"></span></span>
+                                            <span className="ec-pay-agree"><input type="checkbox" /><a href="javascript:void(0);">{t("I have read and agree")}</a><span className="checked"></span></span>
                                         </form>
                                     </div>
                                 </div>

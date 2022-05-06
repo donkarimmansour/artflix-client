@@ -490,7 +490,7 @@ const Profile = () => {
                                                     <div className="ec-vendor-block-img space-bottom-30">
 
                                                         <div className="ec-vendor-block-bg" style={{ backgroundImage: "url(assets/imgs/ws-banner.jpg)" }}>
-                                                            <button href="#" className="btn btn-lg btn-primary" title="Edit Detail" onClick={editAccount}>{t("Edit Detail")}</button>
+                                                            <button className="btn btn-lg btn-primary" title="Edit Detail" onClick={editAccount}>{t("Edit Detail")}</button>
                                                         </div>
 
                                                         <div className="ec-vendor-block-detail">

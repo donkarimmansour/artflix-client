@@ -99,7 +99,15 @@ const Header = () => {
         setqueryVal(val)
     }
 
+    const menuToggle = (e) => {
+        e.target.parentElement.className.includes("active") ? e.target.parentElement.classList.remove("active") : e.target.parentElement.classList.add("active")
+        e.target.parentElement.querySelector("ul").style.display === "block" ? e.target.parentElement.querySelector("ul").style.display = "none" : e.target.parentElement.querySelector("ul").style.display = "block"
+  
+     }
 
+     const menuToggleClick = (e) => {
+        e.target.parentElement.click()
+     }
    
     return (
 
@@ -481,7 +489,8 @@ const Header = () => {
                                 {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 
                                     return (
-                                        <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats._id) })}><Link to="#">{t(cats._id)}</Link>
+                                        <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats._id) })}>
+                                            <span className="menu-toggle" onClick={(e) => { menuToggle(e) }}></span><Link to="#">{t(cats._id)}</Link>
                                             <ul className="sub-menu">
       
       
@@ -503,8 +512,8 @@ const Header = () => {
 
                                 } 
 
-                                        <li className={myClassName("dropdown scroll-to", { "active": pathname.includes("/pages") })}><a href="javascript:void(0)"><img
-                                            src="/assets/imgs/ws-scroll.svg" className="svg_img header_svg scroll" alt="" /></a>
+                                        <li className={myClassName("dropdown scroll-to", { "active": pathname.includes("/pages") })}>
+                                            <a href="javascript:void(0)" onClick={(e) => { menuToggle(e) }} ><img onClick={(e) => { menuToggleClick(e) }} src="/assets/imgs/ws-scroll.svg" className="svg_img header_svg scroll" alt="" /></a>
                                             <ul className="sub-menu">
                                                 <li className="menu_title">{t('pages')}</li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/about-us") })}><Link to="/pages/about-us">{t('About Us')}</Link></li>
@@ -579,13 +588,13 @@ const Header = () => {
                 <div className="container">
                     <div className="ec-nav-panel">
                         <div className="ec-nav-panel-icons">
-                            <a href="#ec-mobile-menu" className="navbar-toggler-btn ec-header-btn ec-side-toggle" onClick={openSlider}>
+                            <a href="javascript:void(0);" className="navbar-toggler-btn ec-header-btn ec-side-toggle" onClick={openSlider}>
                                 <i className="fas fa-bars"></i>
 
                             </a>
                         </div>
                         <div className="ec-nav-panel-icons">
-                            <a href="#" onClick={openCart} className="toggle-cart ec-header-btn ec-side-toggle">
+                            <a href="javascript:void(0);" onClick={openCart} className="toggle-cart ec-header-btn ec-side-toggle">
                                 <i className="fas fa-cart-plus"></i>
                                 <span className="ec-cart-noti ec-header-count cart-count-lable">{cartCount}</span>
                             </a>

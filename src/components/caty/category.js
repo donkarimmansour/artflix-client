@@ -7,8 +7,6 @@ import {  get_colors, get_count, get_filter, get_sizes, set_product_id } from ".
 import { useDispatch, useSelector } from "react-redux";
 import { create_wishlist } from "../../redux/actions/wishlist";
 import { create_carts } from "../../redux/actions/carts";
-import { getLocalStorage } from "../../shared/localStorage";
-import { getCookie } from "../../shared/cookie";
 import { isAuthentication } from "../../redux/actions/auth"
 import { get_catigories } from "../../redux/actions/categories";
 import { toast } from "react-toastify";

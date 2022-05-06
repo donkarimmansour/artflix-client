@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
 import { handleColor, handleSize, ImageLink } from '../../shared/funs';
 import myClassNames from 'classnames';
-import { Link , useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { get_products_tab, set_product_id } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
 import { create_wishlist } from "../../redux/actions/wishlist";
@@ -26,23 +26,25 @@ const AreaProducts = (props) => {
     const dispatch = useDispatch()
     const { tabsproducts } = useSelector(state => state.products)
 
-    const { isAuth , token , user } = useSelector((state) => state.auth);
+    const { isAuth, token, user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
 
     useEffect(() => { AOS.init({ duration: 800 }); }, []);
 
     useEffect(() => {
-        dispatch(isAuthentication()); 
+        dispatch(isAuthentication());
 
         dispatch(get_products_tab({ filter: caty, limit, skip, sort }))
-      }, [dispatch]);
+    }, [dispatch]);
 
 
-        useEffect(() => {
-            setProducts(tabsproducts)
-        }, [tabsproducts])
+    useEffect(() => {
+        setProducts(tabsproducts)
+    }, [tabsproducts])
 
-    const handleTabArea = (name , index , e) => { 
+    const handleTabArea = (name, index, e) => {
+        // AOS.init({ duration: 800 })
+        // AOS.refreshHard();
         const tabs = e.target.parentElement.parentElement.querySelectorAll("li");
         const areas = document.querySelector(`#tab-pro-for-${name}`).parentElement.querySelectorAll(".tab-pane")
 
@@ -60,7 +62,7 @@ const AreaProducts = (props) => {
             }
         })
     }
-   
+
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
@@ -87,7 +89,7 @@ const AreaProducts = (props) => {
     return (
 
         <Fragment>
-            {Products &&  Products.length > 0 &&
+            {Products && Products.length > 0 &&
 
                 // <!-- Product tab Area Start -->
                 <section className="section ec-product-tab section-space-p">
@@ -107,8 +109,8 @@ const AreaProducts = (props) => {
                             <div className="col-md-12 text-center">
                                 <ul className="ec-pro-tab-nav nav justify-content-center">
 
-                                    {Products.map((c, ci) => <li onClick={(e) => (handleTabArea(c._id.replace(/ /g , "") , ci , e))} key={ci}  className="nav-item">
-                                        <a className={myClassNames("nav-link" , {"active" : ci === 0 })} href="javascript:void(0)" >For {c._id}</a></li>)}
+                                    {Products.map((c, ci) => <li onClick={(e) => (handleTabArea(c._id.replace(/ /g, ""), ci, e))} key={ci} className="nav-item">
+                                        <a className={myClassNames("nav-link", { "active": ci === 0 })} href="javascript:void(0)" >For {c._id}</a></li>)}
 
                                 </ul>
                             </div>
@@ -128,20 +130,20 @@ const AreaProducts = (props) => {
 
 
                                         return (
-                                            <div key={pi} className={myClassNames("tab-pane fade", { "show active": pi === 0 })} id={`tab-pro-for-${product._id.replace(/ /g , "")}`}>
+                                            <div key={pi} className={myClassNames("tab-pane fade", { "show active": pi === 0 })} id={`tab-pro-for-${product._id.replace(/ /g, "")}`}>
                                                 <div className="row">
                                                     {/* <!-- Product Content --> */}
 
 
 
                                                     {product.products.length > 0 && product.products.map((prdct, ii) => {
-                                                        
-                                                          let img = ""
-                                                          if(!prdct || !prdct.product.images || !prdct.product.images.imagesUrl[0]){
-                                                              img = "https://via.placeholder.com/500"
-                                                          }else {
-                                                           img = ImageLink(prdct.product.images.imagesUrl[0])
-                                                          }
+
+                                                        let img = ""
+                                                        if (!prdct || !prdct.product.images || !prdct.product.images.imagesUrl[0]) {
+                                                            img = "https://via.placeholder.com/500"
+                                                        } else {
+                                                            img = ImageLink(prdct.product.images.imagesUrl[0])
+                                                        }
 
                                                         return (
 
@@ -161,13 +163,13 @@ const AreaProducts = (props) => {
                                                                                 {prdct.product.condition == "new" && <span className="new">{t("New")}</span>}
                                                                             </span>
 
-                                                                            {prdct.product.oldprice && <span className="percentage">{Math.floor( Math.floor(prdct.product.price * Math.floor(prdct.product.oldprice - prdct.product.price) ) / 100 )}%</span>}
+                                                                            {prdct.product.oldprice && <span className="percentage">{Math.floor(Math.floor(prdct.product.price * Math.floor(prdct.product.oldprice - prdct.product.price)) / 100)}%</span>}
 
                                                                             <div className="ec-pro-actions">
-                                                                                <button title="Add To Cart" className="ec-btn-group compare" onClick={() => {addToCart(prdct.product)}}><i className="fas fa-cart-plus"></i></button>
-                                                                                <button className="ec-btn-group wishlist" title="Wishlist" onClick={() => {addToWishList(prdct.product._id , user._id)}}><i className="far fa-heart"></i></button >
+                                                                                <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(prdct.product) }}><i className="fas fa-cart-plus"></i></button>
+                                                                                <button className="ec-btn-group wishlist" title="Wishlist" onClick={() => { addToWishList(prdct.product._id, user._id) }}><i className="far fa-heart"></i></button >
                                                                             </div>
-                                                                            <a href="javascript:void(0)" className="quickview" title="Quick view" onClick={() => {quickView(prdct.product._id)}}><i className="far fa-eye"></i></a>
+                                                                            <a href="javascript:void(0)" className="quickview" title="Quick view" onClick={() => { quickView(prdct.product._id) }}><i className="far fa-eye"></i></a>
 
                                                                         </div>
                                                                     </div>

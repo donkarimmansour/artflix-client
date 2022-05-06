@@ -87,7 +87,7 @@ const CartBox = () => {
                                                     <input className="qty-input" type="text" name="ec_qtybtn" onChange={() => { }} value={cart.quantity} />
                                                     <div className="inc ec_qtybtn" onClick={() => { increaseProduct(cart.product._id) }}>+</div>
                                                 </div>
-                                                <a href="#" className="remove" onClick={() => { removeProduct(cart.product._id) }}>×</a>
+                                                <a href="javascript:void(0);" className="remove" onClick={() => { removeProduct(cart.product._id) }}>×</a>
                                             </div>
                                         </li>
 
