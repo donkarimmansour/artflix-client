@@ -108,7 +108,9 @@ const Header = (props) => {
     //not necessary
     const querySubmit = (e) => {
         e.preventDefault()
-
+         
+        navigate("/category")
+        
         if(queryVal === ""){
             setQuery("***")
             return
