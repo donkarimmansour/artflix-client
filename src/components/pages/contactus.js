@@ -12,11 +12,7 @@ import { toast } from "react-toastify";
 const Contactus = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch()
-
-    useEffect(() => {
-        dispatch({ type: CLEAR_MESSAGE })
-    }, [])
-
+ 
     const { loading } = useSelector(state => state.loading)
     const { errorMsg, successMsg } = useSelector(state => state.message)
 
@@ -28,7 +24,7 @@ const Contactus = () => {
     }, [errorMsg]);
 
     useEffect(() => {
-        if (successMsg === "sent") {
+        if (successMsg === "sentc") {
             toast.success(t("thank you for contacting us we will reply as soon as possible"))
             dispatch({ type: CLEAR_MESSAGE });
         }

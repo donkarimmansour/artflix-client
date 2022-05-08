@@ -288,10 +288,10 @@
     font-size: 35px;
   }
 
-  .single-pro-content .ec-pro-variation .ec-pro-variation-inner .ec-pro-variation-content li {
+  /* .single-pro-content .ec-pro-variation .ec-pro-variation-inner .ec-pro-variation-content li {
     width: 25px;
     height: 25px;
-  }
+  } */
 
   .global_title {
     font-size: 38px;
@@ -2328,8 +2328,8 @@
     width: auto;
   }
   .single-pro-content .ec-pro-variation .ec-pro-variation-inner .ec-pro-variation-content li {
-    width: 30px;
-    height: 30px;
+    /* width: 30px;
+    height: 30px; */
     font-size: 12px;
   }
   .single-pro-content .ec-single-qty {

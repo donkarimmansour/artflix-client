@@ -61,7 +61,7 @@ const Backsoon = () => {
                                 <div className="hero-counter">
                                     <div className="hero-detail">
                                         <div className="logo">
-                                            <img src="/assets/imgs/ws-dark-logo.png"  alt="logo" />
+                                            <img  src="/assets/imgs/ws-artflix.png"  alt="logo" />
                                         </div>
                                         <h1 className="title">{t("backsoon text")}</h1>
                                         <p className="hero-counter-desc">{t("backsoon description")}</p>

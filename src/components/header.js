@@ -9,16 +9,16 @@ import { COUNT_WISHLIST } from "../redux/constans/wishlist";
 import  'aos/dist/aos.css';
 import { isAuthentication, Logout } from "../redux/actions/auth"
 
-const Header = () => {
+const Header = (props) => {
     const { t, i18n } = useTranslation();
     const navigate = useNavigate();
-    const [query] = useSearchParams();
+   // const [query] = useSearchParams();
 
     const topMessage = t("Welcome")
-
+    const setQuery = props.setQuery
     const location = useLocation()
     const pathname = location.pathname
-    const inc = query.get("inc")
+   // const inc = query.get("inc")
 
     const [cartCount, setcartCount] = useState(0)
     const [watchlistCount, setwatchlistCount] = useState(0)
@@ -40,11 +40,11 @@ const Header = () => {
         dispatch(get_catigories({}))
     }, [dispatch])
 
-    useEffect(() => {
-        if (inc && inc != "") { 
-            setqueryVal(inc)
-        }
-    }, [inc])
+    // useEffect(() => {
+    //     if (inc && inc != "") { 
+    //         setqueryVal(inc)
+    //     }
+    // }, [inc])
 
     useEffect(() => {
         setcartCount(carts.length)
@@ -97,6 +97,22 @@ const Header = () => {
     const handleQueryVal = (e) => {
         let val = e.target.value
         setqueryVal(val)
+
+        if(val === ""){
+            setQuery("***")
+            return
+        } setQuery(val)
+
+    }
+
+    //not necessary
+    const querySubmit = (e) => {
+        e.preventDefault()
+
+        if(queryVal === ""){
+            setQuery("***")
+            return
+        } setQuery(queryVal)
     }
 
     const menuToggle = (e) => {
@@ -279,8 +295,8 @@ const Header = () => {
       <!-- Ec Header Search Start --> */}
                                 <div className="align-self-center">
                                     <div className="header-search">
-                                        <form className="ec-btn-group-form" action="get" action="/category/ser/">
-                                            <input className="form-control" value={queryVal} onChange={(e) => { handleQueryVal(e) }} name="inc" placeholder={t("Enter Your Product Name...")} type="text" />
+                                        <form className="ec-btn-group-form" onSubmit={querySubmit}>
+                                            <input className="form-control" value={queryVal} onChange={(e) => { handleQueryVal(e) }} placeholder={t("Enter Your Product Name...")} type="text" />
                                             <button className="submit" type="submit">
                                                 <i className="fas fa-search"></i>
                                             </button>
@@ -386,8 +402,8 @@ const Header = () => {
    <!-- Ec Header Search Start --> */}
                             <div className="col">
                                 <div className="header-search">
-                                    <form className="ec-btn-group-form" action="get" action="/category/ser/">
-                                        <input className="form-control" value={queryVal} onChange={(e) => { handleQueryVal(e) }} name="inc" placeholder={t("Enter Your Product Name...")} type="text" />
+                                    <form className="ec-btn-group-form"  onSubmit={querySubmit}>
+                                        <input className="form-control" value={queryVal} onChange={(e) => { handleQueryVal(e) }} placeholder={t("Enter Your Product Name...")} type="text" />
                                         <button className="submit" type="submit">
                                             <i className="fas fa-search"></i>
                                         </button>
@@ -413,12 +429,13 @@ const Header = () => {
 
                                     <ul>
                                         <li className={myClassName("", { "active": pathname === "/" })}><Link to="/">{t("Home")}</Link></li>
-
+                                        <li className={myClassName("", { "active": pathname === "/category" })}><Link to="/category">{t("All Categories")}</Link></li>
 
                                         {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 
                                             return (
                                                 <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats._id) })}><Link to="#">{t(cats._id)}</Link>
+                            
                                                     <ul className="sub-menu">
 
                                                         {cats.categories.map((cat, ci) => {
@@ -485,6 +502,7 @@ const Header = () => {
 
 
                                 <li className={myClassName("", { "active": pathname === "" })}><Link to="/">{t("Home")}</Link></li>
+                                <li className={myClassName("", { "active": pathname === "/category" })}><Link to="/category">{t("All Categories")}</Link></li>
 
                                 {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 

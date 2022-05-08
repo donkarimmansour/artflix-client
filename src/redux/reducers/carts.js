@@ -1,5 +1,5 @@
 import { setLocalStorage } from "../../shared/localStorage"
-import { GET_CARTS, SET_CARTS, DELETE_CARTS, DECREASE_CARTS, INCREASE_CARTS, COLOR_CARTS , SIZE_CARTS } from "../constans/carts"
+import { GET_CARTS, SET_CARTS, DELETE_CARTS, DECREASE_CARTS, INCREASE_CARTS, COLOR_CARTS , SIZE_CARTS, DELETE_CART } from "../constans/carts"
 
 const INITIAL_STATE = {
     carts: []
@@ -22,6 +22,10 @@ const cartsReducer = (state = INITIAL_STATE, action) => {
 
             return {
                 carts: [...newCart]
+            }
+        case DELETE_CART:
+            return {
+                carts:[]
             }
         case INCREASE_CARTS:
             const indexI = state.carts.findIndex(o => o.product._id == action.payload.id);  

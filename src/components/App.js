@@ -23,6 +23,7 @@ import Services from "./stuff/services";
 import CartBox from "./cart/cartBox";
 import IndexPage from "./indexPage";
 import Review from "./stuff/review";
+import QuerySearch from "../contexts/search";
 const Products = lazy(() => import("./products/products")) ;
 const AreaProducts = lazy(() => import("./products/areaProducts")) ;
 const SingleProduct = lazy(() => import("./products/singleProduct")) ;
@@ -41,6 +42,7 @@ const Track = lazy(() => import("./stuff/track")) ;
 
 const App = () => {
   const [style, setStyle] = useState(0);
+ const [query, setQuery] = useState("***");
 
   useEffect(() => {
 
@@ -127,7 +129,7 @@ const App = () => {
     <div className="app">
       <BrowserRouter>
 
-        <Header />
+        <Header setQuery={setQuery}/>
 
         <Routes>
 
@@ -203,19 +205,31 @@ const App = () => {
 
           <Route path="/Category" element={
             <Suspense fallback={<IndexPage />}>
-              <Category limit="12" />            
+
+              <QuerySearch.Provider value={query}>
+                <Category limit="12" />
+              </QuerySearch.Provider>
+
             </Suspense>
           } />
 
           <Route path="/Category/:caty" element={
             <Suspense fallback={<IndexPage />}>
-              <Category limit="12" />          
+
+              <QuerySearch.Provider value={query}>
+                <Category limit="12" />
+              </QuerySearch.Provider>
+
             </Suspense>
           } />
           <Route path="/Category/ser" element={
             <Suspense fallback={<IndexPage />}>
-              <Category limit="12" />       
-           </Suspense>
+
+              <QuerySearch.Provider value={query}>
+                <Category limit="12" />
+              </QuerySearch.Provider>
+
+            </Suspense>
           } />
 
   

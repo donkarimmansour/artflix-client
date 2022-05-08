@@ -13,6 +13,6 @@ const removeLocalStorage = (key) => {
 
 export {
     setLocalStorage ,
-    getLocalStorage ,
+    getLocalStorage , 
     removeLocalStorage
 }

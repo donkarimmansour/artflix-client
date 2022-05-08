@@ -231,6 +231,7 @@ const resources = {
       "of": "of"  ,
       "item(s)": "item(s)"  ,
       "Categories": "Categories"  ,
+      "All Categories": "All Categories"  ,
       "More": "More"  ,
       "Less": "Less"  ,
       "Price Range": "Price Range"  ,

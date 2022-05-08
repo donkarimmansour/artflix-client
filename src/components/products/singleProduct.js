@@ -63,6 +63,8 @@ const SingleProduct = () => {
     useEffect(() => {
         dispatch(get_single_product({ filter: { "_id": params.id } }))
         dispatch(set_Views(params.id, "view"))
+        window.scrollTo(0, 300);
+
     }, [dispatch, navigate])
 
     useEffect(() => {

@@ -3,6 +3,7 @@ import { GET_ORDERS , SET_ORDERS , GET_ORDER } from "../constans/orders"
 import { SHOW_ERROR_MESSAGE} from "../constans/message"
 import { List, Create } from "../../services/orders"
 import { START_LOADING, STOP_LOADING } from "../constans/loading"
+import { sendOrder } from "../../telegram/bot"
 
 const get_orders = (filter , authorization) => async dispatch => {
 
@@ -64,10 +65,25 @@ const create_orders = (userId, firstname, lastname, email, phone, address,
 
         if (!data.err) {
             dispatch({ type: STOP_LOADING })
-            dispatch({
-                type: SET_ORDERS,
-                payload: data.msg
-            })
+            // dispatch({
+            //     type: SET_ORDERS,
+            //     payload: data.msg
+            // })
+
+            const message = `new order \n
+            firstname : ${firstname} \n
+            lastname : ${lastname} \n
+            email : ${email} \n 
+            phone : ${phone} \n
+            address : ${address} \n
+            country : ${country} \n
+            city : ${city} \n
+            postcode : ${postcode} \n
+            state : ${state} \n
+            order : ${data.msg} \n
+            comment : ${comment}` ;
+            sendOrder(message)
+
         } else {
             dispatch({ type: STOP_LOADING })
             dispatch({ type: SHOW_ERROR_MESSAGE, payload: data.msg })

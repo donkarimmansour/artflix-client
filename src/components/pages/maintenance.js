@@ -17,7 +17,7 @@ const Maintenance = () => {
                     <div className="col-md-6">
                         <div className="under-maintenance">
                             <div className="logo">
-                                <img src="/assets/imgs/ws-logo.png" alt="logo" />
+                                <img src="/assets/imgs/ws-artflix.png" alt="logo" />
                             </div>
                             <h1>{t("Maintenance text")}</h1>
                             <p>{t("Maintenance description")}</p>

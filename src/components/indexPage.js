@@ -4,11 +4,18 @@ import React from "react"
 const IndexPage = () => {
  
   return (
-    <main>
-        <div className="pcm-spinner">
-            <div className="cm-spinner"></div>
+    <main className="pcm-spinner">
+      <div className="mesh-loader">
+        <div className="set-one">
+          <div className="circle"></div>
+          <div className="circle"></div>
         </div>
-    </main> 
+        <div className="set-two">
+          <div className="circle"></div>
+          <div className="circle"></div>
+        </div>
+      </div>
+    </main>
   );
 }
  

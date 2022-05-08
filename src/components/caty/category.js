@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from "react"
+import React, { Fragment, useContext, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
 import { calculateRating, extractDesk, handleColor, handleSize, ImageLink } from '../../shared/funs';
 import myClassNames from 'classnames';
@@ -11,13 +11,14 @@ import { isAuthentication } from "../../redux/actions/auth"
 import { get_catigories } from "../../redux/actions/categories";
 import { toast } from "react-toastify";
 import AOS from 'aos';
+import QuerySearch from "../../contexts/search";
 
 
 const Category = (props) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const params = useParams();
-    const [query] = useSearchParams();
+    //const [query] = useSearchParams();
 
     const [Products, setProducts] = useState([])
     const [Colors, setColors] = useState([])
@@ -25,11 +26,12 @@ const Category = (props) => {
     const [Sizes, setSizes] = useState([])
     const [Pages, setPages] = useState({ pages: ["", "", ""], currentPage: 1 })
     const [Filters, setFilters] = useState({ category: [], size: [], color: [], min: 1, max: 500, order: "1" })
+    const query = useContext(QuerySearch)
 
     let caty = params.caty ? params.caty.replace(/ /g , "") : undefined
 
     const limit = props.limit
-    const inc = query.get("inc")
+   // const inc = query.get("inc")
 
     const dispatch = useDispatch()
     const { filters, count, sizes, colors } = useSelector(state => state.products)
@@ -75,7 +77,7 @@ const Category = (props) => {
         } 
 
 
-    }, [catigories, sizes, colors])
+    }, [catigories, sizes, colors , caty])
 
 
 
@@ -98,15 +100,15 @@ const Category = (props) => {
              price: { "$gt": Filters.min, "$lt": Filters.max }, 
         }
 
-        if (inc) {
-            filter = { ...filter, $or: [{ name: { "$regex": inc, "$options": "i" } }, { description: { "$regex": inc, "$options": "i" } }] }
+        if (query != "***") {
+            filter = { ...filter, $or: [{ name: { "$regex": query, "$options": "i" } }, { description: { "$regex": query, "$options": "i" } }] }
         }else {
             filter = {...filter}
         }
 
         if (Filters.color.length > 0) {
             filter = { ...filter, color: { "$in": [...Filters.color] } }
-        }else {
+        }else { 
             filter = {...filter}
         }
 
@@ -120,8 +122,7 @@ const Category = (props) => {
         dispatch(get_count({ filter }))
         dispatch(get_filter({ filter, limit, skip, sort }))
 
-    }, [Filters, Pages.currentPage])
-
+    }, [Filters, Pages.currentPage , query])
 
 
 

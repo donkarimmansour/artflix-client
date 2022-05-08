@@ -12,6 +12,8 @@ import { loader } from "../../shared/elements";
 import { isAuthentication} from "../../redux/actions/auth"
 import { toast } from "react-toastify";
 import { CLEAR_MESSAGE } from "../../redux/constans/message";
+import { removeLocalStorage } from "../../shared/localStorage";
+import { DELETE_CART } from "../../redux/constans/carts";
  
 const Checkout = () => {
     const navigate = useNavigate()
@@ -112,7 +114,7 @@ const Checkout = () => {
             })
         }
     }
-
+ 
     const Validator = yup.object().shape({
         firstname: yup.string().required(t("firstname field is required")),
         lastname: yup.string().required(t("lastname field is required")),
@@ -187,13 +189,12 @@ const Checkout = () => {
     // }, [Carts, ShippingCost])
 
     const orderOrder = () => {
-        if (Carts && Carts.length > 0) {
+        if (Carts && Carts.length > 0 && formiRef.current.isValid) {
 
             const shipping = ShippingCost;
             const products = Carts;
 
-         //   const transaction = orderData.purchase_units[0].payments.captures[0];
-            const transaction = "xmxlmkvmkjjkljlljks"
+            const transaction = {id : "123" , status : "none"}
 
             const { firstname, lastname, email, phone, address, country, city, postcode, state } = formiRef.current.values;
             const comment = Comment;
@@ -205,6 +206,8 @@ const Checkout = () => {
                 transactionId , transactionState , authorization))
 
                 toast.success(t("your payment was successful please check your orders"))
+                removeLocalStorage("cart")
+                dispatch({type : DELETE_CART})
                 navigate("/profile")
 
         }
