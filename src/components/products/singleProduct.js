@@ -11,6 +11,8 @@ import { create_carts } from "../../redux/actions/carts";
 import Breadcrumb from "../stuff/breadcrumb";
 import Slider from "react-slick";
 import { isAuthentication } from "../../redux/actions/auth";
+import Image from 'lqip-react';
+import { toast } from "react-toastify";
 
 
 const SingleProduct = () => {
@@ -56,7 +58,7 @@ const SingleProduct = () => {
     useEffect(() => {
         dispatch(isAuthentication());
 
-        dispatch(get_extra_products({ filter: { "category": params.caty }, limit: 4, sort: '{"soldcount" : -1}' }))
+        dispatch(get_extra_products({ filter: { "category": params.caty , status : "published" }, limit: 4, sort: '{"soldcount" : -1}' }))
     }, [dispatch]);
  
 
@@ -159,7 +161,7 @@ const SingleProduct = () => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-        alert(t("Added"))
+        toast.info(t("Added"))
 
     }
 
@@ -211,13 +213,13 @@ const SingleProduct = () => {
                                                     <div className="single-product-scroll">
 
                                                         <Slider {...settingsImage} asNavFor={ slider2 } className="single-product-cover"  ref={(slider) => setSlider1(slider)}>
-                                                            {(Product.images && Product.images.imagesUrl && Product.images.imagesUrl.length > 0) &&
-                                                                Product.images.imagesUrl.map((image, i) => {
+                                                            {(Product.images && Product.images.length > 0) &&
+                                                                Product.images.map((image, i) => {
 
                                                                     return (
 
                                                                         <div key={i} className="single-slide zoom-image-hover" >
-                                                                            <img className="img-responsive" src={ImageLink(image)} alt={Product.name} />
+                                                                            <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                                         </div>
 
 
@@ -231,13 +233,13 @@ const SingleProduct = () => {
 
                                                         <Slider {...settingsImages} asNavFor={ slider1 } className="single-nav-thumb"  ref={(slider) => setSlider2(slider)}>
 
-                                                            {(Product.images && Product.images.imagesUrl && Product.images.imagesUrl.length > 0) &&
-                                                                Product.images.imagesUrl.map((image, i) => {
+                                                            {(Product.images && Product.images.length > 0) &&
+                                                                Product.images.map((image, i) => {
 
                                                                     return (
-
+                                                                        
                                                                         <div key={i} className="single-slide" >
-                                                                            <img className="img-responsive" src={ImageLink(image)} alt={Product.name} />
+                                                                            <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                                         </div>
 
 
@@ -340,10 +342,13 @@ const SingleProduct = () => {
 
 
                                                         <div className="ec-single-price-stoke">
+                                                        {isAuth &&
                                                             <div className="ec-single-price">
                                                                 <span className="ec-single-ps-title">{t("As low as")}</span>
                                                                 <span className="new-price">${Product.price}</span>
                                                             </div>
+                                                        }
+
                                                             <div className="ec-single-stoke">
                                                                 <span className="ec-single-ps-title">{t("IN STOCK")}</span>
                                                                 <span className="ec-single-sku">{Product.stock}</span>
@@ -572,10 +577,10 @@ const SingleProduct = () => {
                                                                 ExtraProducts.map((products, pi) => {
 
                                                                     let img = ""
-                                                                    if (!products.images || !products.images.imagesUrl[0]) {
+                                                                    if (!products.images || !products.images[0]) {
                                                                         img = "https://via.placeholder.com/500"
                                                                     } else {
-                                                                        img = ImageLink(products.images.imagesUrl[0])
+                                                                        img = ImageLink(products.images[0])
                                                                     }
 
                                                                     return (
@@ -585,7 +590,7 @@ const SingleProduct = () => {
                                                                                 <div className="ec-sb-pro-sl-item">
                                                                                     <Link to={`/product/${products.category}/${products._id}`} className="sidekka_pro_img" >
 
-                                                                                        <img src={img} alt="product" />
+                                                                                        <Image src={img} alt="product" thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
 
                                                                                     </Link>
                                                                                     <div className="ec-pro-content">
@@ -601,10 +606,11 @@ const SingleProduct = () => {
                                                                                                         }
 
                                                                                                     </div>} */}
-                                                                                        <span className="ec-price">
+                                                                                        {isAuth && <span className="ec-price">
                                                                                             {products.oldprice && <span className="old-price">${products.oldprice}</span>}
                                                                                             <span className="new-price">${products.price}</span>
-                                                                                        </span>
+                                                                                        </span>}
+
                                                                                     </div>
                                                                                 </div>
                                                                             </div>

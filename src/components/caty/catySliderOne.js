@@ -6,13 +6,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { get_catyone } from "../../redux/actions/products";
 import Slider from "react-slick";
 import AOS from 'aos';
+import Image from 'lqip-react';
 
 
 const CatySlideOne = (props) => {
     const { t } = useTranslation();
     const [Products, setProducts] = useState([])
-    const caty = props.caty ? { "category": props.caty } : {}
-    const limit = props.limit
+    const caty = props.caty ? { "category": props.caty , status : "published" } : { status : "published" }
+    const limit = props.limit 
     const skip = props.skip
     const sort = props.sort
 
@@ -98,10 +99,10 @@ const CatySlideOne = (props) => {
                                         {Products.map((product, i) => {
 
                                             let img = ""
-                                            if(!product.images || !product.images.imagesUrl[0]){
+                                            if(!product.images || !product.images[0]){
                                                 img = "https://via.placeholder.com/500"
                                             }else {
-                                            img = ImageLink(product.images.imagesUrl[0])
+                                            img = ImageLink(product.images[0])
                                             }
                                             return (
                                              
@@ -109,8 +110,16 @@ const CatySlideOne = (props) => {
                                                         <div className="ec_cat_content" style={{ width: "100%", display: "inline-block" }}>
                                                             <div className="ec_cat_inner">
                                                                 <div className="ec-cat-image">
-                                                                    <img src={img}
-                                                                        alt={product.name} />
+
+
+                                                                <Image
+                                                                    src={img}
+                                                                    thumbnail={"https://via.placeholder.com/500"}
+                                                                    aspectRatio={'500x500'}
+                                                                    className="ec-cat-image"
+                                                                    alt={product.name}
+                                                                />
+
                                                                 </div>
                                                                 <div className="ec-cat-desc">
                                                                     <span className="ec-section-btn"><Link to={`/product/${product.category}/${product._id}`} className="btn-primary"

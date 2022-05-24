@@ -129,7 +129,7 @@ const Footer = () => {
 
                 <div className={myClassname("recent-purchase", { "hide": !Pupup })}>
 
-                    <img src={!Product.images || !Product.images.imagesUrl[0] ? "https://via.placeholder.com/500" : ImageLink(Product.images.imagesUrl[0])} 
+                    <img src={!Product.images || !Product.images[0] ? "https://via.placeholder.com/500" : ImageLink(Product.images[0])} 
                     alt="payment image" />
 
                     <div className="detail">
@@ -302,7 +302,7 @@ const Footer = () => {
                                 Detail</a>
                         </div>
                     </div>
-                </div>
+                 </div>
             </div> */}
                     <div className="footer-top section-space-footer-p">
                         <div className="container">

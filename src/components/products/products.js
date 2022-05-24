@@ -9,8 +9,11 @@ import { create_carts } from "../../redux/actions/carts";
 import { create_wishlist } from "../../redux/actions/wishlist";
 import { isAuthentication } from "../../redux/actions/auth";
 import { toast } from "react-toastify";
+import Image from 'lqip-react';
 import AOS from 'aos';
 
+
+ 
 const Products = (props) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
@@ -18,7 +21,7 @@ const Products = (props) => {
 
     const [Products, setProducts] = useState([])
 
-    const caty = props.caty ? { "category": props.caty } : {}
+    const caty = props.caty ? { "category": props.caty , status : "published" } : { status : "published" }
     const limit = props.limit
     const skip = props.skip
     const sort = props.sort
@@ -60,7 +63,7 @@ const Products = (props) => {
             dispatch(create_wishlist(productId, userId, authorization))
             toast.info(t("Added"))
  
-        }
+        } 
 
     }
 
@@ -77,6 +80,7 @@ const Products = (props) => {
 
 
                 <section className="section ec-new-product section-space-p">
+                    
                     <div className="container">
                         <div className="row">
 
@@ -96,13 +100,14 @@ const Products = (props) => {
                             {Products.map((product, i) => {
 
                                 let img = ""
-                                if(!product.images || !product.images.imagesUrl[0]){
+                                if(!product.images || !product.images[0]){
                                     img = "https://via.placeholder.com/500"
                                 }else {
-                                   img = ImageLink(product.images.imagesUrl[0])
+                                   img = ImageLink(product.images[0])
                                 }
                                 
-                        
+
+
                                 return (
 
                                     <div key={i} className="col-lg-3 col-md-6 col-sm-6 col-xs-6 mb-6 ec-product-content" data-aos="fade-up">
@@ -114,15 +119,24 @@ const Products = (props) => {
                                                 <div className="ec-pro-image">
                                                    
                                                     <Link to={`/product/${product.category}/${product._id}`} className="image" >
-                                                          <img className="main-image" src={img} alt="Product" />
+
+                                                        <Image
+                                                            src={img}
+                                                            thumbnail={"https://via.placeholder.com/500"}
+                                                            aspectRatio={'500x500'}
+                                                            className="main-image"
+                                                            alt="Product"
+                                                        />
+
                                                     </Link>
 
                                                     <span className="flags">
-                                                        {product.stock == 0 && <span className="sale">{t("Sale")}</span>}
-                                                        {product.condition == "new" && <span className="new">{t("New")}</span>}
+                                                        {product.stock === 0 && <span className="sale">{t("Sale")}</span>}
+                                                        {product.condition === "new" && <span className="new">{t("New")}</span>}
                                                     </span>
 
-                                                    {product.oldprice && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
+                                       
+                                                    {product.oldprice && isAuth && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
 
                                                     <div className="ec-pro-actions">
                                                         <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(product) }}><i className="fas fa-cart-plus"></i></button>
@@ -148,10 +162,10 @@ const Products = (props) => {
 
                                                 </div>} */}
 
-                                                <span className="ec-price">
+                                                {isAuth && <span className="ec-price">
                                                     {product.oldprice && <span className="old-price">${product.oldprice}</span>}
                                                     <span className="new-price">${product.price}</span>
-                                                </span>
+                                                </span>}
 
                                                 <div className="ec-pro-option">
 

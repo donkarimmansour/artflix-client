@@ -28,7 +28,7 @@ const calculateRating = (rates , multi = true) => {
 }
 
 const ImageLink = (img) => {
-    return  `${Host.BACKEND}${Host.PREFIX}/file/get-single-image/${img}/view`
+    return `${Host.BACKEND}${Host.PREFIX}/file/get-single-image/${img}/view`
 }
 
 const countDown = (end) => {

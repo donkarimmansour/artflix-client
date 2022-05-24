@@ -24,6 +24,12 @@ import CartBox from "./cart/cartBox";
 import IndexPage from "./indexPage";
 import Review from "./stuff/review";
 import QuerySearch from "../contexts/search";
+import ProductsSkeleton from "../skeleton/productsSkeleton";
+import CatyOneSkeleton from "../skeleton/CatyOneSkeleton";
+import CatyTwoSkeleton from "../skeleton/CatyTwoSkeleton";
+import ItemsSkeleton from "../skeleton/ItemsSkeleton";
+import SlidersSkeleton from "../skeleton/sliderSkeleton";
+import SingleSkeleton from "../skeleton/singleSkeleton";
 const Products = lazy(() => import("./products/products")) ;
 const AreaProducts = lazy(() => import("./products/areaProducts")) ;
 const SingleProduct = lazy(() => import("./products/singleProduct")) ;
@@ -132,34 +138,34 @@ const App = () => {
         <Header setQuery={setQuery}/>
 
         <Routes>
-
+ 
 
           <Route path="/" element={
             <Fragment>
 
-              <Suspense fallback={<IndexPage />}>
-                <MainSlider skip="0" limit="10" sort={'{"updatedAt" : -1}'}/>
-              {/* </Suspense>
-
-               <Suspense fallback={<IndexPage />}> */}
-                <Products caty="avatar" skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
-              {/* </Suspense> 
-
-              <Suspense fallback={<IndexPage />}> */}
-                <AreaProducts caty='["attract the attention" , "boku no hero academian"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
-              {/* </Suspense>
-
-              <Suspense fallback={<IndexPage />}> */}
-                <CatySlideOne caty="attract the attention" skip="0" limit="10" sort={'{"updatedAt" : -1}'} />
-              {/* </Suspense>
-
-              <Suspense fallback={<IndexPage />}> */}
-                <CatySlideTwo  caty="attract the attention" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/>
-              {/* </Suspense> 
-
-              <Suspense fallback={<IndexPage />}> */}
-              <FeatureAndLimit skip="0" limit="4" sort='{"updatedAt" : 1}' />  
+             <Suspense fallback={<IndexPage />}>
+                 <MainSlider skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
               </Suspense> 
+
+                <Suspense fallback={<ProductsSkeleton />}>
+                 <Products caty="Cameras" skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
+               </Suspense> 
+
+                <Suspense fallback={<ProductsSkeleton />}>
+                <AreaProducts caty='["Cameras"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
+               </Suspense>
+{/*                
+                <Suspense fallback={<CatyOneSkeleton />}> 
+                 <CatySlideOne caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'} /> 
+               </Suspense>
+
+              <Suspense fallback={<CatyTwoSkeleton />}> 
+                 <CatySlideTwo  caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
+               </Suspense>  */}
+
+              <Suspense fallback={<ItemsSkeleton />}> 
+               <FeatureAndLimit skip="0" limit="4" sort='{"updatedAt" : 1}' />   
+               </Suspense>  
 
 
                
@@ -180,7 +186,7 @@ const App = () => {
           } />
 
           <Route path="/product/:caty/:id" element={
-            <Suspense fallback={<IndexPage />}>
+            <Suspense fallback={<SingleSkeleton />}>
               <SingleProduct />
             </Suspense>
           } />
@@ -204,7 +210,7 @@ const App = () => {
           } />
 
           <Route path="/Category" element={
-            <Suspense fallback={<IndexPage />}>
+            <Suspense fallback={<ProductsSkeleton />}>
 
               <QuerySearch.Provider value={query}>
                 <Category limit="12" />
@@ -214,7 +220,7 @@ const App = () => {
           } />
 
           <Route path="/Category/:caty" element={
-            <Suspense fallback={<IndexPage />}>
+            <Suspense fallback={<ProductsSkeleton />}>
 
               <QuerySearch.Provider value={query}>
                 <Category limit="12" />
@@ -223,7 +229,7 @@ const App = () => {
             </Suspense>
           } />
           <Route path="/Category/ser" element={
-            <Suspense fallback={<IndexPage />}>
+            <Suspense fallback={<ProductsSkeleton />}>
 
               <QuerySearch.Provider value={query}>
                 <Category limit="12" />

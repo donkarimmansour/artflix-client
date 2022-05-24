@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
 import { calculateRating, extractDesk, handleColor, handleSize, ImageLink } from '../../shared/funs';
 import myClassNames from 'classnames';
-import { Link, useNavigate, useParams, useSearchParams  } from "react-router-dom";
+import { Link, useNavigate, useParams  } from "react-router-dom";
 import {  get_colors, get_count, get_filter, get_sizes, set_product_id } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
 import { create_wishlist } from "../../redux/actions/wishlist";
@@ -12,13 +12,13 @@ import { get_catigories } from "../../redux/actions/categories";
 import { toast } from "react-toastify";
 import AOS from 'aos';
 import QuerySearch from "../../contexts/search";
-
+import Image from 'lqip-react';
+ 
 
 const Category = (props) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const params = useParams();
-    //const [query] = useSearchParams();
 
     const [Products, setProducts] = useState([])
     const [Colors, setColors] = useState([])
@@ -30,7 +30,7 @@ const Category = (props) => {
 
     let caty = params.caty ? params.caty.replace(/ /g , "") : undefined
 
-    const limit = props.limit
+    const limit = props.limit 
    // const inc = query.get("inc")
 
     const dispatch = useDispatch()
@@ -98,6 +98,7 @@ const Category = (props) => {
         let filter = {
             "category": { "$in": [...Filters.category] },
              price: { "$gt": Filters.min, "$lt": Filters.max }, 
+             status : "published"
         }
 
         if (query != "***") {
@@ -385,10 +386,10 @@ const Category = (props) => {
                                             {Products.map((product, i) => {
 
                                                 let img = ""
-                                                if (!product.images || !product.images.imagesUrl[0]) {
+                                                if (!product.images || !product.images[0]) {
                                                     img = "https://via.placeholder.com/500"
                                                 } else {
-                                                    img = ImageLink(product.images.imagesUrl[0])
+                                                    img = ImageLink(product.images[0])
                                                 }
 
                                                 return (
@@ -401,7 +402,15 @@ const Category = (props) => {
 
                                                                 <div className="ec-pro-image">
                                                                     <Link to={`/product/${product.category}/${product._id}`} className="image">
-                                                                        <img className="main-image" src={img} alt="Product" />
+                                                                     
+                                                                    <Image
+                                                                        src={img}
+                                                                        thumbnail={"https://via.placeholder.com/500"}
+                                                                        aspectRatio={'500x500'}
+                                                                        className="main-image"
+                                                                        alt="Product"
+                                                                    />
+
                                                                     </Link>
 
                                                                     <span className="flags">
@@ -409,7 +418,7 @@ const Category = (props) => {
                                                                         {product.condition == "new" && <span className="new">{t("New")}</span>}
                                                                     </span>
 
-                                                                    {product.oldprice && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
+                                                                    {product.oldprice && isAuth && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
 
                                                                     <div className="ec-pro-actions">
                                                                         <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(product) }}><i className="fas fa-cart-plus"></i></button>
@@ -453,10 +462,10 @@ const Category = (props) => {
 
                                                                 <div className="ec-pro-list-desc">{extractDesk(product.description, 120)}</div>
 
-                                                                <span className="ec-price">
+                                                               {isAuth && <span className="ec-price">
                                                                     {product.oldprice && <span className="old-price">${product.oldprice}</span>}
                                                                     <span className="new-price">${product.price}</span>
-                                                                </span>
+                                                                </span>} 
 
                                                                 <div className="ec-pro-option">
 

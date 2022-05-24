@@ -18,7 +18,7 @@ const MainSlider = (props) => {
     const { main } = useSelector(state => state.main)
 
     useEffect(() => {
-        dispatch(get_main({ limit, skip, sort, expend: "image" }))
+        dispatch(get_main({ limit, skip, sort }))
     }, [dispatch])
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const MainSlider = (props) => {
                             return (
 
 
-                                <SwiperSlide key={mi} style={{ backgroundImage: `url(${ImageLink(main.image.imageUrl)})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", height: "80vh" }}
+                                <SwiperSlide key={mi} style={{ backgroundImage: `url(${ImageLink(main.image)})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", height: "80vh" }}
                                     className={myClassNames("ec-slide-item d-flex ", { "ec-slide-1": mi == 0 }, { "ec-slide-2": mi !== 0 })}>
 
                                     <div className="container align-self-center">

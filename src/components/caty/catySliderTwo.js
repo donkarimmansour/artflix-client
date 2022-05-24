@@ -6,22 +6,28 @@ import { get_catytwo } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
 import Slider from "react-slick";
 import AOS from 'aos';
+import Image from 'lqip-react';
+import { isAuthentication } from "../../redux/actions/auth";
 
 const CatySlideTwo = (props) => {
     const { t } = useTranslation();
     const [Products, setProducts] = useState([])
-    const caty = props.caty ? { "category": props.caty } : {}
+    const caty = props.caty ? { "category": props.caty , status : "published" } : { status : "published" }
     const limit = props.limit
     const skip = props.skip
     const sort = props.sort
-
+ 
     const dispatch = useDispatch()
     const { catytwo } = useSelector(state => state.products)
+    const { isAuth } = useSelector((state) => state.auth);
+
 
     useEffect(() => { AOS.init({ duration: 500 }); }, []);
 
     useEffect(() => {
         dispatch(get_catytwo({ filter: caty, limit, skip, sort, catyName: props.caty }))
+        dispatch(isAuthentication());
+
     }, [dispatch])
 
     useEffect(() => {
@@ -98,10 +104,10 @@ const CatySlideTwo = (props) => {
                                 {Products.map((product, i) => {
 
                                         let img = ""
-                                        if(!product.images || !product.images.imagesUrl[0]){
+                                        if(!product.images || !product.images[0]){
                                             img = "https://via.placeholder.com/500"
                                         }else {
-                                        img = ImageLink(product.images.imagesUrl[0])
+                                        img = ImageLink(product.images[0])
                                         }
 
 
@@ -109,13 +115,21 @@ const CatySlideTwo = (props) => {
                                         <div key={i} className="col-lg-2 col-md-4 col-sm-12" data-aos="flip-up">
                                             <div className="cat-card">
                                                 <div className="card-img">
+                                                <Image
+                                                        src={img}
+                                                        thumbnail={"https://via.placeholder.com/500"}
+                                                        aspectRatio={'500x500'}
+                                                        className="ec-cat-image"
+                                                        alt={product.name}
+                                                    />
+
                                                     <img className="cat-icon"
                                                         src={img}
                                                         alt="cat-icon" />
                                                 </div>
                                                 <div className="cat-detail">
                                                     <h4>{product.name}</h4>
-                                                    <h5>${product.price}</h5>
+                                                    {isAuth && <h5>${product.price}</h5>} 
                                                     <Link className="btn-primary" to={`/product/${product.category}/${product._id}`}>{("shop now")}</Link>
                                                 </div>
                                             </div>

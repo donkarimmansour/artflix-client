@@ -373,10 +373,10 @@ const Checkout = () => {
                                             Carts.map((cart, oi) => {
 
                                                 let img = ""
-                                                if(!cart.product || !cart.product.images || !cart.product.images.imagesUrl[0]){
+                                                if(!cart.product || !cart.product.images || !cart.product.images[0]){
                                                     img = "https://via.placeholder.com/500"
                                                 }else {
-                                                img = ImageLink(cart.product.images.imagesUrl[0])
+                                                img = ImageLink(cart.product.images[0])
                                                 }
 
                                                 return (

@@ -10,6 +10,7 @@ import { create_carts } from "../../redux/actions/carts";
 import { isAuthentication } from "../../redux/actions/auth";
 import { toast } from "react-toastify";
 import AOS from 'aos';
+import Image from 'lqip-react'; 
 
 
 const AreaProducts = (props) => {
@@ -21,7 +22,7 @@ const AreaProducts = (props) => {
     const skip = props.skip
     const sort = props.sort
     const catyNames = JSON.parse(props.caty)
-    const caty = props.caty ? { "category": { "$in": [...catyNames] } } : {}
+    const caty = props.caty ? { "category": { "$in": [...catyNames] } , status : "published"} : {status : "published"}
 
     const dispatch = useDispatch()
     const { tabsproducts } = useSelector(state => state.products)
@@ -139,10 +140,10 @@ const AreaProducts = (props) => {
                                                     {product.products.length > 0 && product.products.map((prdct, ii) => {
 
                                                         let img = ""
-                                                        if (!prdct || !prdct.product.images || !prdct.product.images.imagesUrl[0]) {
+                                                        if (!prdct || !prdct.product.images || !prdct.product.images[0]) {
                                                             img = "https://via.placeholder.com/500"
                                                         } else {
-                                                            img = ImageLink(prdct.product.images.imagesUrl[0])
+                                                            img = ImageLink(prdct.product.images[0])
                                                         }
 
                                                         return (
@@ -155,7 +156,15 @@ const AreaProducts = (props) => {
 
                                                                         <div className="ec-pro-image">
                                                                             <Link to={`/product/${prdct.product.category}/${prdct.product._id}`} className="image">
-                                                                                <img className="main-image" src={img} alt="Product" />
+                                                                               
+                                                                            <Image
+                                                                                    src={img}
+                                                                                    thumbnail={"https://via.placeholder.com/500"}
+                                                                                    aspectRatio={'500x500'}
+                                                                                    className="main-image"
+                                                                                    alt="Product"
+                                                                                />
+
                                                                             </Link>
 
                                                                             <span className="flags">
@@ -163,7 +172,7 @@ const AreaProducts = (props) => {
                                                                                 {prdct.product.condition == "new" && <span className="new">{t("New")}</span>}
                                                                             </span>
 
-                                                                            {prdct.product.oldprice && <span className="percentage">{Math.floor(Math.floor(prdct.product.price * Math.floor(prdct.product.oldprice - prdct.product.price)) / 100)}%</span>}
+                                                                            {prdct.product.oldprice && isAuth && <span className="percentage">{Math.floor(Math.floor(prdct.product.price * Math.floor(prdct.product.oldprice - prdct.product.price)) / 100)}%</span>}
 
                                                                             <div className="ec-pro-actions">
                                                                                 <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(prdct.product) }}><i className="fas fa-cart-plus"></i></button>
@@ -189,10 +198,10 @@ const AreaProducts = (props) => {
 
                                                                         </div>} */}
 
-                                                                        <span className="ec-price">
+                                                                       {isAuth && <span className="ec-price">
                                                                             {prdct.product.oldprice && <span className="old-price">${prdct.product.oldprice}</span>}
                                                                             <span className="new-price">${prdct.product.price}</span>
-                                                                        </span>
+                                                                        </span>} 
 
                                                                         <div className="ec-pro-option">
 

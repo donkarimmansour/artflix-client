@@ -24,7 +24,7 @@ const Track = () => {
       useEffect(() => {
         if (!isAuth) {
           navigate("/login");
-        }
+        } 
       }, [isAuth]);
 
 

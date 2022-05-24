@@ -7,8 +7,10 @@ import { get_single_product, set_product_id } from "../../redux/actions/products
 import { create_carts } from "../../redux/actions/carts";
 import Slider from "react-slick";
 import { toast } from "react-toastify";
+import Image from 'lqip-react';
+import { isAuthentication } from "../../redux/actions/auth";
 
-
+ 
 const Model = () => {
     const { t } = useTranslation();
 
@@ -17,8 +19,13 @@ const Model = () => {
 
     const dispatch = useDispatch()
     const { singleproduct, productid } = useSelector(state => state.products)
+    const { isAuth } = useSelector((state) => state.auth);
 
-      
+    useEffect(() => {
+        dispatch(isAuthentication());
+
+    }, [dispatch])
+
     useEffect(() => {
 
         if (productid !== "")
@@ -130,13 +137,13 @@ const Model = () => {
                                         <div className="col-md-5 col-sm-12 col-xs-12">
 
                                             <Slider {...settingsImage} asNavFor={slider2} className="qty-product-cover" ref={(slider) => setSlider1(slider)}>
-                                                {(Product.images && Product.images.imagesUrl && Product.images.imagesUrl.length > 0) &&
-                                                    Product.images.imagesUrl.map((image, i) => {
+                                                {( Product.images && Product.images.length > 0) &&
+                                                    Product.images.map((image, i) => {
 
                                                         return (
 
                                                             <div key={i} className="qty-slide ">
-                                                                <img className="img-responsive" src={ImageLink(image)} alt={Product.name} />
+                                                                <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                             </div>
 
 
@@ -149,13 +156,13 @@ const Model = () => {
 
                                             <Slider {...settingsImages} asNavFor={slider1} className="qty-nav-thumb" ref={(slider) => setSlider2(slider)}>
 
-                                                {(Product.images && Product.images.imagesUrl && Product.images.imagesUrl.length > 0) &&
-                                                    Product.images.imagesUrl.map((image, i) => {
+                                                {(Product.images && Product.images.length > 0) &&
+                                                    Product.images.map((image, i) => {
 
                                                         return (
 
                                                             <div key={i} className="qty-slide" >
-                                                                <img className="img-responsive" src={ImageLink(image)} alt={Product.name} />
+                                                                <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                             </div>
 
 
@@ -199,10 +206,11 @@ const Model = () => {
                                     </div>
 
                                     <div className="ec-quickview-desc">{extractDesk(Product.description, 100)}</div>
-                                    <div className="ec-quickview-price">
+                                    {isAuth && <div className="ec-quickview-price">
                                         {Product.oldprice && <span className="old-price">${Product.oldprice}</span>}
                                         <span className="new-price">${Product.price}</span>
-                                    </div>
+                                    </div>}
+                                    
 
                                     <div className="ec-pro-variation">
 

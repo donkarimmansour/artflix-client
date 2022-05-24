@@ -9,6 +9,7 @@ import { delete_wishlist, get_wishlist } from "../../redux/actions/wishlist";
 import { isAuthentication} from "../../redux/actions/auth"
 import { toast } from "react-toastify";
 import AOS from 'aos';
+import Image from 'lqip-react';
 
 const Wishlist = (props) => {
     const { t } = useTranslation();
@@ -85,11 +86,12 @@ const Wishlist = (props) => {
                             {Wishlist.map((mwishlist, i) => {
 
                                     let img = ""
-                                    if(!mwishlist.productId || !mwishlist.productId.images || !mwishlist.productId.images.imagesUrl[0]){
+                                    if(!mwishlist.productId || !mwishlist.productId.images || !mwishlist.productId.images[0]){
                                         img = "https://via.placeholder.com/500"
                                     }else {
-                                    img = ImageLink(mwishlist.productId.images.imagesUrl[0])
+                                         img = ImageLink(mwishlist.productId.images[0])
                                     }
+                                
 
                                 return (
 
@@ -101,7 +103,9 @@ const Wishlist = (props) => {
 
                                                 <div className="ec-pro-image">
                                                     <Link to={`/product/${mwishlist.productId.category}/${mwishlist.productId._id}`} className="image">
-                                                        <img className="main-image" src={img} alt="Wishlist" />
+                                                        <Image className="main-image" src={img} alt="Wishlist"
+                                                            thumbnail={"https://via.placeholder.com/500"}
+                                                            aspectRatio={'500x500'} />
                                                     </Link>
 
                                                     <span className="flags">

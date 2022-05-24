@@ -436,7 +436,7 @@ const Header = (props) => {
                                         {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 
                                             return (
-                                                <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats._id) })}><Link to="#">{t(cats._id)}</Link>
+                                                <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats.name[0]) })}><Link to="#">{t(cats.name[0])}</Link>
                             
                                                     <ul className="sub-menu">
 
@@ -509,8 +509,8 @@ const Header = (props) => {
                                 {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 
                                     return (
-                                        <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats._id) })}>
-                                            <span className="menu-toggle" onClick={(e) => { menuToggle(e) }}></span><Link to="#">{t(cats._id)}</Link>
+                                        <li key={csi} className={myClassName("dropdown", { "active": pathname.includes("/" + cats.name[0]) })}>
+                                            <span className="menu-toggle" onClick={(e) => { menuToggle(e) }}></span><Link to="#">{t(cats.name[0])}</Link>
                                             <ul className="sub-menu">
       
       

@@ -49,7 +49,7 @@ const Profile = () => {
     //orders
 
     useEffect(() => {
-        dispatch(get_orders({ filter: { "userId": user._id }, expend: "images-productId" }, authorization))
+        dispatch(get_orders({ filter: { "userId": user._id }, expend: "productId" }, authorization))
         dispatch(get_wishlist({ filter: { userId: user._id }, expend: 'productId' }, authorization))
     }, [dispatch])
 
@@ -223,7 +223,7 @@ const Profile = () => {
             //return
             const formData = new FormData();
             formData.append('image', img);
-            // formData.append('size', 140);
+            // formData.append('size', 140); 
 
             // dispatch(set_single_image(formData, authorization, user._id))
             setLoading(true)
@@ -316,7 +316,7 @@ const Profile = () => {
                                                     </div>
                                                     <div className="thumb-preview ec-preview">
                                                         <div className="image-thumb-preview">
-                                                            <img className="image-thumb-preview ec-image-preview v-img" src={ImageLink(user.image.imageUrl)} alt="edit" />
+                                                            <img className="image-thumb-preview ec-image-preview v-img" src={ImageLink(user.image)} alt="edit" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -450,7 +450,7 @@ const Profile = () => {
 
                                             <div className="ec-vendor-block-bg" style={{ backgroundImage: "url(assets/imgs/ws-banner.jpg)" }}></div>
                                             <div className="ec-vendor-block-detail">
-                                                <img className="v-img" src={ImageLink(user.image.imageUrl)} alt="vendor image" />
+                                                <img className="v-img" src={ImageLink(user.image)} alt="vendor image" />
                                                 <h5>{`${user.firstname} ${user.lastname}`}</h5>
                                             </div>
 
@@ -494,7 +494,7 @@ const Profile = () => {
                                                         </div>
 
                                                         <div className="ec-vendor-block-detail">
-                                                            <img className="v-img" src={ImageLink(user.image.imageUrl)} alt="vendor image" />
+                                                            <img className="v-img" src={ImageLink(user.image)} alt="vendor image" />
                                                             <h5 className="name">{`${user.firstname} ${user.lastname}`}</h5>
                                                         </div>
 
@@ -528,8 +528,8 @@ const Profile = () => {
                                                                     <li><strong>{("Address")} : </strong>
                                                                         {
                                                                             `${user.shippingaddress ? user.shippingaddress.address ? user.shippingaddress.address : "" : ""} ,
-                                                            ${user.shippingaddress ? user.shippingaddress.city ? user.shippingaddress.city : "" : ""} ,
-                                                            ${user.shippingaddress ? user.shippingaddress.country ? user.shippingaddress.country : "" : ""}
+                                                                            ${user.shippingaddress ? user.shippingaddress.city ? user.shippingaddress.city : "" : ""} ,
+                                                                            ${user.shippingaddress ? user.shippingaddress.country ? user.shippingaddress.country : "" : ""}
                                                             `
                                                                         }.</li>
                                                                 </ul>
@@ -582,10 +582,10 @@ const Profile = () => {
                                                         {Wishlist.map((mwishlist, wi) => {
 
                                                             let img = ""
-                                                            if (!mwishlist.productId || !mwishlist.productId.images || !mwishlist.productId.images.imagesUrl[0]) {
+                                                            if (!mwishlist.productId || !mwishlist.productId.images || !mwishlist.productId.images[0]) {
                                                                 img = "https://via.placeholder.com/500"
                                                             } else {
-                                                                img = ImageLink(mwishlist.productId.images.imagesUrl[0])
+                                                                img = ImageLink(mwishlist.productId.images[0])
                                                             }
 
                                                             return (
@@ -678,7 +678,7 @@ const Profile = () => {
                                                                 return order.orders.map((ordr, coi) => {
                                                                     return (
                                                                         <tr key={coi}>
-                                                                            <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><img className="prod-img" src={ImageLink(ordr.images.imagesUrl[0])} alt="product image" /></Link></td>
+                                                                            <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><img className="prod-img" src={ImageLink(ordr.images[0])} alt="product image" /></Link></td>
                                                                             <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><span>{ordr.name}</span></Link></td>
                                                                             <td><span>${ordr.price}</span></td>
                                                                             <td><span>{ordr.quantity}</span></td>

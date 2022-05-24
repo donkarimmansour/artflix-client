@@ -5,8 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { get_carts, increase_carts, decrease_carts, delete_carts,  color_carts, size_carts } from "../../redux/actions/carts";
 import { ImageLink } from "../../shared/funs";
 import { toast } from "react-toastify";
+import { isAuthentication } from "../../redux/actions/auth";
 
-
+ 
 const Cart = () => {
  
     const { t } = useTranslation();
@@ -15,9 +16,11 @@ const Cart = () => {
 
     const dispatch = useDispatch()
     const { carts } = useSelector(state => state.carts)
+    const { isAuth  } = useSelector((state) => state.auth);
 
     useEffect(() => {
         dispatch(get_carts())
+        dispatch(isAuthentication());
     }, [dispatch])
 
     useEffect(() => {
@@ -88,10 +91,10 @@ const Cart = () => {
                                                    Carts.map((cart, oi) => {
 
                                                     let img = ""
-                                                    if(!cart.product || !cart.product.images || !cart.product.images.imagesUrl[0]){
+                                                    if(!cart.product || !cart.product.images || !cart.product.images[0]){
                                                         img = "https://via.placeholder.com/500"
                                                     }else {
-                                                    img = ImageLink(cart.product.images.imagesUrl[0])
+                                                    img = ImageLink(cart.product.images[0])
                                                     }  
 
                                                     return (
@@ -101,7 +104,7 @@ const Cart = () => {
                                                                 <Link to={`/product/${cart.product.categoty}/${cart.product._id}`}>
                                                                     <img className="ec-cart-pro-img mr-4" src={img} alt="" />
                                                                     {cart.product.name}</Link></td>
-                                                            <td data-label={t("Price")} className="ec-cart-pro-price"><span className="amount">{cart.price}</span></td>
+                                                            <td data-label={t("Price")} className="ec-cart-pro-price">{isAuth && <span className="amount">{cart.price}</span>}</td>
 
                                                           
                                                             <td data-label={t("Size")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
@@ -149,7 +152,7 @@ const Cart = () => {
                                                                 </div>
                                                             </td>
 
-                                                            <td data-label={t("Total")} className="ec-cart-pro-subtotal">${cart.amount}</td>
+                                                            <td data-label={t("Total")} className="ec-cart-pro-subtotal">${isAuth && cart.amount}</td>
                                                             <td data-label={t("Remove")} className="ec-cart-pro-remove" style={{ textAlign: "center" }}>
                                                                 <a href="javascript:void(0);" onClick={() => { removeProduct(cart.product._id) }}><i className="fa-solid fa-xmark"></i></a>
                                                             </td>
@@ -192,13 +195,13 @@ const Cart = () => {
                                 <div className="ec-sb-block-content ec-sidebar-dropdown">
                                     <div className="ec-cart-summary-bottom">
                                         <div className="ec-cart-summary">
-                                            {Carts && Carts.length > 0 &&
+                                            {Carts && Carts.length > 0  &&
 
                                                 <>
 
                                                     <div>
                                                         <span className="text-left">{t("Sub-Total")}</span>
-                                                        <span className="text-right">${
+                                                        <span className="text-right">${ isAuth &&
                                                             Carts.reduce((amount, cart) => amount + cart.amount, 0)
                                                         }</span>
                                                     </div>
@@ -218,7 +221,7 @@ const Cart = () => {
                                                     </div>
                                                     <div className="ec-cart-summary-total">
                                                         <span className="text-left">{t("Total Amount")}</span>
-                                                        <span className="text-right">${
+                                                        <span className="text-right">${ isAuth &&
                                                             Carts.reduce((amount, cart) => amount + cart.amount, 0)
                                                         }</span>
                                                     </div></>
