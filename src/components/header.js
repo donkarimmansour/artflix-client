@@ -288,8 +288,8 @@ const Header = (props) => {
                                 <div className="align-self-center">
                                     <div className="header-logo">
                                         <Link to="/">
-                                            <img src="/assets/imgs/ws-artflix.png" alt="Site Logo" />
-                                            <img className="dark-logo" src="/assets/imgs/ws-artflix.png" alt="Site Logo" style={{ display: "none" }} /></Link>
+                                            <img src="/assets/imgs/ws-soldernet.png" alt="Site Logo" />
+                                            <img className="dark-logo" src="/assets/imgs/ws-soldernet.png" alt="Site Logo" style={{ display: "none" }} /></Link>
                                     </div>
                                 </div>
                                 {/* <!-- Ec Header Logo End -->
@@ -392,10 +392,10 @@ const Header = (props) => {
                                 <div className="header-logo">
                                     <Link to="/">
                                         <img
-                                            src="/assets/imgs/ws-artflix.png"
+                                            src="/assets/imgs/ws-soldernet.png"
                                             alt="Site Logo" />
                                         <img className="dark-logo"
-                                            src="/assets/imgs/ws-artflix.png"
+                                            src="/assets/imgs/ws-soldernet.png"
                                             alt="Site Logo" style={{ display: "none" }} />
                                     </Link>
                                 </div>

@@ -4,7 +4,7 @@ import { get_main } from "../../redux/actions/main";
 import { useDispatch, useSelector } from "react-redux";
 import myClassNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation, Pagination } from 'swiper';
+import { Autoplay , Navigation, Pagination } from 'swiper';
 import 'swiper/css/pagination';
 
 
@@ -40,13 +40,13 @@ const MainSlider = (props) => {
                     {/* <!-- Main slider --> */}
 
                     <Swiper
-                        modules={[Navigation, Pagination]}
+                        modules={[Navigation, Pagination , Autoplay]}
                         slidesPerView={1}
                         loop={true}
-                        speed={1000}
+                        speed={2000}
                         effect={"slide"}
                         autoplay={{
-                            delay: 7000,
+                            delay: 5000,
                             disableOnInteraction: false
                         }
                         }
@@ -64,12 +64,12 @@ const MainSlider = (props) => {
 
                     >
 
-                        {Main.map((main, mi) => {
+                        {Main.map((main, mi) => { 
                             return (
 
 
-                                <SwiperSlide key={mi} style={{ backgroundImage: `url(${ImageLink(main.image)})`, backgroundSize: "cover", backgroundPosition: "center", backgroundRepeat: "no-repeat", height: "80vh" }}
-                                    className={myClassNames("ec-slide-item d-flex ", { "ec-slide-1": mi == 0 }, { "ec-slide-2": mi !== 0 })}>
+                                <SwiperSlide key={mi} style={{ backgroundImage: `url(${ImageLink(main.image)})` }}
+                                    className={myClassNames("ec-slide-item d-flex ec-slide-m", { "ec-slide-1": mi === 0 }, { "ec-slide-2": mi !== 0 })}>
 
                                     <div className="container align-self-center">
                                         <div className="row">

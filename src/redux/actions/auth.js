@@ -13,7 +13,7 @@ const Auth = (formData) => async dispatch => {
 
         if (!data.err) {
             dispatch({ type: STOP_LOADING })
-            dispatch({
+            dispatch({ 
                 type: TOKEN , payload : data.msg.TOKEN
             })
 
@@ -27,7 +27,7 @@ const Auth = (formData) => async dispatch => {
     }).catch(err => {
         console.log("get orders api err ", err);
         dispatch({ type: STOP_LOADING });
-        dispatch({ type: SHOW_ERROR_MESSAGE, payload : "xxxxxxrrrr" })
+        dispatch({ type: SHOW_ERROR_MESSAGE, payload: "something went wrong please try again" });
     })
 }
 

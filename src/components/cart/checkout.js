@@ -37,7 +37,7 @@ const Checkout = () => {
 
 
     const [Carts, setCarts] = useState([])
-    const [ShippingCost, setShippingCost] = useState(0)
+    const [DonationCost, setDonationCost] = useState(0)
     const [Comment, setComment] = useState("...")
     const [Amount, setAmount] = useState(0)
 
@@ -191,7 +191,7 @@ const Checkout = () => {
     const orderOrder = () => {
         if (Carts && Carts.length > 0 && formiRef.current.isValid) {
 
-            const shipping = ShippingCost;
+            const donation = DonationCost;
             const products = Carts;
 
             const transaction = {id : "123" , status : "none"}
@@ -202,7 +202,7 @@ const Checkout = () => {
             const transactionState = transaction.status;
 
             dispatch(create_orders(user._id, firstname, lastname, email, phone, address,
-                country, city, postcode, state, comment, shipping, products, 
+                country, city, postcode, state, comment, donation, products, 
                 transactionId , transactionState , authorization))
 
                 toast.success(t("your payment was successful please check your orders"))
@@ -359,12 +359,12 @@ const Checkout = () => {
                                         </div>
                                         <div>
                                             <span className="text-left">{t("Delivery Chargesr")}</span>
-                                            <span className="text-right">${ShippingCost}</span>
+                                            <span className="text-right">${DonationCost}</span>
                                         </div>
 
                                         <div className="ec-checkout-summary-total">
                                             <span className="text-left">{t("Total Amount")}</span>
-                                            <span className="text-right">${ShippingCost + Amount}</span>
+                                            <span className="text-right">${DonationCost + Amount}</span>
                                         </div>
                                     </div>
                                     <div className="ec-checkout-pro">
@@ -431,6 +431,21 @@ const Checkout = () => {
 
                                                                         </ul>
                                                                     </div>
+
+                                                                    <div className="ec-pro-size">
+                                                                        <span className="ec-pro-opt-label">{t("Size")}</span>
+                                                                        <ul className="ec-opt-size">
+
+                                                                            {cart.product.shipping.map((shipping, si) => {
+                                                                                return (
+                                                                                    <li key={si} className={myClassname({ "active": shipping.name === cart.shipping })}><a href="javascript:void(0);" className="ec-opt-sz" >{shipping.name}</a></li>
+                                                                                )
+                                                                            })}
+
+                                                                        </ul>
+                                                                    </div>
+
+
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -455,18 +470,18 @@ const Checkout = () => {
                                 </div>
                                 <div className="ec-sb-block-content ec-sidebar-dropdown">
                                     <div className="ec-checkout-del">
-                                        <div className="ec-del-desc">{t("Please select the preferred shipping method to use on this order")}.</div>
+                                        <div className="ec-del-desc">{t("Donation")}.</div>
                                         <span className="ec-del-option">
 
                                             <span>
-                                                <span className="ec-del-opt-head">{t("Free Shipping")}</span>
-                                                <input type="radio" id="del1" name="radio-group" onClick={() => { setShippingCost(0) }} />
-                                                <label htmlFor="del1">{("Rate")} - $0 .00</label>
+                                                <span className="ec-del-opt-head">{t("I will not donate")}</span>
+                                                <input type="radio" id="del1" name="radio-group" onClick={() => { setDonationCost(0) }} />
+                                                <label htmlFor="del1">$0 .00</label>
                                             </span>
                                             <span>
-                                                <span className="ec-del-opt-head">{t("Flat Rate")}</span>
-                                                <input type="radio" id="del2" name="radio-group" onClick={() => { setShippingCost(5) }} />
-                                                <label htmlFor="del2">{("Rate")} - $5.00</label>
+                                                <span className="ec-del-opt-head">{t("I will donate")}</span>
+                                                <input type="radio" id="del2" name="radio-group" onClick={() => { setDonationCost(5) }} />
+                                                <label htmlFor="del2">$5.00</label>
                                             </span>
                                         </span>
 

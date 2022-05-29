@@ -23325,7 +23325,7 @@ h4.ec-faq-title::after, .ec-faq-title.h4::after {
       -ms-flex-pack: center;
           justify-content: center;
   font-size: 12px;
-  line-height: 22px;
+  line-height: 22px; 
   padding: 0;
   border: 1px solid #eeeeee;
   float: left;
@@ -23339,8 +23339,8 @@ h4.ec-faq-title::after, .ec-faq-title.h4::after {
   background-color: transparent;
 }
 .single-pro-content .ec-pro-variation .ec-pro-variation-inner.ec-pro-variation-color .ec-pro-variation-content li span {
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   display: block;
   border-radius: 30px;
 }
@@ -33740,6 +33740,35 @@ input[type=email]:focus::-webkit-input-placeholder {
   color: #ffffff;
 }
 
+.ec-slide-item {
+	width: 100%;
+	height: 80vh;
+	position: relative;
+}
+.ec-slide-1 {
+	width: 100%;
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	overflow-y: hidden;	
+}
+.ec-slide-2 {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+}
+/* .ec-slide-2 {
+	background-image: url("../images/main-slider-banner/2.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;	
+}
+.ec-slide-3 {
+	background-image: url("../images/main-slider-banner/3.jpg");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;	
+} */
 
 
 /*-------------------------------------------------

@@ -1,5 +1,5 @@
 
-import { GET_CARTS , SET_CARTS , DELETE_CARTS , DECREASE_CARTS , INCREASE_CARTS  , COLOR_CARTS , SIZE_CARTS } from "../constans/carts"
+import { GET_CARTS , SET_CARTS , DELETE_CARTS , DECREASE_CARTS , INCREASE_CARTS  , COLOR_CARTS , SIZE_CARTS, SHIPPING_CARTS } from "../constans/carts"
 import { SHOW_ERROR_MESSAGE } from "../constans/message"
 import { START_LOADING, STOP_LOADING } from "../constans/loading"
 import { getLocalStorage, setLocalStorage } from "../../shared/localStorage"
@@ -38,10 +38,13 @@ const create_carts = (product) => async dispatch => {
         if(index > -1){
              cart[index].quantity += 1
              cart[index].color = product.color[0]
-             cart[index].size = product.size[0].size
+             cart[index].size = product.size.length > 0 ? product.size[0].size : "standard"
+             cart[index].shipping = product.shipping.length > 0 ? product.shipping[0].name : "free"
              cart[index].amount = (product.price * cart[index].quantity)
         }else {
-             cart.push({product , quantity : 1 , size : product.size[0].size , color : product.color[0] , amount : product.price , price : product.price})
+             cart.push({product , quantity : 1 , shipping : product.shipping.length > 0 ? product.shipping[0].name : "free" ,
+              size : product.size.length > 0 ? product.size[0].size : "standard" , color : product.color[0] ,
+               amount : product.price , price : product.price})
         }
     
         dispatch({
@@ -154,6 +157,35 @@ const size_carts = (id , size , price) => async dispatch => {
 }
 
 
+const shipping_carts = (id , shipping) => async dispatch => {
+    dispatch({ type: START_LOADING })
+
+    try {
+
+        const cart =  localStorage.getItem("cart") ? getLocalStorage("cart") : [] 
+        const index = cart.findIndex(c => c.product._id === id)
+    
+    
+        if(index => 0){ 
+            cart[index].shipping = shipping.name
+            cart[index].amount = (cart[index].price * cart[index].quantity) + shipping.price
+        }
+    
+        dispatch({
+            type: SHIPPING_CARTS,
+            payload: cart
+        })
+        setLocalStorage("cart" , cart)
+
+        dispatch({ type: STOP_LOADING })
+    }catch(err){
+        console.log("set carts api err ", err);
+        dispatch({ type: SHOW_ERROR_MESSAGE, payload: err })
+        dispatch({ type: STOP_LOADING })
+    }
+}
+
+
 
 const color_carts = (id , color) => async dispatch => {
     dispatch({ type: START_LOADING })
@@ -185,6 +217,6 @@ const color_carts = (id , color) => async dispatch => {
 
 
 export {
-    get_carts, create_carts , increase_carts , decrease_carts , color_carts , size_carts , delete_carts
+    get_carts, create_carts , increase_carts , decrease_carts , color_carts , size_carts , delete_carts , shipping_carts
 }
 

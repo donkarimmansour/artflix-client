@@ -2,6 +2,7 @@
   "name": "newshop",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://solidernet.com",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.1.1",
@@ -16,6 +17,7 @@
     "jwt-decode": "^3.1.2",
     "lqip-react": "^1.0.1",
     "lqip.macro": "^0.1.5",
+    "ntc": "0.0.1",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-i18next": "^11.15.3",

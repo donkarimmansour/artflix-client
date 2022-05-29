@@ -49,18 +49,15 @@ const Category = (props) => {
 
     useEffect(() => {
         dispatch(get_catigories({}))
-        dispatch(get_colors("color"))
-        dispatch(get_sizes("size.size"))
-
-    }, [dispatch])
+        dispatch(get_colors({ distinct : "color" , caty : params.caty }))
+        dispatch(get_sizes({ distinct : "size.size" , caty : params.caty }))
+    }, [dispatch , caty])
 
 
 
     useEffect(() => {
 
-        setCategories(() => {
-            return [...catigories]
-        })
+        setCategories(catigories)
 
         setColors(colors)
         setSizes(sizes)
@@ -455,7 +452,7 @@ const Category = (props) => {
                                                                                     <i key={i} className={star} style={{ color: "#eec317" }}></i>
                                                                                 )
                                                                             })
-                                                                        }
+                                                                         }
 
                                                                     </div>  */}
 
@@ -563,7 +560,7 @@ const Category = (props) => {
 
                                         <div className="ec-sidebar-block" key={pci}>
                                             <div className="ec-sb-title">
-                                                <h3 className="ec-sidebar-title">{t(pcat._id)}</h3>
+                                                <h3 className="ec-sidebar-title">{t(pcat.name[0])}</h3>
                                             </div>
                                             <div className="ec-sb-block-content">
                                                 <ul>

@@ -4,6 +4,8 @@ import React from "react"
 const IndexPage = () => {
  
   return (
+    <>
+    
     <main className="pcm-spinner">
       <div className="mesh-loader">
         <div className="set-one">
@@ -16,6 +18,8 @@ const IndexPage = () => {
         </div>
       </div>
     </main>
+    
+    </>
   );
 }
  

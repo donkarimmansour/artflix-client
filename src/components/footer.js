@@ -65,7 +65,7 @@ const Footer = () => {
     }, [dispatch])
 
     useEffect(() => {
-        dispatch(get_random_product({ filter: { "name": { "$ne": "xxxlxxx@gmail.com" } }, skip: Math.floor(Math.random() * count), limit: 1 }))
+        dispatch(get_random_product({ filter: { "name": { "$ne": "xxxlxxx@gmail.com" } , "status" : "published" }, skip: Math.floor(Math.random() * count), limit: 1 }))
     }, [count])
 
 
@@ -313,7 +313,7 @@ const Footer = () => {
                                 <div className="col-sm-12 col-lg-3 ec-footer-contact">
                                     <div className="ec-footer-widget">
 
-                                        <div className="ec-footer-logo"><img src="/assets/imgs/ws-artflix.png" alt="" /></div>
+                                        <div className="ec-footer-logo"><img src="/assets/imgs/ws-soldernet.png" alt="" /></div>
                                             
                                     
                                         <h4 className="ec-footer-heading">{t("Contact us")} <div className='ec-heading-res' onClick={(e) => {handleDropdown(e)}}><i className='ecicon eci-angle-down'></i></div></h4>

@@ -11,7 +11,7 @@ import { create_carts } from "../../redux/actions/carts";
 import Breadcrumb from "../stuff/breadcrumb";
 import Slider from "react-slick";
 import { isAuthentication } from "../../redux/actions/auth";
-import Image from 'lqip-react';
+import Image from 'lqip-react'; 
 import { toast } from "react-toastify";
 
 
@@ -394,6 +394,25 @@ const SingleProduct = () => {
                                                                     </div>
                                                                 </div>}
 
+
+                                                                {Product.shipping.length > 0 &&
+                                                                <div className="ec-pro-variation-inner ec-pro-variation-size">
+                                                                    <span>{t("Please select the preferred shipping method to use on this order")}</span>
+                                                                    <div className="ec-pro-variation-content">
+                                                                        <ul>
+                                                                            {
+                                                                                Product.shipping.map((shipping, index) => {
+                                                                                    return (
+                                                                                        <li key={index}>
+                                                                                            <span className="ec-opt-sz" >{shipping.name}</span>
+                                                                                        </li>
+                                                                                    );
+                                                                                })}
+
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>}
+
                                                         </div>
 
 
@@ -566,12 +585,10 @@ const SingleProduct = () => {
 
                                     <div className="ec-sidebar-slider">
                                         <div className="ec-sb-slider-title">{t("Best Sellers")}</div>
-                                        <div className="ec-sb-pro-sl slick-initialized slick-slider">
-                                            <div className="slick-list draggable">
-                                                <div className="slick-track" >
+                                        <div className="ec-sb-pro-sl">
 
                                                     {ExtraProducts && ExtraProducts.length > 0 &&
-                                                        <div className="slick-slide row" style={{ display: "flex" }} >
+                                                        <div className="row" style={{ display: "flex" }} >
 
                                                             {
                                                                 ExtraProducts.map((products, pi) => {
@@ -590,7 +607,7 @@ const SingleProduct = () => {
                                                                                 <div className="ec-sb-pro-sl-item">
                                                                                     <Link to={`/product/${products.category}/${products._id}`} className="sidekka_pro_img" >
 
-                                                                                        <Image src={img} alt="product" thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
+                                                                                    <Image src={img} alt="product" thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
 
                                                                                     </Link>
                                                                                     <div className="ec-pro-content">
@@ -625,8 +642,7 @@ const SingleProduct = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
+                                  
                                 {/* <!-- Sidebar Area Start --> */}
 
 

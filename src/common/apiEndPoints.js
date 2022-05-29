@@ -1,12 +1,12 @@
 
 const Host = {
   ROOT: "http://localhost:3000",
-  BACKEND: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3001" : "https://api.milo-jbilu.xyz" ,
-  PREFIX: "/v1/api", 
+  BACKEND: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3001" : "https://api.solidernet.com" ,
+  PREFIX: "/v1/api",  
 };
  
 const ApiEndpoints = {
-
+ 
   AuthEndpoints: {
     route: `${Host.PREFIX}/user`, 
     signup: `/signup`, 

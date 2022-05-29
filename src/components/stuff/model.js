@@ -54,6 +54,7 @@ const Model = () => {
 
     }
 
+
     const handleColor = (index, e) => {
         const colors = e.target.parentElement.parentElement.querySelectorAll("li");
 
@@ -205,7 +206,7 @@ const Model = () => {
                                         }
                                     </div>
 
-                                    <div className="ec-quickview-desc">{extractDesk(Product.description, 100)}</div>
+                                     <div className="ec-quickview-desc">{extractDesk(Product.description, 100)}</div>
                                     {isAuth && <div className="ec-quickview-price">
                                         {Product.oldprice && <span className="old-price">${Product.oldprice}</span>}
                                         <span className="new-price">${Product.price}</span>
@@ -252,6 +253,27 @@ const Model = () => {
                                                 </div>
                                             </div>
                                         }
+
+                            {Product.shipping.length > 0 &&
+
+                            <div className="ec-pro-variation-inner ec-pro-variation-size ec-pro-size">
+                                <span>{t("Please select the preferred shipping method to use on this order")}</span>
+                                <div className="ec-pro-variation-content">
+                                    <ul className="ec-opt-size">
+                                        {
+                                            Product.shipping.map((shipping, index) => {
+                                                return (
+                                                    <li key={index}>
+                                                        <a href="javascript:void(0);" className="ec-opt-sz" >{shipping.name}</a>
+                                                    </li>
+                                                );
+                                            })}
+                                    </ul>
+                                </div>
+                            </div>
+                            }
+
+
                                     </div>
 
                                     <div className="ec-quickview-qty">

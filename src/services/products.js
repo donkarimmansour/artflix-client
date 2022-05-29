@@ -18,8 +18,8 @@ const ListTab = async (filter) => {
   , { headers :  {...config.headers} , params : {...filter} } )
 }
 
-const ListDistinct = async (distinct) => {
-  return  await  axios.post(`${Host.BACKEND}${ApiEndpoints.ProductsEndpoints.route}${ApiEndpoints.ProductsEndpoints.distinct}` ,  { "distinct" : distinct } , config )
+const ListDistinct = async (filter) => {
+  return  await  axios.post(`${Host.BACKEND}${ApiEndpoints.ProductsEndpoints.route}${ApiEndpoints.ProductsEndpoints.distinct}` ,  { "distinct" : filter.distinct , caty : filter.caty } , config )
 }
 
 const ListCount = async (filter) => {

@@ -1,5 +1,5 @@
 import { setLocalStorage } from "../../shared/localStorage"
-import { GET_CARTS, SET_CARTS, DELETE_CARTS, DECREASE_CARTS, INCREASE_CARTS, COLOR_CARTS , SIZE_CARTS, DELETE_CART } from "../constans/carts"
+import { GET_CARTS, SET_CARTS, DELETE_CARTS, DECREASE_CARTS, INCREASE_CARTS, COLOR_CARTS , SIZE_CARTS, DELETE_CART, SHIPPING_CARTS } from "../constans/carts"
 
 const INITIAL_STATE = {
     carts: []
@@ -14,7 +14,7 @@ const cartsReducer = (state = INITIAL_STATE, action) => {
         case SET_CARTS:
             return {
                 carts: action.payload
-            }
+            } 
         case DELETE_CARTS:
             const newCart = state.carts.filter(o => o.product._id !== action.payload.id)
             console.log(newCart);
@@ -49,12 +49,17 @@ const cartsReducer = (state = INITIAL_STATE, action) => {
             }
 
         case COLOR_CARTS:
-          
+
             return {
                 carts: action.payload
             }
 
         case SIZE_CARTS:
+
+            return {
+                carts: action.payload
+            }
+        case SHIPPING_CARTS:
 
             return {
                 carts: action.payload

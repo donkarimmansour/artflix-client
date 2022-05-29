@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { get_carts, increase_carts, decrease_carts, delete_carts,  color_carts, size_carts } from "../../redux/actions/carts";
+import { get_carts, increase_carts, decrease_carts, delete_carts,  color_carts, size_carts, shipping_carts } from "../../redux/actions/carts";
 import { ImageLink } from "../../shared/funs";
 import { toast } from "react-toastify";
 import { isAuthentication } from "../../redux/actions/auth";
-
+import ntc from 'ntc'; 
  
 const Cart = () => {
  
@@ -49,6 +49,11 @@ const Cart = () => {
         dispatch(size_carts(id , size , price))
     }
 
+    
+    const changeShipping = (id , shipping) => {
+        dispatch(shipping_carts(id , shipping))
+    }
+
     const toggleCoupan = () => {
       document.querySelector(".ec-cart-coupan-content").classList.toggle("show")
     }; 
@@ -80,6 +85,7 @@ const Cart = () => {
                                                         <th>{t("Price")}</th>
                                                         <th style={{textAlign: "center"}}>{t("Size")}</th>
                                                         <th style={{textAlign: "center"}}>{t("Color")}</th>  
+                                                         <th style={{textAlign: "center"}}>{t("Shipping")}</th>
                                                          <th style={{textAlign: "center"}}>{t("Quantity")}</th>
                                                         <th>{t("Total")}</th>
                                                         <th>{t("Remove")}</th>
@@ -114,7 +120,7 @@ const Cart = () => {
                                                                 </button>
                                                                              
                                                                 <ul className="dropdown-menu dropdown-menu-right">
-                                                                       {cart.product.size.map((size , si) => {
+                                                                       {cart.product.size.length > 0 && cart.product.size.map((size , si) => {
                                                                              return (
                                                                                 <li key={si}><a  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeSize(cart.product._id , size.size , size.price) }}>{size.size} (${size.price})</a> </li>
                                                                              )
@@ -127,19 +133,37 @@ const Cart = () => {
                                                             <td data-label={t("Color")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
 
                                                                 <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                                                                   {cart.color}
+                                                                   {ntc.name(cart.color)[2] ? ntc.name(cart.color)[1] : ntc.name(cart.color)[0]}
                                                                 </button>
                                                                             
                                                                 <ul className="dropdown-menu dropdown-menu-right">
-                                                                    {cart.product.color.map((color , ci) => {
+                                                                    {cart.product.color.length > 0 && cart.product.color.map((color , ci) => {
                                                                             return (
-                                                                                <li key={ci}><a  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeColor(cart.product._id , color) }}>{color}</a> </li>
+                                                                                <li key={ci}><a style={{backgroundColor : color }}  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeColor(cart.product._id , color) }}>{ntc.name(color)[2] ? ntc.name(color)[1] : ntc.name(color)[0]}</a> </li>
                                                                             )
                                                                         })}
 
                                                                 </ul>
 
                                                                 </td>
+
+                                                            <td data-label={t("Shipping")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
+
+                                                                <button className="dropdown-toggle" data-bs-toggle="dropdown">
+                                                                    {cart.shipping}
+                                                                </button>
+
+                                                                <ul className="dropdown-menu dropdown-menu-right">
+                                                                    {cart.product.shipping.length > 0 && cart.product.shipping.map((shipping, si) => {
+                                                                        return (
+                                                                            <li key={si}><a className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeShipping(cart.product._id, shipping) }}>{`${shipping.name}($${shipping.price}(from=>${shipping.from}|to=>${shipping.to}))`}</a> </li>
+                                                                        )
+                                                                    })}
+
+                                                                </ul>
+
+                                                            </td>
+
 
                                                           
                                                             <td data-label={t("Quantity")} className="ec-cart-pro-qty" style={{ textAlign: "center" }}>

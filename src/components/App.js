@@ -143,30 +143,30 @@ const App = () => {
           <Route path="/" element={
             <Fragment>
 
-             <Suspense fallback={<IndexPage />}>
+             <Suspense fallback={<SlidersSkeleton />}>
                  <MainSlider skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
               </Suspense> 
 
                 <Suspense fallback={<ProductsSkeleton />}>
-                 <Products caty="Cameras" skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
+                 <Products skip="0" limit="12" sort={'{"updatedAt" : -1}'}/>
                </Suspense> 
 
-                <Suspense fallback={<ProductsSkeleton />}>
+      {/*           <Suspense fallback={<ProductsSkeleton />}>
                 <AreaProducts caty='["Cameras"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
                </Suspense>
-{/*                
+               
                 <Suspense fallback={<CatyOneSkeleton />}> 
                  <CatySlideOne caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'} /> 
                </Suspense>
 
               <Suspense fallback={<CatyTwoSkeleton />}> 
                  <CatySlideTwo  caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
-               </Suspense>  */}
+               </Suspense>  
 
               <Suspense fallback={<ItemsSkeleton />}> 
                <FeatureAndLimit skip="0" limit="4" sort='{"updatedAt" : 1}' />   
                </Suspense>  
-
+*/}
 
                
                 <Review /> 

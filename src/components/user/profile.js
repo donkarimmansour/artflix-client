@@ -667,6 +667,7 @@ const Profile = () => {
                                                             <th scope="col">{('Qty')}</th>
                                                             <th scope="col">{("Color")}</th>
                                                             <th scope="col">{("Size")}</th>
+                                                            <th scope="col">{("Shipping")}</th>
                                                             {/* <th scope="col">{("Traking")}</th> */}
                                                             <th scope="col">{("Track")}</th>
                                                         </tr>
@@ -684,6 +685,7 @@ const Profile = () => {
                                                                             <td><span>{ordr.quantity}</span></td>
                                                                             <td><span>{ordr.color}</span></td>
                                                                             <td><span>{ordr.size}</span></td>
+                                                                            <td><span>{`${ordr.shipping.name} $${ordr.shipping.price}`}</span></td>
                                                                             {/* <td><span>{ordr.tracking}</span></td> */}
                                                                             <td><span className="tbl-btn"><Link className="btn btn-lg btn-primary" to={`/track/${order._id}/${ordr.productId._id}`}>Track</Link></span></td>
                                                                         </tr>

@@ -52,14 +52,14 @@ const get_order = (filter , authorization) => async dispatch => {
 
 
 const create_orders = (userId, firstname, lastname, email, phone, address,
-    country, city, postcode, state, comment, shipping,
+    country, city, postcode, state, comment, donation,
     products, transactionId, transactionState, authorization) => async dispatch => {
         
     dispatch({ type: START_LOADING })
 
         await Create({
             userId, firstname, lastname, email, phone, address,
-            country, city, postcode, state, comment, shipping,
+            country, city, postcode, state, comment, donation,
             products, transactionId, transactionState
         }, authorization).then(({ data }) => {
 
