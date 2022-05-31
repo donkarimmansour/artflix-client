@@ -161,12 +161,12 @@ const App = () => {
 
               <Suspense fallback={<CatyTwoSkeleton />}> 
                  <CatySlideTwo  caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
-               </Suspense>  
+               </Suspense>  */}
 
               <Suspense fallback={<ItemsSkeleton />}> 
                <FeatureAndLimit skip="0" limit="4" sort='{"updatedAt" : 1}' />   
                </Suspense>  
-*/}
+
 
                
                 <Review /> 
