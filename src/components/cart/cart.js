@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { get_carts, increase_carts, decrease_carts, delete_carts,  color_carts, size_carts, shipping_carts } from "../../redux/actions/carts";
-import { ImageLink } from "../../shared/funs";
+import { ImageLink ,extractDesk } from "../../shared/funs";
 import { toast } from "react-toastify";
 import { isAuthentication } from "../../redux/actions/auth";
+import * as moment from 'moment';
 import ntc from 'ntc'; 
+
  
 const Cart = () => {
  
@@ -63,7 +65,6 @@ const Cart = () => {
         toast.info("there is no coupon")
       }; 
 
-
     return (
 
         // <!-- Start cart page -->
@@ -77,11 +78,13 @@ const Cart = () => {
                                 <div className="row">
                                     <form action="#">
 
-                                        <div className="table-content cart-table-content">
+                                        <div className="table-content cart-table-content" style={{overflowX: "scroll" , overflowY : "hidden" , maxWidth: "100%"}}>
                                             <table>
                                                 <thead>
                                                     <tr>
                                                         <th>{t("Product")}</th>
+                                                        <th></th>
+                                                        <th></th>
                                                         <th>{t("Price")}</th>
                                                         <th style={{textAlign: "center"}}>{t("Size")}</th>
                                                         <th style={{textAlign: "center"}}>{t("Color")}</th>  
@@ -94,7 +97,7 @@ const Cart = () => {
 
                                                 <tbody>
                                                 {Carts && Carts.length > 0 &&
-                                                   Carts.map((cart, oi) => {
+                                                   Carts.map((cart, oi) => {  
 
                                                     let img = ""
                                                     if(!cart.product || !cart.product.images || !cart.product.images[0]){
@@ -106,11 +109,13 @@ const Cart = () => {
                                                     return (
 
                                                         <tr key={oi}>
-                                                            <td data-label={t("Product")} className="ec-cart-pro-name">
+                                                            <td data-label={t("Product")} className="ec-cart-pro-name" colSpan="3">
                                                                 <Link to={`/product/${cart.product.categoty}/${cart.product._id}`}>
                                                                     <img className="ec-cart-pro-img mr-4" src={img} alt="" />
-                                                                    {cart.product.name}</Link></td>
-                                                            <td data-label={t("Price")} className="ec-cart-pro-price">{isAuth && <span className="amount">{cart.price}</span>}</td>
+                                                                      {extractDesk(cart.product.name , 10) }</Link>
+                                                                    </td>
+
+                                                            <td data-label={t("Price")} className="ec-cart-pro-price">{isAuth && <span className="amount">${cart.price}</span>}</td>
 
                                                           
                                                             <td data-label={t("Size")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
@@ -133,13 +138,15 @@ const Cart = () => {
                                                             <td data-label={t("Color")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
 
                                                                 <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                                                                   {ntc.name(cart.color)[2] ? ntc.name(cart.color)[1] : ntc.name(cart.color)[0]}
+                                                                {/* { typeof cart.color === "undefined" ? (t("Default")) : ntc.name(cart.color)[2] ? ntc.name(cart.color)[1] : ntc.name(cart.color)[0] } */}
+                                                                { typeof cart.color === "undefined" ? (t("Default")) : ntc.name(cart.color)[1] }
                                                                 </button>
                                                                             
                                                                 <ul className="dropdown-menu dropdown-menu-right">
                                                                     {cart.product.color.length > 0 && cart.product.color.map((color , ci) => {
+                                                                       
                                                                             return (
-                                                                                <li key={ci}><a style={{backgroundColor : color }}  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeColor(cart.product._id , color) }}>{ntc.name(color)[2] ? ntc.name(color)[1] : ntc.name(color)[0]}</a> </li>
+                                                                                <li key={ci}><a style={{backgroundColor : color }}  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeColor(cart.product._id , color) }}>{ntc.name(color)[1] }</a> </li>
                                                                             )
                                                                         })}
 
@@ -150,13 +157,21 @@ const Cart = () => {
                                                             <td data-label={t("Shipping")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
 
                                                                 <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                                                                    {cart.shipping}
+                                                                    {(cart.shipping)}
                                                                 </button>
 
                                                                 <ul className="dropdown-menu dropdown-menu-right">
                                                                     {cart.product.shipping.length > 0 && cart.product.shipping.map((shipping, si) => {
+
+                                                                        const now = new Date()
+
+                                                                        const from = moment(now).add(shipping.from, "days").format("LL")
+                                                                        const to = moment(now).add(shipping.to, "days").format("LL")
+
+                                                                        const info = `(${shipping.name} cost : $${shipping.price}) between ${from} and : ${to}`
+
                                                                         return (
-                                                                            <li key={si}><a className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeShipping(cart.product._id, shipping) }}>{`${shipping.name}($${shipping.price}(from=>${shipping.from}|to=>${shipping.to}))`}</a> </li>
+                                                                            <li key={si}><a className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeShipping(cart.product._id, shipping) }}>{info}</a> </li>
                                                                         )
                                                                     })}
 

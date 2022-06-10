@@ -38,12 +38,12 @@ const create_carts = (product) => async dispatch => {
         if(index > -1){
              cart[index].quantity += 1
              cart[index].color = product.color[0]
-             cart[index].size = product.size.length > 0 ? product.size[0].size : "standard"
-             cart[index].shipping = product.shipping.length > 0 ? product.shipping[0].name : "free"
+             cart[index].size = product.size.length > 0 ? product.size[0].size : "Standard"
+             cart[index].shipping = product.shipping.length > 0 ? product.shipping[0].name : "Standard"
              cart[index].amount = (product.price * cart[index].quantity)
         }else {
-             cart.push({product , quantity : 1 , shipping : product.shipping.length > 0 ? product.shipping[0].name : "free" ,
-              size : product.size.length > 0 ? product.size[0].size : "standard" , color : product.color[0] ,
+             cart.push({product , quantity : 1 , shipping : product.shipping.length > 0 ? product.shipping[0].name : "Standard" ,
+              size : product.size.length > 0 ? product.size[0].size : "Standard" , color : product.color[0] ,
                amount : product.price , price : product.price})
         }
     

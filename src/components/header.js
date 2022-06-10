@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import myClassName from 'classnames';
 import { useDispatch, useSelector } from "react-redux";
 import { get_catigories } from "../redux/actions/categories";
@@ -8,6 +8,7 @@ import { get_wishlist_count } from "../redux/actions/wishlist";
 import { COUNT_WISHLIST } from "../redux/constans/wishlist";
 import  'aos/dist/aos.css';
 import { isAuthentication, Logout } from "../redux/actions/auth"
+import { getCookie, setCookie } from "../shared/cookie";
 
 const Header = (props) => {
     const { t, i18n } = useTranslation();
@@ -126,6 +127,24 @@ const Header = (props) => {
      const menuToggleClick = (e) => {
         e.target.parentElement.click()
      }
+
+     const myChangeLanguage = (lang) => {
+        i18n.changeLanguage(lang) 
+        setCookie("lang", lang)
+
+        if (lang === "ar") {
+             if (!getCookie("rtl") || getCookie("rtl") === "false") {
+                 setCookie("rtl", "true")
+                 props.setStyle(props.style + 1)
+             }
+         } else {
+             if (!getCookie("rtl") || getCookie("rtl") === "true") {
+                 setCookie("rtl", "false")
+                 props.setStyle(props.style + 1)
+             }
+         }
+       
+     }
    
     return (
 
@@ -178,8 +197,8 @@ const Header = (props) => {
                                     <div className="header-top-lan dropdown">
                                         <button className="dropdown-toggle text-upper" data-bs-toggle="dropdown">{t("Language")} <i className="fas fa-caret-down"></i></button>
                                         <ul className="dropdown-menu">
-                                            <li className={i18n.language === "en" ? "active" : ""}><button className="dropdown-item" onClick={() => { i18n.changeLanguage("en") }}>{t("English")}</button></li>
-                                            <li className={i18n.language === "ar" ? "active" : ""}><button className="dropdown-item" onClick={() => { i18n.changeLanguage("ar") }}>{t("Arabic")}</button></li>
+                                            <li className={i18n.language === "en" ? "active" : ""}><button className="dropdown-item" onClick={() => { myChangeLanguage("en") }}>{t("English")}</button></li>
+                                            <li className={i18n.language === "ar" ? "active" : ""}><button className="dropdown-item" onClick={() => { myChangeLanguage("ar") }}>{t("Arabic")}</button></li>
                                         </ul>
                                     </div>
                                     {/* <!-- Language End --> */}
@@ -466,10 +485,10 @@ const Header = (props) => {
                                                 <li className="menu_title">{t('pages')}</li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/about-us") })}><Link to="/pages/about-us">{t('About Us')}</Link></li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/contact-us") })}><Link to="/pages/contact-us">{t("Contact Us")}</Link></li>
-                                                <li className={myClassName("", { "active": pathname.includes("/pages/maintenance") })}><Link to="/pages/maintenance">{t("Maintenance")}</Link></li>
+                                                {/* <li className={myClassName("", { "active": pathname.includes("/pages/maintenance") })}><Link to="/pages/maintenance">{t("Maintenance")}</Link></li> */}
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/faq") })}><Link to="/pages/faq">{t("FAQ")}</Link></li>
-                                                <li className={myClassName("", { "active": pathname.includes("/pages/error404") })}><Link to="/pages/error404">{t("Error 404")}</Link></li>
-                                                <li className={myClassName("", { "active": pathname.includes("/pages/backsoon") })}><Link to="/pages/backsoon">{t("Backsoon")}</Link></li>
+                                                {/* <li className={myClassName("", { "active": pathname.includes("/pages/error404") })}><Link to="/pages/error404">{t("Error 404")}</Link></li> */}
+                                                {/* <li className={myClassName("", { "active": pathname.includes("/pages/backsoon") })}><Link to="/pages/backsoon">{t("Backsoon")}</Link></li> */}
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/privacy") })}><Link to="/pages/privacy">{t("Privacy Policy")}</Link></li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/terms") })}><Link to="/pages/terms">{t("Terms Condition")}</Link></li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/cancellation") })}><Link to="/pages/cancellation">{t("Cancellation Policy")}</Link></li>
@@ -538,10 +557,10 @@ const Header = (props) => {
                                                 <li className="menu_title">{t('pages')}</li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/about-us") })}><Link to="/pages/about-us">{t('About Us')}</Link></li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/contact-us") })}><Link to="/pages/contact-us">{t("Contact Us")}</Link></li>
-                                                <li className={myClassName("", { "active": pathname.includes("/pages/maintenance") })}><Link to="/pages/maintenance">{t("Maintenance")}</Link></li>
+                                                {/* <li className={myClassName("", { "active": pathname.includes("/pages/maintenance") })}><Link to="/pages/maintenance">{t("Maintenance")}</Link></li> */}
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/faq") })}><Link to="/pages/faq">{t("FAQ")}</Link></li>
-                                                <li className={myClassName("", { "active": pathname.includes("/pages/error404") })}><Link to="/pages/error404">{t("Error 404")}</Link></li>
-                                                <li className={myClassName("", { "active": pathname.includes("/pages/backsoon") })}><Link to="/pages/backsoon">{t("Backsoon")}</Link></li>
+                                                {/* <li className={myClassName("", { "active": pathname.includes("/pages/error404") })}><Link to="/pages/error404">{t("Error 404")}</Link></li> */}
+                                                {/* <li className={myClassName("", { "active": pathname.includes("/pages/backsoon") })}><Link to="/pages/backsoon">{t("Backsoon")}</Link></li> */}
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/privacy") })}><Link to="/pages/privacy">{t("Privacy Policy")}</Link></li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/terms") })}><Link to="/pages/terms">{t("Terms Condition")}</Link></li>
                                                 <li className={myClassName("", { "active": pathname.includes("/pages/cancellation") })}><Link to="/pages/cancellation">{t("Cancellation Policy")}</Link></li>
@@ -563,8 +582,8 @@ const Header = (props) => {
                                 <div className="header-top-lan dropdown">
                                     <button className="dropdown-toggle text-upper" data-bs-toggle="dropdown">{t("Language")} <i className="fas fa-caret-down"></i></button>
                                     <ul className="dropdown-menu">
-                                        <li className={i18n.language == "en" ? "active" : ""}><button className="dropdown-item" onClick={() => { i18n.changeLanguage("en") }}>{t("English")}</button></li>
-                                        <li className={i18n.language == "ar" ? "active" : ""}><button className="dropdown-item" onClick={() => { i18n.changeLanguage("ar") }}>{t("Arabic")}</button></li>
+                                        <li className={i18n.language == "en" ? "active" : ""}><button className="dropdown-item" onClick={() => { myChangeLanguage("en") }}>{t("English")}</button></li>
+                                        <li className={i18n.language == "ar" ? "active" : ""}><button className="dropdown-item" onClick={() => { myChangeLanguage("ar") }}>{t("Arabic")}</button></li>
                                     </ul>
                                 </div>
                                 {/* <!-- Language End -*/}

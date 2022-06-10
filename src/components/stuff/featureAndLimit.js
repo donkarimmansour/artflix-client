@@ -161,9 +161,10 @@ const FeatureAndLimit = (props) => {
                                                         <div className="ec-fs-pro-image">
 
                                                             <Link to={`/product/${product.category}/${product._id}`} className="image"
-                                                                tabIndex="0"><Image className="main-image"
+                                                                tabIndex="0">
+                                                                    <Image className="main-image"
                                                                     thumbnail={"https://via.placeholder.com/500"}
-                                                                    aspectRatio={'500x500'}
+                                                                    aspectRatio={''}
                                                                     src={ImageLink(product.images[0])}
                                                                     alt="Product" />
                                                             </Link>

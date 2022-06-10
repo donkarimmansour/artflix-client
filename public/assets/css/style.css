@@ -21660,7 +21660,7 @@ select::-ms-expand {
   display: block;
   margin: 5px auto 10px;
   font-size: 15px;
-}
+} 
 
 /*-----  Pro List View Section  -----*/
 .ec-pro-list-desc {
@@ -34202,4 +34202,32 @@ input[type=email]:focus::-webkit-input-placeholder {
   100% {
     transform: rotate(360deg);
   }
+}
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+
+#root > div > section > div > div > div.ec-shop-leftside.filter-sidebar.toggle-sidebar-swipe > div.ec-sidebar-wrap > div.ec-sidebar-block.ec-sidebar-block-clr > div.ec-sb-block-content.ec-sidebar-dropdown > ul > li:nth-child(1) > div > span {
+    position: relative;
+}
+
+#root > div > section > div > div > div.ec-shop-leftside.filter-sidebar.toggle-sidebar-swipe > div.ec-sidebar-wrap > div.ec-sidebar-block.ec-sidebar-block-clr > div.ec-sb-block-content.ec-sidebar-dropdown > ul > li:nth-child(1) > div > span::after {
+  content: "No";
+    position: absolute;
 }

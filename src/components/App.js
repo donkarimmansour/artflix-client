@@ -30,6 +30,7 @@ import CatyTwoSkeleton from "../skeleton/CatyTwoSkeleton";
 import ItemsSkeleton from "../skeleton/ItemsSkeleton";
 import SlidersSkeleton from "../skeleton/sliderSkeleton";
 import SingleSkeleton from "../skeleton/singleSkeleton";
+import { useTranslation } from "react-i18next";
 const Products = lazy(() => import("./products/products")) ;
 const AreaProducts = lazy(() => import("./products/areaProducts")) ;
 const SingleProduct = lazy(() => import("./products/singleProduct")) ;
@@ -49,6 +50,7 @@ const Track = lazy(() => import("./stuff/track")) ;
 const App = () => {
   const [style, setStyle] = useState(0);
  const [query, setQuery] = useState("***");
+ const { i18n } = useTranslation();
 
   useEffect(() => {
 
@@ -56,6 +58,11 @@ const App = () => {
     const rtl = getCookie("rtl") ? getCookie("rtl") : "false"
     const cbg = getCookie("cbg") ? getCookie("cbg") : false
     const cskin = getCookie("cskin") ? getCookie("cskin") : false
+    const lang = getCookie("lang") ? getCookie("lang") : "en"
+
+    if (lang) {
+        i18n.changeLanguage(lang) 
+    }
 
     if (dark) {
       const head = document.head;
@@ -135,7 +142,7 @@ const App = () => {
     <div className="app">
       <BrowserRouter>
 
-        <Header setQuery={setQuery}/>
+        <Header setQuery={setQuery}  style={style} setStyle={setStyle}/>
 
         <Routes>
  
@@ -259,8 +266,8 @@ const App = () => {
             <Route path="about-us" element={<Aboutus />} />
             <Route path="contact-us" element={<Contactus />} />
             <Route path="faq" element={<FAQ />} />
-            <Route path="backsoon" element={<Backsoon />} />
-            <Route path="maintenance" element={<Maintenance />} />
+            {/* <Route path="backsoon" element={<Backsoon />} />
+            <Route path="maintenance" element={<Maintenance />} /> */}
             <Route path="privacy" element={<PrivacyPolicy />} />
             <Route path="terms" element={<TermsCondition />} />
             <Route path="cancellation" element={<Cancellation />} />

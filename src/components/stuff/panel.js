@@ -18,7 +18,7 @@ const Panel = (props) => {
         setCookie("dark", "false")
         setCookie("rtl", "false")
         //  setCookie("fullscreen" , "false")
-        hidePanel()
+        hidePanel() 
         props.setStyle(props.style + 1)
     }
 

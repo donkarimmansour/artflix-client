@@ -14,9 +14,9 @@ import AOS from 'aos';
 import QuerySearch from "../../contexts/search";
 import Image from 'lqip-react';
  
-
-const Category = (props) => {
-    const { t } = useTranslation();
+ 
+const Category = (props) => {  
+    const { t } = useTranslation(); 
     const navigate = useNavigate();
     const params = useParams();
 
@@ -25,7 +25,7 @@ const Category = (props) => {
     const [Categories, setCategories] = useState([])
     const [Sizes, setSizes] = useState([])
     const [Pages, setPages] = useState({ pages: ["", "", ""], currentPage: 1 })
-    const [Filters, setFilters] = useState({ category: [], size: [], color: [], min: 1, max: 500, order: "1" })
+    const [Filters, setFilters] = useState({ category: [], size: [], color: [], min: 1, max: 500, order: "1"  , nosize : true , nocolor : true})
     const query = useContext(QuerySearch)
 
     let caty = params.caty ? params.caty.replace(/ /g , "") : undefined
@@ -64,12 +64,12 @@ const Category = (props) => {
 
 
         if(caty){
-            setFilters({ ...Filters, category: [params.caty], size: sizes, color: colors })
+            setFilters({ ...Filters, category: [params.caty], size: sizes, color: colors.filter(c => c !== null) })
         }else{
             if(catigories.length > 0){
                 let cats = []
                  catigories.map(pc => pc.categories.map( cc => cats = new Set([...cats , cc.category.name]) ))
-                 setFilters({ ...Filters, category: cats, size: sizes, color: colors })
+                 setFilters({ ...Filters, category: cats, size: sizes, color: colors.filter(c => c !== null) })
             }
         } 
 
@@ -98,24 +98,28 @@ const Category = (props) => {
              status : "published"
         }
 
+       
+
         if (query != "***") {
             filter = { ...filter, $or: [{ name: { "$regex": query, "$options": "i" } }, { description: { "$regex": query, "$options": "i" } }] }
-        }else {
-            filter = {...filter}
         }
 
-        if (Filters.color.length > 0) {
+        if (!Filters.nocolor && Filters.color.length > 0) {
             filter = { ...filter, color: { "$in": [...Filters.color] } }
-        }else { 
-            filter = {...filter}
+        } else if (Filters.nocolor && Filters.color.length > 0) {
+            filter = { ...filter, $or: [{ color: { "$in": [...Filters.color] } }, { color: null }] }
         }
 
-        if (Filters.size.length > 0) {
+        if (!Filters.nosize && Filters.size.length > 0) {
             filter = { ...filter, size: { "$elemMatch": { "size": { "$in": [...Filters.size] } } } }
-        }else {
-            filter = {...filter}
+
+        } else if (Filters.nosize && Filters.size.length > 0) {
+            filter = { ...filter, $or: [{ size: { "$elemMatch": { "size": { "$in": [...Filters.size] } } } }, { size: { $size: 0 } }] }
+
         }
 
+        filter = { ...filter }
+        
 
         dispatch(get_count({ filter }))
         dispatch(get_filter({ filter, limit, skip, sort }))
@@ -135,36 +139,53 @@ const Category = (props) => {
     }, [filters, count])
 
 
-
-
  
 
 
     const handleColorSer = (e) => {
 
-        if (e.target.style.backgroundColor) {
+            if (e.target.style.backgroundColor) {
 
-            const Pcolor = e.target.parentElement.parentElement
-            const color = e.target.style.backgroundColor
-            if (Pcolor.className.includes("active")) {
-                Pcolor.className = ""
-                setFilters({ ...Filters, color: Filters.color.filter((item, pos, self) => item !== color) })
+                const Pcolor = e.target.parentElement.parentElement
+                const color = e.target.style.backgroundColor
 
-            } else {
-                Pcolor.className = "active"
-                setFilters({ ...Filters, color: [...new Set([...Filters.color, color])] })
+                if (Pcolor.className.includes("active")) {
+                    Pcolor.className = ""
+                    if (e.target.getAttribute("data-type") === "nocolor") {
+                        setFilters({ ...Filters, nocolor: !Filters.nocolor })
 
+                    } else {
+                        setFilters({ ...Filters, color: Filters.color.filter((item, pos, self) => item !== color) })
+                    }
+
+                } else {
+                    Pcolor.className = "active"
+
+                    if (e.target.getAttribute("data-type") === "nocolor") {
+                        setFilters({ ...Filters, nocolor: !Filters.nocolor })
+
+                    } else {
+                        setFilters({ ...Filters, color: [...new Set([...Filters.color, color])] })
+                    }
+
+
+                }
             }
-        }
-
-
+        
 
     }
 
 
+    console.log(Filters);
+
+ 
 
     const handleSizeSearch = (e) => {
-        const size = e.target.parentElement.querySelector("a").innerText;
+        if(e.target.value === "nosize"){
+            setFilters({ ...Filters, nosize: e.target.checked })
+
+        }else {
+             const size = e.target.parentElement.querySelector("a").innerText;
 
         if (e.target.checked) {
             setFilters({ ...Filters, size: [...new Set([...Filters.size, size])] })
@@ -173,6 +194,8 @@ const Category = (props) => {
                 ...Filters, size: Filters.size.filter((item, pos, self) => item !== size)
             })
         }
+        }
+       
     }
 
 
@@ -304,7 +327,7 @@ const Category = (props) => {
             e.target.classList.add("active")
         else e.target.parentElement.classList.add("active")
 
-        document.querySelector(".shop-pro-content .shop-pro-inner").classList.toggle("list-view")
+        document.querySelector(".shop-pro-content .shop-pro-inner").classList.toggle("list-view-50")
 
         document.querySelectorAll(".shop-pro-content .shop-pro-inner .pro-gl-content").forEach(element => {
             element.classList.toggle("width-50")
@@ -585,7 +608,7 @@ const Category = (props) => {
         
                                                 } 
 
-                                                    {Categories.length > 1 &&
+                                                    {pcat.categories.length > 2 &&
                                                         <li id="ec-more-toggle-content" style={{ padding: "0", display: "none" }}>
                                                             <ul>
 
@@ -608,13 +631,14 @@ const Category = (props) => {
                                                         </li>
                                                     }
 
-                                            
 
-                                                    <li onClick={(e) => { handleMore(e) }}>
-                                                        <div className="ec-sidebar-block-item ec-more-toggle">
-                                                            <span className="checked"></span><span id="ec-more-toggle">{t("More Categories")}</span>
-                                                        </div>
-                                                    </li>
+                                                    {pcat.categories.length > 2 &&
+                                                        <li onClick={(e) => { handleMore(e) }}>
+                                                            <div className="ec-sidebar-block-item ec-more-toggle">
+                                                                <span className="checked"></span><span id="ec-more-toggle">{t("More Categories")}</span>
+                                                            </div>
+                                                        </li>
+                                                    }
 
                                                 </ul>
                                             </div>
@@ -643,6 +667,13 @@ const Category = (props) => {
                                     </div>
                                     <div className="ec-sb-block-content ec-sidebar-dropdown">
                                         <ul>
+
+                                        <li onClick={(e) => { handleSizeSearch(e) }}>
+                                                        <div className="ec-sidebar-block-item">
+                                                            <input type="checkbox" defaultChecked defaultValue="nosize"/> <a href="javascript:void(0);">{"no Size"}</a><span
+                                                                className="checked"></span>
+                                                        </div>
+                                        </li>
 
                                             {Sizes.map((size, si) => {
 
@@ -676,9 +707,16 @@ const Category = (props) => {
                                     </div>
                                     <div className="ec-sb-block-content ec-sidebar-dropdown ">
                                         <ul>
+
+                                        <li className="active" onClick={(e) => { handleColorSer(e) }} >
+                                            <div className="ec-sidebar-block-item"><span
+                                                style={{ backgroundColor: "transparent" }} data-type="nocolor" ></span></div>
+                                        </li> 
+
                                             {Colors.map((color, ci) => {
 
-                                                return (
+                                                
+                                                 return (
                                                     <li className="active" onClick={(e) => { handleColorSer(e) }} key={ci} >
                                                         <div className="ec-sidebar-block-item"><span
                                                             style={{ backgroundColor: color }}></span></div>

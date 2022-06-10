@@ -1,9 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useTranslation } from 'react-i18next';
+import AOS from 'aos';
 
 
-const Services = () => {
+const Services = () => { 
     const { t } = useTranslation();
+
+    useEffect(() => { AOS.init({ duration: 800 }); }, []);
+
 
     const Services = [
         {
@@ -36,7 +40,7 @@ const Services = () => {
                   {Services.map((serv, ti) => {
 
                       return (
-                          <div key={ti} className="ec_ser_content ec_ser_content_3 col-sm-12 col-md-6 col-lg-3 zoomIn" >
+                          <div key={ti} className="ec_ser_content ec_ser_content_3 col-sm-12 col-md-6 col-lg-3" data-aos="zoom-in"  >
                               <div className="ec_ser_inner">
                                   <div className="ec-service-image">
                                       <img src={serv.icon} className="svg_img" alt="" />

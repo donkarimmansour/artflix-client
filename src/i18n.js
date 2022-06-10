@@ -34,6 +34,7 @@ const resources = {
       "backsoon description": "Lorem Ipsum is simply dummy text of the printing and typesetting industry since the 1500s." ,
       "Enter your email": "Enter your email"  ,
       "subscribe": "subscribe"  ,
+      "Standard": "Standard"  ,
      
      
       "About our business Firm": "About our business Firm"  ,
@@ -130,6 +131,7 @@ const resources = {
       "RTL mode": "RTL mode"  ,
       "Clear local storage": "Clear local storage"  ,
       "Clear Cache Default": "Clear Cache &amp; Default"  ,
+      "Default": "Default"  ,
       "Next": "Next"  ,
       "Previous": "Previous"  ,
       "Feature Items": "Feature Items"  ,
