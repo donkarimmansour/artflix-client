@@ -78,7 +78,7 @@ const Cart = () => {
                                 <div className="row">
                                     <form action="#">
 
-                                        <div className="table-content cart-table-content" style={{overflowX: "scroll" , overflowY : "hidden" , maxWidth: "100%"}}>
+                                        <div className="table-content cart-table-content" style={{overflowX: "scroll" , overflowY : "visible" , maxWidth: "100%"}}>
                                             <table>
                                                 <thead>
                                                     <tr>

@@ -160,14 +160,17 @@ const FeatureAndLimit = (props) => {
                                                     <div className="ec-fs-pro-image-outer col-lg-6 col-md-6 col-sm-6">
                                                         <div className="ec-fs-pro-image">
 
-                                                            <Link to={`/product/${product.category}/${product._id}`} className="image"
-                                                                tabIndex="0">
+
+                                                             <Link to={`/product/${product.category}/${product._id}`} className="image"
+                                                                  tabIndex="0">
+                                                                    
                                                                     <Image className="main-image"
                                                                     thumbnail={"https://via.placeholder.com/500"}
-                                                                    aspectRatio={''}
+                                                                    aspectRatio={'500x500'}
                                                                     src={ImageLink(product.images[0])}
                                                                     alt="Product" />
-                                                            </Link>
+                                                                    
+                                                                    </Link>
                                                             
                                                             <a href="javascript:void(0);" className="quickview" title="Quick view" onClick={() => { quickView(product._id) }}><i style={{ color: "black" }} className="far fa-eye"></i></a>
 
