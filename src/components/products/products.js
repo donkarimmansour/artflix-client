@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import {  handleColor, handleSize, ImageLink } from '../../shared/funs';
+import {  handleColor, handleSize, ImageVIEW } from '../../shared/funs';
 import { get_products, set_product_id } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
 import myClassNames from 'classnames';
@@ -8,7 +8,6 @@ import { Link , useNavigate } from "react-router-dom";
 import { create_carts } from "../../redux/actions/carts";
 import { create_wishlist } from "../../redux/actions/wishlist";
 import { isAuthentication } from "../../redux/actions/auth";
-import { toast } from "react-toastify";
 import Image from 'lqip-react';
 import AOS from 'aos';
 
@@ -25,7 +24,7 @@ const Products = (props) => {
     const limit = props.limit
     const skip = props.skip
     const sort = props.sort
-    const catyName = props.caty ? props.caty : "New Arrivals"
+    const catyName = props.caty ? props.caty : "all"
 
     const { products } = useSelector(state => state.products)
     const { isAuth , token , user } = useSelector((state) => state.auth);
@@ -49,11 +48,8 @@ const Products = (props) => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-        toast.info(t("Added"))
-
     }
 
-    
 
     const addToWishList = (productId, userId) => {
 
@@ -61,8 +57,7 @@ const Products = (props) => {
             navigate("/login")
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
-            toast.info(t("Added"))
- 
+
         } 
 
     }
@@ -71,7 +66,7 @@ const Products = (props) => {
         dispatch(set_product_id(productId))
     }
 
-  
+   
 
     return (
         <Fragment>
@@ -103,7 +98,7 @@ const Products = (props) => {
                                 if(!product.images || !product.images[0]){
                                     img = "https://via.placeholder.com/500"
                                 }else {
-                                   img = ImageLink(product.images[0])
+                                   img = ImageVIEW(product.images[0])
                                 }
                                 
 
@@ -136,7 +131,7 @@ const Products = (props) => {
                                                     </span>
 
                                        
-                                                    {product.oldprice && isAuth && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
+                                                    {product.oldprice && (isAuth || !isAuth) && <span className="percentage">{Math.floor( ((product.oldprice - product.price) / product.price)  * 100 )}%</span>}
 
                                                     <div className="ec-pro-actions">
                                                         <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(product) }}><i className="fas fa-cart-plus"></i></button>
@@ -162,7 +157,7 @@ const Products = (props) => {
 
                                                 </div>} */}
 
-                                                {isAuth && <span className="ec-price">
+                                                {(isAuth || !isAuth) && <span className="ec-price">
                                                     {product.oldprice && <span className="old-price">${product.oldprice}</span>}
                                                     <span className="new-price">${product.price}</span>
                                                 </span>}
@@ -175,11 +170,14 @@ const Products = (props) => {
                                                             <ul className="ec-opt-swatch ec-change-img">
 
                                                                 {product.color.map((color, index) => {
-                                                                    return (
+                                                                    if(index < 5){
+                                                                          return (
                                                                         <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleColor(index, e) }} key={index} >
                                                                             <a className="ec-opt-clr-img"><span style={{ backgroundColor: color }}></span></a>
                                                                         </li>
                                                                     );
+                                                                    }
+                                                                  
                                                                 })}
 
 
@@ -192,11 +190,14 @@ const Products = (props) => {
                                                             <span className="ec-pro-opt-label">{t("Size")}</span>
                                                             <ul className="ec-opt-size">
                                                                 {product.size.map((size, index) => {
-                                                                    return (
-                                                                        <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleSize(size.price, index, e) }} key={index}>
-                                                                            <a className="ec-opt-sz" >{size.size}</a>
-                                                                        </li>
-                                                                    );
+                                                                    if(index < 5){
+                                                                         return (
+                                                                            <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleSize(size.price, index, e) }} key={index}>
+                                                                                <a className="ec-opt-sz" >{size.size}</a>
+                                                                            </li>
+                                                                        );
+                                                                    }
+                                                                   
                                                                 })}
 
                                                             </ul>

@@ -34231,3 +34231,33 @@ input[type=email]:focus::-webkit-input-placeholder {
   content: "No";
     position: absolute;
 }
+
+
+
+.from-me{
+  direction : rtl ;
+
+}
+.from-me .ec-t-review-avtar{
+  margin: 0 0 0 15px!important;
+}
+
+.from-me .ec-t-review-name{
+  text-align: right;
+}
+
+
+.message-image {
+  text-align: end; 
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #f3f2f9;
+}
+.message-image img {
+  width: 220px;
+  height: 270px;
+  margin-right: 0px;
+  border-radius: 5px;
+  overflow: hidden;
+  object-fit: cover;
+}

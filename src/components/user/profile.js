@@ -8,16 +8,16 @@ import * as yup from 'yup'
 import myClassName from "classnames"
 import { useDispatch, useSelector } from "react-redux";
 import { get_orders } from "../../redux/actions/orders";
-import { ImageLink } from "../../shared/funs";
+import { extractDesk, ImageVIEW } from "../../shared/funs";
 import { delete_wishlist, get_wishlist } from "../../redux/actions/wishlist";
 import { create_carts } from "../../redux/actions/carts";
 import { toast } from "react-toastify";
 import { Create } from "../../services/file"
 import { AddressAccount, EditAccount, Image } from "../../services/user";
 import { ME_UPDATE, ME_UPDATE_AVATAR, ME_UPDATE_SHIPPINGADDRESS } from "../../redux/constans/auth";
+import ntc from 'ntc'; 
 
-
-const Profile = () => {
+const Profile = () => { 
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const { t } = useTranslation();
@@ -31,9 +31,10 @@ const Profile = () => {
     const { isAuth, token, user } = useSelector((state) => state.auth);
     const { orders } = useSelector(state => state.orders)
     const { wishlist } = useSelector(state => state.wishlist)
+
     const authorization = { "Authorization": `bearer ${token}` }
 
-    useEffect(() => {
+    useEffect(() => { 
         dispatch(isAuthentication());
     }, [dispatch]);
 
@@ -65,13 +66,10 @@ const Profile = () => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-
-        toast.info(t("Added"))
     }
 
     const removeFromWishList = (id) => {
         dispatch(delete_wishlist(id, authorization))
-        toast.info(t("Removed"))
 
     }
 
@@ -316,7 +314,7 @@ const Profile = () => {
                                                     </div>
                                                     <div className="thumb-preview ec-preview">
                                                         <div className="image-thumb-preview">
-                                                            <img className="image-thumb-preview ec-image-preview v-img" src={ImageLink(user.image)} alt="edit" />
+                                                            <img className="image-thumb-preview ec-image-preview v-img" src={ImageVIEW(user.image)} alt="edit" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -409,7 +407,7 @@ const Profile = () => {
 
 
                                                                     <div className="col-md-12 space-t-15 mt-2">
-                                                                        <button disabled={(loading)} type="submit" className="btn btn-primary ">{("Update")}</button>
+                                                                        <button disabled={(loading)} type="submit" className="btn btn-primary ">{t("Update")}</button>
                                                                         <button onClick={closeModel} type="button" className="btn btn-lg btn-secondary qty_close m-2" >{t("Close")}</button>
                                                                     </div>
 
@@ -450,7 +448,7 @@ const Profile = () => {
 
                                             <div className="ec-vendor-block-bg" style={{ backgroundImage: "url(assets/imgs/ws-banner.jpg)" }}></div>
                                             <div className="ec-vendor-block-detail">
-                                                <img className="v-img" src={ImageLink(user.image)} alt="vendor image" />
+                                                <img className="v-img" src={ImageVIEW(user.image)} alt="vendor image" />
                                                 <h5>{`${user.firstname} ${user.lastname}`}</h5>
                                             </div>
 
@@ -494,7 +492,7 @@ const Profile = () => {
                                                         </div>
 
                                                         <div className="ec-vendor-block-detail">
-                                                            <img className="v-img" src={ImageLink(user.image)} alt="vendor image" />
+                                                            <img className="v-img" src={ImageVIEW(user.image)} alt="vendor image" />
                                                             <h5 className="name">{`${user.firstname} ${user.lastname}`}</h5>
                                                         </div>
 
@@ -525,7 +523,7 @@ const Profile = () => {
                                                             <div className="ec-vendor-detail-block ec-vendor-block-address">
                                                                 <h6>{t("Shipping Address")} <svg onClick={editAddress} xmlns="http://www.w3.org/2000/svg" fill="#000000" viewBox="0 0 32 32" width="32px" height="32px" src="/assets/imgs/ws-edit.svg" className="svg_img pro_svg" alt="edit"><path d="M 23.90625 3.96875 C 22.859375 3.96875 21.8125 4.375 21 5.1875 L 5.1875 21 L 5.125 21.3125 L 4.03125 26.8125 L 3.71875 28.28125 L 5.1875 27.96875 L 10.6875 26.875 L 11 26.8125 L 26.8125 11 C 28.4375 9.375 28.4375 6.8125 26.8125 5.1875 C 26 4.375 24.953125 3.96875 23.90625 3.96875 Z M 23.90625 5.875 C 24.410156 5.875 24.917969 6.105469 25.40625 6.59375 C 26.378906 7.566406 26.378906 8.621094 25.40625 9.59375 L 24.6875 10.28125 L 21.71875 7.3125 L 22.40625 6.59375 C 22.894531 6.105469 23.402344 5.875 23.90625 5.875 Z M 20.3125 8.71875 L 23.28125 11.6875 L 11.1875 23.78125 C 10.53125 22.5 9.5 21.46875 8.21875 20.8125 Z M 6.9375 22.4375 C 8.136719 22.921875 9.078125 23.863281 9.5625 25.0625 L 6.28125 25.71875 Z"></path></svg></h6>
                                                                 <ul>
-                                                                    <li><strong>{("Address")} : </strong>
+                                                                    <li><strong>{t("Address")} : </strong>
                                                                         {
                                                                             `${user.shippingaddress ? user.shippingaddress.address ? user.shippingaddress.address : "" : ""} ,
                                                                             ${user.shippingaddress ? user.shippingaddress.city ? user.shippingaddress.city : "" : ""} ,
@@ -569,11 +567,11 @@ const Profile = () => {
                                                     <thead>
                                                         <tr>
                                                             <th scope="col">#</th>
-                                                            <th scope="col">{("Image")}</th>
-                                                            <th scope="col">{("Name")}</th>
-                                                            <th scope="col">{("Price")}</th>
-                                                            <th scope="col">{("Category")}</th>
-                                                            <th scope="col">{('View')}</th>
+                                                            <th scope="col">{t("Image")}</th>
+                                                            <th scope="col">{t("Name")}</th>
+                                                            <th scope="col">{t("Price")}</th>
+                                                            <th scope="col">{t("Category")}</th>
+                                                            <th scope="col">{t('View')}</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody className="wish-empt">
@@ -585,7 +583,7 @@ const Profile = () => {
                                                             if (!mwishlist.productId || !mwishlist.productId.images || !mwishlist.productId.images[0]) {
                                                                 img = "https://via.placeholder.com/500"
                                                             } else {
-                                                                img = ImageLink(mwishlist.productId.images[0])
+                                                                img = ImageVIEW(mwishlist.productId.images[0])
                                                             }
 
                                                             return (
@@ -595,7 +593,7 @@ const Profile = () => {
                                                                 <tr key={wi} className="pro-gl-content">
                                                                     <th scope="row"><span>{(wi + 1)}</span></th>
                                                                     <td><Link to={`/product/${mwishlist.productId.category}/${mwishlist.productId._id}`}><img className="prod-img" src={img} alt="product image" /></Link></td>
-                                                                    <td><span><Link to={`/product/${mwishlist.productId.category}/${mwishlist.productId._id}`}>{mwishlist.productId.name}</Link></span></td>
+                                                                    <td><span><Link to={`/product/${mwishlist.productId.category}/${mwishlist.productId._id}`}>{extractDesk(mwishlist.productId.name , 20)}</Link></span></td>
                                                                     <td><span>${mwishlist.productId.price}</span></td>
                                                                     <td><span>{mwishlist.productId.category}</span></td>
 
@@ -661,13 +659,13 @@ const Profile = () => {
                                                 <table className="table ec-table" style={{ width: "100%" }}>
                                                     <thead>
                                                         <tr>
-                                                            <th scope="col">{("Image")}</th>
-                                                            <th scope="col">{("Name")}</th>
-                                                            <th scope="col">{("Price")}</th>
-                                                            <th scope="col">{('Qty')}</th>
-                                                            <th scope="col">{("Color")}</th>
-                                                            <th scope="col">{("Size")}</th>
-                                                            <th scope="col">{("Shipping")}</th>
+                                                            <th scope="col">{t("Image")}</th>
+                                                            <th scope="col">{t("Name")}</th>
+                                                            <th scope="col">{t("Price")}</th>
+                                                            <th scope="col">{t('Qty')}</th>
+                                                            <th scope="col">{t("Color")}</th>
+                                                            <th scope="col">{t("Size")}</th>
+                                                            <th scope="col">{t("Shipping")}</th>
                                                             {/* <th scope="col">{("Traking")}</th> */}
                                                             <th scope="col">{("Track")}</th>
                                                         </tr>
@@ -679,15 +677,15 @@ const Profile = () => {
                                                                 return order.orders.map((ordr, coi) => {
                                                                     return (
                                                                         <tr key={coi}>
-                                                                            <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><img className="prod-img" src={ImageLink(ordr.images[0])} alt="product image" /></Link></td>
-                                                                            <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><span>{ordr.name}</span></Link></td>
+                                                                            <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><img className="prod-img" src={ImageVIEW(ordr.images[0])} alt="product image" /></Link></td>
+                                                                            <td><Link to={`/product/${ordr.productId.category}/${ordr.productId._id}`}><span>{extractDesk(ordr.name , 20)}</span></Link></td>
                                                                             <td><span>${ordr.price}</span></td>
                                                                             <td><span>{ordr.quantity}</span></td>
-                                                                            <td><span>{ordr.color}</span></td>
+                                                                            <td><span>{ typeof ordr.color === "undefined" ? (t("Default")) : ntc.name(ordr.color)[2] ? ntc.name(ordr.color)[1] : ntc.name(ordr.color)[0] }</span></td>
                                                                             <td><span>{ordr.size}</span></td>
-                                                                            <td><span>{`${ordr.shipping.name} $${ordr.shipping.price}`}</span></td>
+                                                                            <td><span>{`${ordr.shipping.name} ($${ordr.shipping.price})`}</span></td>
                                                                             {/* <td><span>{ordr.tracking}</span></td> */}
-                                                                            <td><span className="tbl-btn"><Link className="btn btn-lg btn-primary" to={`/track/${order._id}/${ordr.productId._id}`}>Track</Link></span></td>
+                                                                            <td><span className="tbl-btn"><Link className="btn btn-lg btn-primary" to={`/track/${order._id}/${ordr.productId._id}`}>{t("Track")}</Link></span></td>
                                                                         </tr>
 
                                                                     )

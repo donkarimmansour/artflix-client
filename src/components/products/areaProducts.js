@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import { handleColor, handleSize, ImageLink } from '../../shared/funs';
+import { handleColor, handleSize, ImageVIEW } from '../../shared/funs';
 import myClassNames from 'classnames';
 import { Link, useNavigate } from "react-router-dom";
 import { get_products_tab, set_product_id } from "../../redux/actions/products";
@@ -8,8 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { create_wishlist } from "../../redux/actions/wishlist";
 import { create_carts } from "../../redux/actions/carts";
 import { isAuthentication } from "../../redux/actions/auth";
-import { toast } from "react-toastify";
-import AOS from 'aos';
+import AOS from 'aos'; 
 import Image from 'lqip-react'; 
 
 
@@ -26,7 +25,6 @@ const AreaProducts = (props) => {
 
     const dispatch = useDispatch()
     const { tabsproducts } = useSelector(state => state.products)
-
     const { isAuth, token, user } = useSelector((state) => state.auth);
     const authorization = { "Authorization": `bearer ${token}` }
 
@@ -67,8 +65,6 @@ const AreaProducts = (props) => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-        toast.info(t("Added"))
-
     }
 
     const addToWishList = (productId, userId) => {
@@ -77,8 +73,6 @@ const AreaProducts = (props) => {
             navigate("/login")
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
-            toast.info(t("Added"))
-
         }
 
     }
@@ -86,6 +80,8 @@ const AreaProducts = (props) => {
     const quickView = (productId) => {
         dispatch(set_product_id(productId))
     }
+
+
 
     return (
 
@@ -143,7 +139,7 @@ const AreaProducts = (props) => {
                                                         if (!prdct || !prdct.product.images || !prdct.product.images[0]) {
                                                             img = "https://via.placeholder.com/500"
                                                         } else {
-                                                            img = ImageLink(prdct.product.images[0])
+                                                            img = ImageVIEW(prdct.product.images[0])
                                                         }
 
                                                         return (
@@ -165,14 +161,14 @@ const AreaProducts = (props) => {
                                                                                     alt="Product"
                                                                                 />
 
-                                                                            </Link>
+                                                                            </Link> 
 
                                                                             <span className="flags">
                                                                                 {prdct.product.stock == 0 && <span className="sale">{t("Sale")}</span>}
                                                                                 {prdct.product.condition == "new" && <span className="new">{t("New")}</span>}
                                                                             </span>
 
-                                                                            {prdct.product.oldprice && isAuth && <span className="percentage">{Math.floor(Math.floor(prdct.product.price * Math.floor(prdct.product.oldprice - prdct.product.price)) / 100)}%</span>}
+                                                                            {prdct.product.oldprice && (isAuth || !isAuth) && <span className="percentage">{Math.floor( ((product.oldprice - product.price) / product.price)  * 100 )}%</span>}
 
                                                                             <div className="ec-pro-actions">
                                                                                 <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(prdct.product) }}><i className="fas fa-cart-plus"></i></button>
@@ -198,7 +194,7 @@ const AreaProducts = (props) => {
 
                                                                         </div>} */}
 
-                                                                       {isAuth && <span className="ec-price">
+                                                                       {(isAuth || !isAuth) && <span className="ec-price">
                                                                             {prdct.product.oldprice && <span className="old-price">${prdct.product.oldprice}</span>}
                                                                             <span className="new-price">${prdct.product.price}</span>
                                                                         </span>} 

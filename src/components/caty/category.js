@@ -1,6 +1,6 @@
 import React, { Fragment, useContext, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import { calculateRating, extractDesk, handleColor, handleSize, ImageLink } from '../../shared/funs';
+import { calculateRating, extractDesk, handleColor, handleSize, ImageVIEW } from '../../shared/funs';
 import myClassNames from 'classnames';
 import { Link, useNavigate, useParams  } from "react-router-dom";
 import {  get_colors, get_count, get_filter, get_sizes, set_product_id } from "../../redux/actions/products";
@@ -25,10 +25,10 @@ const Category = (props) => {
     const [Categories, setCategories] = useState([])
     const [Sizes, setSizes] = useState([])
     const [Pages, setPages] = useState({ pages: ["", "", ""], currentPage: 1 })
-    const [Filters, setFilters] = useState({ category: [], size: [], color: [], min: 1, max: 500, order: "1"  , nosize : true , nocolor : true})
+    const [Filters, setFilters] = useState({ category: [], size: [], color: [], min: 0, max: 500, order: "1"  , nosize : true , nocolor : true})
     const query = useContext(QuerySearch)
 
-    let caty = params.caty ? params.caty.replace(/ /g , "") : undefined
+    let caty = params.caty && params.caty !== "all" ? params.caty.replace(/ /g , "") : undefined
 
     const limit = props.limit 
    // const inc = query.get("inc")
@@ -45,12 +45,15 @@ const Category = (props) => {
         dispatch(isAuthentication());
     }, [dispatch]);
 
+    useEffect(() => {
+        window.scrollTo(0, 300);
+    }, [ Pages.currentPage])
 
 
     useEffect(() => {
         dispatch(get_catigories({}))
-        dispatch(get_colors({ distinct : "color" , caty : params.caty }))
-        dispatch(get_sizes({ distinct : "size.size" , caty : params.caty }))
+        dispatch(get_colors({ distinct : "color" , caty : caty }))
+        dispatch(get_sizes({ distinct : "size.size" , caty : caty }))
     }, [dispatch , caty])
 
 
@@ -64,7 +67,7 @@ const Category = (props) => {
 
 
         if(caty){
-            setFilters({ ...Filters, category: [params.caty], size: sizes, color: colors.filter(c => c !== null) })
+            setFilters({ ...Filters, category: [caty], size: sizes, color: colors.filter(c => c !== null) })
         }else{
             if(catigories.length > 0){
                 let cats = []
@@ -100,22 +103,30 @@ const Category = (props) => {
 
        
 
-        if (query != "***") {
+        if (query !== "***") {
             filter = { ...filter, $or: [{ name: { "$regex": query, "$options": "i" } }, { description: { "$regex": query, "$options": "i" } }] }
         }
+
+        console.log(Filters.nocolor);
 
         if (!Filters.nocolor && Filters.color.length > 0) {
             filter = { ...filter, color: { "$in": [...Filters.color] } }
         } else if (Filters.nocolor && Filters.color.length > 0) {
-            filter = { ...filter, $or: [{ color: { "$in": [...Filters.color] } }, { color: null }] }
+            filter = { ...filter, $or: [{ color: { "$in": [...Filters.color] } }, { color: { $size: 0 } }] }
+        } else if (Filters.nocolor && Filters.color.length === 0) {
+            filter = { ...filter, color: { $size: 0 } }
+        } else if (!Filters.nocolor && Filters.color.length === 0) {
+            filter = { ...filter }
         }
 
         if (!Filters.nosize && Filters.size.length > 0) {
             filter = { ...filter, size: { "$elemMatch": { "size": { "$in": [...Filters.size] } } } }
-
-        } else if (Filters.nosize && Filters.size.length > 0) {
+        }else if (Filters.nosize && Filters.size.length > 0) {
             filter = { ...filter, $or: [{ size: { "$elemMatch": { "size": { "$in": [...Filters.size] } } } }, { size: { $size: 0 } }] }
-
+        }else if (Filters.nosize && Filters.size.length === 0) {
+            filter = { ...filter, size: { $size: 0 } }
+        }else if (!Filters.nosize && Filters.size.length === 0) {
+            filter = { ...filter}
         }
 
         filter = { ...filter }
@@ -147,7 +158,7 @@ const Category = (props) => {
             if (e.target.style.backgroundColor) {
 
                 const Pcolor = e.target.parentElement.parentElement
-                const color = e.target.style.backgroundColor
+                const color = e.target.getAttribute("data-color")
 
                 if (Pcolor.className.includes("active")) {
                     Pcolor.className = ""
@@ -176,7 +187,6 @@ const Category = (props) => {
     }
 
 
-    console.log(Filters);
 
  
 
@@ -292,7 +302,6 @@ const Category = (props) => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product)) 
-        toast.info(t("Added"))
 
     }
 
@@ -303,7 +312,6 @@ const Category = (props) => {
             navigate("/login")
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
-            toast.info(t("Added"))
 
         }
 
@@ -409,7 +417,7 @@ const Category = (props) => {
                                                 if (!product.images || !product.images[0]) {
                                                     img = "https://via.placeholder.com/500"
                                                 } else {
-                                                    img = ImageLink(product.images[0])
+                                                    img = ImageVIEW(product.images[0])
                                                 }
 
                                                 return (
@@ -438,7 +446,7 @@ const Category = (props) => {
                                                                         {product.condition == "new" && <span className="new">{t("New")}</span>}
                                                                     </span>
 
-                                                                    {product.oldprice && isAuth && <span className="percentage">{Math.floor( Math.floor(product.price * Math.floor(product.oldprice - product.price) ) / 100 )}%</span>}
+                                                                    {product.oldprice && (isAuth || !isAuth) && <span className="percentage">{Math.floor( ((product.oldprice - product.price) / product.price)  * 100 )}%</span>}
 
                                                                     <div className="ec-pro-actions">
                                                                         <button title="Add To Cart" className="ec-btn-group compare" onClick={() => { addToCart(product) }}><i className="fas fa-cart-plus"></i></button>
@@ -482,7 +490,7 @@ const Category = (props) => {
 
                                                                 <div className="ec-pro-list-desc">{extractDesk(product.description, 120)}</div>
 
-                                                               {isAuth && <span className="ec-price">
+                                                               {(isAuth || !isAuth) && <span className="ec-price">
                                                                     {product.oldprice && <span className="old-price">${product.oldprice}</span>}
                                                                     <span className="new-price">${product.price}</span>
                                                                 </span>} 
@@ -495,11 +503,14 @@ const Category = (props) => {
                                                                             <ul className="ec-opt-swatch ec-change-img">
 
                                                                                 {product.color.map((color, index) => {
-                                                                                    return (
-                                                                                        <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleColor(index, e) }} key={index} >
-                                                                                            <a className="ec-opt-clr-img"><span style={{ backgroundColor: color }}></span></a>
-                                                                                        </li>
-                                                                                    );
+                                                                                    if (index < 5) {
+                                                                                        return (
+                                                                                            <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleColor(index, e) }} key={index} >
+                                                                                                <a className="ec-opt-clr-img"><span style={{ backgroundColor: color }}></span></a>
+                                                                                            </li>
+                                                                                        );
+                                                                                    }
+                                                                                   
                                                                                 })}
 
 
@@ -512,11 +523,14 @@ const Category = (props) => {
                                                                             <span className="ec-pro-opt-label">{t("Size")}</span>
                                                                             <ul className="ec-opt-size">
                                                                                 {product.size.map((size, index) => {
-                                                                                    return (
-                                                                                        <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleSize(size.price, index, e) }} key={index}>
-                                                                                            <a className="ec-opt-sz" >{size.size}</a>
-                                                                                        </li>
-                                                                                    );
+                                                                                    if (index < 5) {
+                                                                                        return (
+                                                                                            <li className={myClassNames({ "active": index == 0 })} onClick={(e) => { handleSize(size.price, index, e) }} key={index}>
+                                                                                                <a className="ec-opt-sz" >{size.size}</a>
+                                                                                            </li>
+                                                                                        );
+                                                                                    }
+                                                                                   
                                                                                 })}
 
                                                                             </ul>
@@ -661,7 +675,7 @@ const Category = (props) => {
 
                                 < div className="ec-sidebar-block">
                                     <div className="ec-sb-title">
-                                        <h3 className="ec-sidebar-title">{("Size")}<div className="ec-sidebar-res"><i
+                                        <h3 className="ec-sidebar-title">{t("Size")}<div className="ec-sidebar-res"><i
                                             className="ecicon eci-angle-down"></i></div>
                                         </h3>
                                     </div>
@@ -719,7 +733,7 @@ const Category = (props) => {
                                                  return (
                                                     <li className="active" onClick={(e) => { handleColorSer(e) }} key={ci} >
                                                         <div className="ec-sidebar-block-item"><span
-                                                            style={{ backgroundColor: color }}></span></div>
+                                                            style={{ backgroundColor: color }} data-color={color} ></span></div>
                                                     </li>
 
                                                 )

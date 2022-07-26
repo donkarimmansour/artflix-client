@@ -1,7 +1,7 @@
 
 const Host = {
   ROOT: "http://localhost:3000",
-  BACKEND: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" : "https://api.solidernet.com" ,
+  BACKEND: (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') ? "http://localhost:3000" : "https://api.cheap-shop.net" ,
   PREFIX: "/v1/api",  
 };
  
@@ -53,17 +53,28 @@ const ApiEndpoints = {
   WishlistEndpoints: {
     route: `${Host.PREFIX}/wishlist`,
     list: `/list`,
-    create: `/create`,
+    create: `/create`, 
     delete: `/delete`,
     count: `/count`,
   },
+  ChatEndpoints: { 
+    route: `${Host.PREFIX}/chat`, 
+    sendMessage: `/send-message`, 
+    getMessage: `/get-message`, 
+    imageMessageSend: `/image-message-send`, 
+    seenMessage: `/seen-message`,  
+    delivaredMessage: `/delivared-message`, 
+  },
+
   FileEndpoints: {
     route: `${Host.PREFIX}/file`,
-    getSingleImageView: `/get-single-image/:id/view`,
-    getSingleImageDownload: `/get-single-image/:id/download`,
-    createSingleImage: `/create-single-image`,
-    createMultipleImage: `/create-multiple-image`, 
+    getSingleFileView: `/get-single-file`, 
+    getSingleFileDownload: `/get-single-file`,
+    createSingleFile: `/create-single-file`,
+    createMultipleFile: `/create-multiple-file`, 
+
   },
+ 
   SubscribeEndpoints: {
     route: `${Host.PREFIX}/subscribe`,
     list: `/list`,

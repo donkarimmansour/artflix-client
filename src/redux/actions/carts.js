@@ -30,25 +30,42 @@ const get_carts = () => async dispatch => {
 const create_carts = (product) => async dispatch => {
     dispatch({ type: START_LOADING })
 
-    try {
+    try { 
 
         const cart =  localStorage.getItem("cart") ? getLocalStorage("cart") : [] 
         const index = cart.findIndex(c => c.product._id === product._id)
+
+
          
         if(index > -1){
+            const shippingIndex = product.shipping.findIndex(s => s.name ===cart[index].shipping)
+            const sizeIndex = product.size.findIndex(s => s.name === cart[index].size)
+            const shippingPrice = (shippingIndex !== -1 && product.shipping.length > 0) ? product.shipping[shippingIndex].price : 0
+            const sizePrice = (sizeIndex !== -1 && product.size.length > 0) ? product.size[sizeIndex].price : product.price
+
              cart[index].quantity += 1
              cart[index].color = product.color[0]
-             cart[index].size = product.size.length > 0 ? product.size[0].size : "Standard"
-             cart[index].shipping = product.shipping.length > 0 ? product.shipping[0].name : "Standard"
-             cart[index].amount = (product.price * cart[index].quantity)
+            //  cart[index].size = (product.size.length > 0) ? product.size[index].size : "Standard"
+            //  cart[index].shipping = (product.shipping.length > 0) ? product.shipping[index].name : "Standard"
+             cart[index].amount = (sizePrice * cart[index].quantity) + (shippingPrice * cart[index].quantity) 
         }else {
-             cart.push({product , quantity : 1 , shipping : product.shipping.length > 0 ? product.shipping[0].name : "Standard" ,
-              size : product.size.length > 0 ? product.size[0].size : "Standard" , color : product.color[0] ,
-               amount : product.price , price : product.price})
+            const shippingName = (product.shipping.length > 0) ? product.shipping[0].name : "Standard"
+            const sizeName = (product.size.length > 0) ? product.size[0].size : "Standard"
+            const shippingPrice = (product.shipping.length > 0) ? product.shipping[0].price : 0
+            const sizePrice = (product.size.length > 0) ? product.size[0].price : product.price
+
+             cart.push({
+                product ,
+                quantity : 1 ,
+                shipping : shippingName ,
+                size : sizeName ,
+                color : product.color[0] ,
+                amount : (sizePrice + shippingPrice) ,
+                price : sizePrice })
         }
-    
+
         dispatch({
-            type: SET_CARTS,
+            type: SET_CARTS, 
             payload: cart
         })
 
@@ -136,12 +153,21 @@ const size_carts = (id , size , price) => async dispatch => {
         const index = cart.findIndex(c => c.product._id === id)
     
     
-        if(index => 0){ 
-            cart[index].size = size
-            cart[index].price = price
-            cart[index].amount = (price * cart[index].quantity)
+           
+        if(index > -1){
+            const sizeIndex = cart[index].product.size.findIndex(s => s.size === size)
+            const sizePrice = (sizeIndex !== -1 && cart[index].product.size.length > 0) ? cart[index].product.size[sizeIndex].price : cart[index].price
+            const sizeName = (sizeIndex !== -1 && cart[index].product.size.length > 0) ? cart[index].product.size[sizeIndex].size : cart[index].size
+            const shippingIndex = cart[index].product.shipping.findIndex(s => s.name === cart[index].shipping)
+            const shippingPrice = (shippingIndex !== -1 && cart[index].product.shipping.length > 0) ? cart[index].product.shipping[shippingIndex].price : 0
+          //  const shippingName = (shippingIndex !== -1 && cart[index].product.shipping.length > 0) ? cart[index].product.shipping[shippingIndex].name : cart[index].shipping
+          
+             cart[index].size = sizeName
+             cart[index].price = sizePrice
+             cart[index].amount = (sizePrice * cart[index].quantity) + (shippingPrice * cart[index].quantity)
+
         }
-    
+        
         dispatch({
             type: SIZE_CARTS,
             payload: cart
@@ -164,13 +190,20 @@ const shipping_carts = (id , shipping) => async dispatch => {
 
         const cart =  localStorage.getItem("cart") ? getLocalStorage("cart") : [] 
         const index = cart.findIndex(c => c.product._id === id)
-    
-    
-        if(index => 0){ 
-            cart[index].shipping = shipping.name
-            cart[index].amount = (cart[index].price * cart[index].quantity) + shipping.price
+
+              
+        if (index > -1) {
+            const sizeIndex = cart[index].product.size.findIndex(s => s.name === cart[index].size)
+            const sizePrice = (sizeIndex !== -1 && cart[index].product.size.length > 0) ? cart[index].product.size[sizeIndex].price : cart[index].price
+            // const sizeName = (sizeIndex !== -1 && cart[index].product.size.length > 0) ? cart[index].product.size[sizeIndex].name : cart[index].size
+            const shippingIndex = cart[index].product.shipping.findIndex(s => s.name === shipping.name)
+            const shippingPrice = (shippingIndex !== -1 && cart[index].product.shipping.length > 0) ? cart[index].product.shipping[shippingIndex].price : 0
+            const shippingName = (shippingIndex !== -1 && cart[index].product.shipping.length > 0) ? cart[index].product.shipping[shippingIndex].name : cart[index].shipping
+
+            cart[index].shipping = shippingName
+            cart[index].amount = (sizePrice * cart[index].quantity) + (shippingPrice * cart[index].quantity)
         }
-    
+
         dispatch({
             type: SHIPPING_CARTS,
             payload: cart

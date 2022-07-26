@@ -6,7 +6,7 @@ import { set_subscribe } from "../redux/actions/subscribe";
 import { loader } from "../shared/elements";
 import * as yup from "yup";
 import { get_count, get_random_product } from "../redux/actions/products";
-import { ImageLink } from "../shared/funs";
+import { extractDesk, ImageVIEW } from "../shared/funs";
 import myClassname from "classnames";
 import { CLEAR_MESSAGE } from "../redux/constans/message"
 import { Link } from "react-router-dom"
@@ -116,6 +116,22 @@ const Footer = () => {
         else
             e.target.parentElement.parentElement.parentElement.querySelector(".ec-footer-dropdown").style.display = "block"
     }
+
+    const { insert : wInsert ,  delete : wDelete} = useSelector(state => state.wishlist)
+    const { insert : cInsert ,   delete : cDelete} = useSelector(state => state.carts)
+
+    useEffect(() => {
+        if(wInsert !== "" || cInsert !== ""){
+            toast.info(t("Added"))
+        }
+    }, [wInsert , cInsert])
+
+    useEffect(() => {
+        if(wDelete !== "" || cDelete !== ""){
+            toast.info(t("Removed"))
+        }
+    }, [ wDelete , cDelete])
+
  
 
     return (
@@ -129,12 +145,12 @@ const Footer = () => {
 
                 <div className={myClassname("recent-purchase", { "hide": !Pupup })}>
 
-                    <img src={!Product.images || !Product.images[0] ? "https://via.placeholder.com/500" : ImageLink(Product.images[0])} 
+                    <img src={!Product.images || !Product.images[0] ? "https://via.placeholder.com/500" : ImageVIEW(Product.images[0])} 
                     alt="payment image" />
 
                     <div className="detail">
                         <p>{t("Someone in new just bought")}</p>
-                        <h6><Link style={{ all: "unset", cursor: "pointer" }} to={`/product/${Product.category}/${Product._id}`}>{Product.name}</Link></h6>
+                        <h6><Link style={{ all: "unset", cursor: "pointer" }} to={`/product/${Product.category}/${Product._id}`}>{extractDesk(Product.name , 50)}</Link></h6>
                     </div>
 
                     <a href="javascript:void(0)" className="icon-btn recent-close" onClick={() => { setPupup(false) }}>×</a>
@@ -313,7 +329,7 @@ const Footer = () => {
                                 <div className="col-sm-12 col-lg-3 ec-footer-contact">
                                     <div className="ec-footer-widget">
 
-                                        <div className="ec-footer-logo"><img src="/assets/imgs/ws-soldernet.png" alt="" /></div>
+                                        <div className="ec-footer-logo"><img src="/assets/imgs/ws-logo.png" alt="" /></div>
                                             
                                     
                                         <h4 className="ec-footer-heading">{t("Contact us")} <div className='ec-heading-res' onClick={(e) => {handleDropdown(e)}}><i className='ecicon eci-angle-down'></i></div></h4>
@@ -360,8 +376,8 @@ const Footer = () => {
                                         <h4 className="ec-footer-heading">{t("Services")} <div className='ec-heading-res' onClick={(e) => {handleDropdown(e)}}><i className='ecicon eci-angle-down'></i></div></h4>
                                         <div className="ec-footer-links ec-footer-dropdown">
                                             <ul className="align-items-center">
-                                                <li className="ec-footer-link"><Link to="/pages/privacy">{t("Policy Policy")}</Link></li>
-                                                <li className="ec-footer-link"><Link to="/pages/terms">{t("Term Condition")}</Link></li>
+                                                <li className="ec-footer-link"><Link to="/pages/privacy">{t("Privacy Policy")}</Link></li>
+                                                <li className="ec-footer-link"><Link to="/pages/terms">{t("Terms Condition")}</Link></li>
                                                 <li className="ec-footer-link"><Link to="/pages/cancellation">{t("Cancellation Policy")}</Link></li>
                                                 <li className="ec-footer-link"><Link to="/pages/shipping">{t("Shipping Delivery Policy")}</Link></li>
 

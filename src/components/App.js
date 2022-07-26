@@ -158,17 +158,17 @@ const App = () => {
                  <Products skip="0" limit="12" sort={'{"updatedAt" : -1}'}/>
                </Suspense> 
 
-      {/*           <Suspense fallback={<ProductsSkeleton />}>
-                <AreaProducts caty='["Cameras"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
+               <Suspense fallback={<ProductsSkeleton />}>
+                <AreaProducts caty='["tools"]' skip="0" limit="4" sort={'{"updatedAt" : -1}'}/>
                </Suspense>
                
                 <Suspense fallback={<CatyOneSkeleton />}> 
-                 <CatySlideOne caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'} /> 
+                 <CatySlideOne caty="tools" skip="0" limit="10" sort={'{"updatedAt" : -1}'} /> 
                </Suspense>
 
               <Suspense fallback={<CatyTwoSkeleton />}> 
-                 <CatySlideTwo  caty="Cameras" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
-               </Suspense>  */}
+                 <CatySlideTwo  caty="tools" skip="0" limit="10" sort={'{"updatedAt" : -1}'}/> 
+               </Suspense> 
 
               <Suspense fallback={<ItemsSkeleton />}> 
                <FeatureAndLimit skip="0" limit="4" sort='{"updatedAt" : 1}' />   

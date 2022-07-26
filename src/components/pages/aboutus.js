@@ -1,6 +1,5 @@
 import React, { Fragment } from "react"
 import { useTranslation } from 'react-i18next';
-import { ImageLink } from '../../shared/funs';
 import Breadcrumb from "../stuff/breadcrumb";
 
 

@@ -51,7 +51,7 @@ const create_wishlist = (productId , userId , authorization) => async dispatch =
     })
 }
 
-
+ 
 
 const delete_wishlist = (id , authorization ) => async dispatch => {
     dispatch({ type: START_LOADING })
@@ -63,7 +63,6 @@ const delete_wishlist = (id , authorization ) => async dispatch => {
             dispatch({
                 type: DELETE_WISHLIST,
                 payload: {id}
-
             })
         } else {
             dispatch({ type: STOP_LOADING })

@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import { countDown, extractDesk, ImageLink } from '../../shared/funs';
+import { countDown, extractDesk, ImageVIEW } from '../../shared/funs';
 import { get_feature_products, get_limited_products, set_product_id } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom"; import { create_carts } from "../../redux/actions/carts";
 import { create_wishlist } from "../../redux/actions/wishlist";
 import Slider from "react-slick";
 import { isAuthentication } from "../../redux/actions/auth"
-import { toast } from "react-toastify";
 import AOS from 'aos';
 import Image from 'lqip-react';
  
@@ -63,7 +62,6 @@ const FeatureAndLimit = (props) => {
         autoplaySpeed: 3000,
         cssEase: "linear",
         beforeChange: (current, next) => setCurrentFeature(next)
-
     };
 
     const settingsLimited = {
@@ -104,7 +102,6 @@ const FeatureAndLimit = (props) => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-        toast.info(t("Added"))
     }
 
 
@@ -115,8 +112,6 @@ const FeatureAndLimit = (props) => {
             navigate("/login")
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
-            toast.info(t("Added"))
-
         }
 
     }
@@ -124,10 +119,6 @@ const FeatureAndLimit = (props) => {
     const quickView = (productId) => {
         dispatch(set_product_id(productId))
     }
-
-
-
-
 
 
     return (
@@ -167,7 +158,7 @@ const FeatureAndLimit = (props) => {
                                                                     <Image className="main-image"
                                                                     thumbnail={"https://via.placeholder.com/500"}
                                                                     aspectRatio={'500x500'}
-                                                                    src={ImageLink(product.images[0])}
+                                                                    src={ImageVIEW(product.images[0])}
                                                                     alt="Product" />
                                                                     
                                                                     </Link>
@@ -183,7 +174,7 @@ const FeatureAndLimit = (props) => {
                                                         </h5>
 
 
-                                                        {isAuth && <div className="ec-fs-price">
+                                                        {(isAuth || !isAuth) && <div className="ec-fs-price">
                                                             {product.oldprice && <span className="old-price">${product.oldprice}</span>}
                                                             <span className="new-price">${product.price}</span>
                                                         </div>}
@@ -283,7 +274,7 @@ const FeatureAndLimit = (props) => {
                                                                     <Image className="main-image"
                                                                     thumbnail={"https://via.placeholder.com/500"}
                                                                     aspectRatio={'500x500'}
-                                                                    src={ImageLink(product.images[0])}
+                                                                    src={ImageVIEW(product.images[0])}
                                                                     alt="Product" />
                                                                     
                                                                     </Link>
@@ -299,7 +290,7 @@ const FeatureAndLimit = (props) => {
                                                         </h5>
 
 
-                                                        {isAuth && <div className="ec-fs-price">
+                                                        {(isAuth || !isAuth) && <div className="ec-fs-price">
                                                             {product.oldprice && <span className="old-price">${product.oldprice}</span>}
                                                             <span className="new-price">${product.price}</span>
                                                         </div>}

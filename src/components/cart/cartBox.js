@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { get_carts, increase_carts, decrease_carts, delete_carts } from "../../redux/actions/carts";
-import { ImageLink } from "../../shared/funs";
+import { decimalNumber, ImageVIEW } from "../../shared/funs";
 import { toast } from "react-toastify";
 import { isAuthentication } from "../../redux/actions/auth";
  
@@ -39,16 +39,12 @@ const CartBox = () => {
 
     const removeProduct = (id) => {
         dispatch(delete_carts(id))
-        toast.info(t("Removed"))
-
-
     }
 
     const closeCart = () => {
-   
         document.querySelector(".ec-side-cart-overlay").style.display =  "none" 
         document.querySelector("#ec-side-cart.ec-side-cart").classList.remove("ec-open") 
-     
+    
      }
 
     return (
@@ -73,7 +69,7 @@ const CartBox = () => {
                                     if(!cart.product || !cart.product.images || !cart.product.images[0]){
                                         img = "https://via.placeholder.com/500"
                                     }else {
-                                    img = ImageLink(cart.product.images[0])
+                                    img = ImageVIEW(cart.product.images[0])
                                     }
 
                                     return (
@@ -85,7 +81,7 @@ const CartBox = () => {
 
                                             <div className="ec-pro-content">
                                                 <a href="product-left-sidebar.html" className="cart_pro_title">{cart.product.name}</a>
-                                                <span className="cart-price"><span>${isAuth && cart.price}</span> x {cart.quantity}</span>
+                                                <span className="cart-price"><span>${(isAuth || !isAuth) && cart.price}</span> x {cart.quantity}</span>
                                                 <div className="qty-plus-minus">
                                                     <div className="dec ec_qtybtn" disabled={(cart.quantity <= 1)} onClick={(e) => { decreaseProduct(cart.product._id) }}>-</div>
                                                     <input className="qty-input" type="text" name="ec_qtybtn" onChange={() => { }} value={cart.quantity} />
@@ -110,16 +106,16 @@ const CartBox = () => {
                                     <tbody>
                                         <tr>
                                             <td className="text-left">{t("Total")} :</td>
-                                            <td className="text-right primary-color">${ isAuth &&
-                                                Carts.reduce((amount , cart) => amount + cart.amount , 0 )
+                                            <td className="text-right primary-color">${ (isAuth || !isAuth) &&
+                                               decimalNumber(Carts.reduce((amount , cart) => amount + cart.amount , 0 )) 
                                             }</td>
                                         </tr>
                                     </tbody>
                                 </table>
-
+  
 
                             }
-                        </div>
+                        </div> 
                         <div className="cart_btn">
                             <Link to="/cart" className="btn btn-primary">{t("View Cart")}</Link>
                             <Link to="/checkout" className="btn btn-secondary">{t("Checkout")}</Link>
@@ -127,7 +123,7 @@ const CartBox = () => {
                     </div>
                 </div>
             </div>
-
+ 
         </Fragment>
     );
 }

@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import { ImageLink } from '../../shared/funs';
+import { extractDesk, ImageVIEW } from '../../shared/funs';
 import { Link } from "react-router-dom";
 import { get_catytwo } from "../../redux/actions/products";
 import { useDispatch, useSelector } from "react-redux";
@@ -107,7 +107,7 @@ const CatySlideTwo = (props) => {
                                         if(!product.images || !product.images[0]){
                                             img = "https://via.placeholder.com/500"
                                         }else {
-                                        img = ImageLink(product.images[0])
+                                        img = ImageVIEW(product.images[0])
                                         }
 
 
@@ -123,14 +123,12 @@ const CatySlideTwo = (props) => {
                                                         alt={product.name}
                                                     />
 
-                                                    <img className="cat-icon"
-                                                        src={img}
-                                                        alt="cat-icon" />
+                                                    
                                                 </div>
                                                 <div className="cat-detail">
-                                                    <h4>{product.name}</h4>
-                                                    {isAuth && <h5>${product.price}</h5>} 
-                                                    <Link className="btn-primary" to={`/product/${product.category}/${product._id}`}>{("shop now")}</Link>
+                                                    <h4>{extractDesk(product.name , 30 )}</h4>
+                                                    {(isAuth || !isAuth) && <h5>${product.price}</h5>} 
+                                                    <Link className="btn-primary" to={`/product/${product.category}/${product._id}`}>{t("shop now")}</Link>
                                                 </div>
                                             </div>
                                         </div>

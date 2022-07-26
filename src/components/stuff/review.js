@@ -33,24 +33,15 @@ const Review = () => {
 
     const testimonial = [
         {
-            fullname: "John Doe", rule: "General Manager", desc: `Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen` , avatar: "/assets/imgs/ws-profile-1.jpg"
+            fullname: "Crystal Murrell", rule: "Customer", desc: `Absolutely in love with this sink guard! I previously had a hand towel folded up to catch the water, this looks and works so much better` , avatar: "/assets/imgs/ws-profile-1.jpg"
         },
 
         {
-            fullname: "John Doe", rule: "General Manager", desc: `Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen` , avatar: "/assets/imgs/ws-profile-2.jpg"
+            fullname: "jane denison", rule: "Customer", desc: `We really like it and it’s versatility. We can use each section with ceramic plates or remove the plates and use them in another way. Our charcuterie board was full and our guests enjoyed themselves.` , avatar: "/assets/imgs/ws-profile-2.jpg"
         },
 
         {
-            fullname: "John Doe", rule: "General Manager", desc: `Lorem Ipsum is simply dummy text of the printing and
-          typesetting industry. Lorem Ipsum has been the industry's standard dummy text
-          ever since the 1500s, when an unknown printer took a galley of type and
-          scrambled it to make a type specimen` , avatar: "/assets/imgs/ws-profile-3.jpg"
+            fullname: "Allison H", rule: "Customer", desc: `This try is amazing! It accelerates the defrost time of meat placed on the tray versus on the counter or in the sink. I am surprised by the significantly shorter defrost times.` , avatar: "/assets/imgs/ws-profile-3.jpg"
         }
     ]
 
@@ -89,7 +80,7 @@ const Review = () => {
 
                                                     <div className="ec-test-content">
                                                         <div className="ec-test-desc">{team.desc}</div>
-                                                        <div className="ec-test-name">{team.name}</div>
+                                                        <div className="ec-test-name">{team.fullname}</div>
                                                         <div className="ec-test-designation">{team.rule}</div>
                                                         <div className="ec-test-rating">
                                                             {

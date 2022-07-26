@@ -1,16 +1,15 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import { calculateRating, ImageLink, extractDesk } from '../../shared/funs';
+import { calculateRating, ImageVIEW, extractDesk } from '../../shared/funs';
 import myClassNames from 'classnames';
 import { useDispatch, useSelector } from "react-redux";
 import { get_single_product, set_product_id } from "../../redux/actions/products";
 import { create_carts } from "../../redux/actions/carts";
 import Slider from "react-slick";
-import { toast } from "react-toastify";
 import Image from 'lqip-react';
 import { isAuthentication } from "../../redux/actions/auth";
 
- 
+  
 const Model = () => {
     const { t } = useTranslation();
 
@@ -84,8 +83,8 @@ const Model = () => {
     const addToCart = (product) => {
         dispatch(create_carts(product))
         dispatch(set_product_id(""))
-        toast.info(t("Added"))
     }
+
     const close = (e) => {
         dispatch(set_product_id(""))
     }
@@ -119,8 +118,6 @@ const Model = () => {
     };
 
 
-
-
     return (
         <Fragment>
 
@@ -144,7 +141,7 @@ const Model = () => {
                                                         return (
 
                                                             <div key={i} className="qty-slide ">
-                                                                <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
+                                                                <Image className="img-responsive" src={ImageVIEW(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                             </div>
 
 
@@ -163,7 +160,7 @@ const Model = () => {
                                                         return (
 
                                                             <div key={i} className="qty-slide" >
-                                                                <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
+                                                                <Image className="img-responsive" src={ImageVIEW(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                             </div>
 
 
@@ -207,7 +204,7 @@ const Model = () => {
                                     </div>
 
                                      <div className="ec-quickview-desc">{extractDesk(Product.description, 100)}</div>
-                                    {isAuth && <div className="ec-quickview-price">
+                                    {(isAuth || !isAuth) && <div className="ec-quickview-price">
                                         {Product.oldprice && <span className="old-price">${Product.oldprice}</span>}
                                         <span className="new-price">${Product.price}</span>
                                     </div>}

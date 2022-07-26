@@ -1,8 +1,10 @@
 import { GET_WISHLIST, CREATE_WISHLIST, DELETE_WISHLIST, COUNT_WISHLIST } from "../constans/wishlist"
 
 const INITIAL_STATE = {
-    wishlist: [],
-    count: 0
+    wishlist: [], 
+    count: 0 ,
+    delete : "" ,
+    insert : ""
 }
 
 const wishlistReducer = (state = INITIAL_STATE, action) => {
@@ -15,17 +17,21 @@ const wishlistReducer = (state = INITIAL_STATE, action) => {
         case CREATE_WISHLIST:
 
             return {
-                ...state,
                 wishlist: [...state.wishlist, action.payload] ,
-                count : state.wishlist.length != (state.wishlist.length + 1) ? state.count + 1 : state.count
+                count : state.wishlist.length != (state.wishlist.length + 1) ? state.count + 1 : state.count ,
+                insert : Math.random() + new Date() ,
+                delete : "" ,
+
             }
         case DELETE_WISHLIST:
 
             const newishlist = state.wishlist.filter(w => w._id !== action.payload.id)
             return {
-                ...state,
                 wishlist: [...newishlist] ,
-                count : state.wishlist.length != newishlist.length ? state.count - 1 : state.count
+                count : state.wishlist.length != newishlist.length ? state.count - 1 : state.count ,
+                delete : Math.random() + new Date() ,
+                insert : ""
+
             }
 
         case COUNT_WISHLIST:

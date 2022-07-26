@@ -1,6 +1,7 @@
-import React, { Fragment, useEffect , useState } from "react"
+import React, { Fragment, useEffect , useState , useRef } from "react"
 import { useTranslation } from 'react-i18next';
-import { calculateRating, ImageLink, countDown, extractDesk } from '../../shared/funs';
+import { calculateRating, ImageVIEW, countDown , extractDesk, makeId, ImageDOWNLOAD } from '../../shared/funs';
+import {  loader } from '../../shared/elements';
 import myClassNames from 'classnames';
 import { Link, useParams, useNavigate } from "react-router-dom";
 import Products from "./products";
@@ -13,22 +14,45 @@ import Slider from "react-slick";
 import { isAuthentication } from "../../redux/actions/auth";
 import Image from 'lqip-react'; 
 import { toast } from "react-toastify";
+import { Field, Form, Formik } from "formik";
+import * as yup from 'yup'
+import { getLocalStorage, setLocalStorage } from "../../shared/localStorage";
+import { io } from "socket.io-client";
+import { CLEAR_MESSAGE } from "../../redux/constans/message";
+import { messageSend , getMessage , seenMessage , ImageMessageSend , delivaredMessage} from "../../redux/actions/chat";
+import { Create } from "../../services/file";
+import { SOCKET_MESSAGE } from "../../redux/constans/chat";
+import { START_LOADING, STOP_LOADING } from "../../redux/constans/loading";
 
 
 const SingleProduct = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const socket = useRef();
+    const dispatch = useDispatch()
+    const params = useParams();
+
 
     const [Product, setProduct] = useState({})
     const [ExtraProducts, setExtraProducts] = useState([])
-
-    const params = useParams();
     const [progress, setProgress] = useState(0)
     const [countDownDate, setCountDownDate] = useState({ days: "", hr: "", min: "", sec: "" })
     const [visitor, setVisitor] = useState(0)
     const [quantity, setQuantity] = useState(1)
     const [slider1, setSlider1] = useState(null);
     const [slider2, setSlider2] = useState(null);
+     const [newMessage, setNewMessage] = useState('');
+     const [socketMessage, setSocketMessage] = useState('');
+     const [ChatId, setChatId] = useState({})
+
+
+     const { singleproduct, extraproducts } = useSelector(state => state.products)//, sort : '{ "uptatedAt": 1 }'
+     const { isAuth , token , user } = useSelector((state) => state.auth);
+     const { loading } = useSelector((state) => state.loading);
+     const {successMsg , errorMsg } = useSelector((state) => state.message);
+     const { message } = useSelector(state => state.chat);
+     const authorization = { "Authorization": `bearer ${token}` }
+ 
 
     const settingsImage = {
         slidesToShow: 1,
@@ -47,13 +71,9 @@ const SingleProduct = () => {
         rows: 1,
     };
 
- 
-    
-    const dispatch = useDispatch()
-    const { singleproduct, extraproducts } = useSelector(state => state.products)//, sort : '{ "uptatedAt": 1 }'
-    const { isAuth , token , user } = useSelector((state) => state.auth);
-    const authorization = { "Authorization": `bearer ${token}` }
 
+     //states
+ 
  
     useEffect(() => {
         dispatch(isAuthentication());
@@ -72,7 +92,7 @@ const SingleProduct = () => {
     useEffect(() => {
         setProduct(singleproduct)
         setExtraProducts(extraproducts)
-    }, [singleproduct, extraproducts])
+    }, [singleproduct, extraproducts]) 
 
     useEffect(() => {
         Progress()
@@ -87,8 +107,6 @@ const SingleProduct = () => {
         }
 
     }, [Product.limitedAtt])
-
-
 
 
 
@@ -161,8 +179,6 @@ const SingleProduct = () => {
 
     const addToCart = (product) => {
         dispatch(create_carts(product))
-        toast.info(t("Added"))
-
     }
 
 
@@ -172,8 +188,6 @@ const SingleProduct = () => {
             navigate("/login")
         } else {
             dispatch(create_wishlist(productId, userId, authorization))
-            alert(t("Added"))
-
         }
 
     }
@@ -182,9 +196,251 @@ const SingleProduct = () => {
         dispatch(set_product_id(productId))
     }
 
+   
+
+
+    useEffect(() => {
+        socket.current = io('ws://localhost:8080');
+        
+        //get new message
+        socket.current.on('getMessage', (data) => {
+            setSocketMessage(data);
+        })
+
+        return () => {
+            //logout
+           socket.current.emit('logout', "myInfo.id")
+        }
+    }, []);
+
+
+    useEffect(() => {
+        socket.current.emit('addUser', ChatId)
+    } , [ChatId])
 
 
 
+    useEffect(() => {
+        if("productId" in ChatId) {
+            dispatch(getMessage(params.id , ChatId.id)) 
+        }
+    
+    }, [ChatId]) 
+
+
+    // on Success Send message in local
+    useEffect(() => {
+        if (successMsg === "MessageSendFIRST") {
+            socket.current.emit('sendMessage', message[message.length - 1]); //last msg
+
+            setChatId(message[message.length - 1])
+            setLocalStorage("chat", message[message.length - 1])// this not good
+
+        } else if (successMsg === "MessageSend") {
+            socket.current.emit('sendMessage', message[message.length - 1]); //last msg
+
+
+        } //get Message 
+        else if (successMsg === "getMessage") {
+            if (message.length > 0) {
+
+                if (message[message.length - 1].from !== "user" && message[message.length - 1].status !== 'seen') {
+
+                    //see in other
+                    socket.current.emit('seen', message[message.length - 1].id);
+
+                    // see all msg
+                    dispatch(seenMessage({ _id: message[message.length - 1]._id }))
+
+                }
+            }
+
+        }
+
+        dispatch({ type: CLEAR_MESSAGE })
+
+    }, [successMsg, errorMsg])
+
+
+      
+useEffect(() => {
+    // on Success Send from user to me
+     if (socketMessage) {
+
+        if (socketMessage.productId === params.id && socketMessage.from === "admin") {
+
+            // insert new msg
+            dispatch({type: SOCKET_MESSAGE, payload: socketMessage})
+
+           // see this msg
+           dispatch(seenMessage({_id: socketMessage._id}));
+
+           socket.current.emit('messageSeen', socketMessage.id);
+
+
+            setSocketMessage('')
+
+        } // on Success Send from user to me in outside 
+        else if (socketMessage.productId !== params.id && socketMessage.from === "admin") {
+            //    notificationSPlay();
+
+          toast.info(t(`admin send a new message`));
+
+           dispatch(delivaredMessage({_id: socketMessage._id}));
+
+           socket.current.emit('delivaredMessage', socketMessage.id);
+
+
+        }
+
+    }
+
+}, [socketMessage])
+
+ 
+
+
+
+  
+
+
+
+useEffect(() => {
+
+    try {
+       const existChatId = getLocalStorage("chat") ? getLocalStorage("chat") : {}
+
+
+        if("id" in existChatId){
+            setInitial({
+                message: "",
+            })
+            setInitialValidator(yup.object().shape({
+                message: yup.string().required(t("message field is required")),
+            }))
+
+            setChatId(existChatId)
+
+       
+        }else{
+            setInitial({
+                fullname: "",
+                message: "",
+            })
+            setInitialValidator(yup.object().shape({
+                fullname: yup.string().required(t("fullname field is required")), 
+                message: yup.string().required(t("message field is required")),
+            })) 
+
+            setChatId({})
+        }
+    } catch (error) {  
+        console.log(error);
+    }
+
+} ,  [params ])
+
+
+
+
+
+      //input Hendle
+      const inputHendle = (e) => {
+        setNewMessage(e.target.value);
+
+        socket.current.emit('typingMessage', {
+            id : ChatId?.id,
+            msg: e.target.value
+        })
+    }
+
+
+    //form
+    const [initial, setInitial] = useState({ 
+        fullname: "", 
+    }) 
+
+    const [initialValidator, setInitialValidator] = useState(yup.object().shape({
+        fullname: yup.string().required(t("fullname field is required")),
+    }))
+
+    
+
+    const onSubmit = values => {
+
+        let existChatId = {}
+        let data = {}
+
+        try {
+            existChatId = getLocalStorage("chat") ? getLocalStorage("chat") : {}
+        } catch (error) { }
+
+        if ("id" in existChatId) {
+                data = {...existChatId , message: values.message , productId: params.id}
+                 dispatch(messageSend(data , ''))
+        } else {
+            if ("_id" in user) {
+                data = {
+                    senderName: `${user.firstname} ${user.lastname}`,
+                    productId: params.id,
+                    userId: user._id,
+                    id: makeId(20),
+                    message: values.message,
+                    image: user.image ,
+                }
+            } else {
+                data = {
+                    senderName: values.fullname,
+                    productId: params.id,
+                    id: makeId(20),
+                    message: values.message ,
+                    image: "62d85c889baf3cc9640f7904" ,
+                    userId: null,
+
+            }
+
+            
+                dispatch(messageSend(data , 'first'))
+                setNewMessage("")
+            }
+        }
+    }
+
+
+
+
+     //Image Send
+     const ImageSend = (e , type) => {    
+    
+        if (e.target.files.length !== 0) {
+             //    sendingSPlay();
+
+            const formData = new FormData();
+            formData.append('image', e.target.files[0]);
+           
+            dispatch({ type: START_LOADING })
+
+            Create(formData).then(({ data }) => {
+
+                if (!data.err) {
+                    dispatch({ type: STOP_LOADING })
+
+                          dispatch(ImageMessageSend({...ChatId , message: data.msg , productId: params.id , type}));
+
+                } else {
+                    dispatch({ type: STOP_LOADING })
+                    toast.warning(t(`There was an error while uploading your file`));
+
+                }
+                //  console.log(data);
+
+            }).catch(err => {
+                console.log("get orders api err ", err);
+                dispatch({ type: STOP_LOADING })
+            })
+        }
+
+    }
 
 
    
@@ -194,6 +450,8 @@ const SingleProduct = () => {
         <Fragment>
 
             <Breadcrumb name={params.caty} />
+
+            {loading && loader()}
 
 
             {Product && Product.name &&
@@ -219,7 +477,7 @@ const SingleProduct = () => {
                                                                     return (
 
                                                                         <div key={i} className="single-slide zoom-image-hover" >
-                                                                            <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
+                                                                            <Image className="img-responsive" src={ImageVIEW(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                                         </div>
 
 
@@ -239,7 +497,7 @@ const SingleProduct = () => {
                                                                     return (
                                                                         
                                                                         <div key={i} className="single-slide" >
-                                                                            <Image className="img-responsive" src={ImageLink(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
+                                                                            <Image className="img-responsive" src={ImageVIEW(image)} alt={Product.name} thumbnail={"https://via.placeholder.com/500"} aspectRatio={'500x500'}/>
                                                                         </div>
 
 
@@ -342,7 +600,7 @@ const SingleProduct = () => {
 
 
                                                         <div className="ec-single-price-stoke">
-                                                        {isAuth &&
+                                                        {(isAuth || !isAuth) &&
                                                             <div className="ec-single-price">
                                                                 <span className="ec-single-ps-title">{t("As low as")}</span>
                                                                 <span className="new-price">${Product.price}</span>
@@ -397,7 +655,7 @@ const SingleProduct = () => {
 
                                                                 {Product.shipping.length > 0 &&
                                                                 <div className="ec-pro-variation-inner ec-pro-variation-size">
-                                                                    <span>{t("Please select the preferred shipping method to use on this order")}</span>
+                                                                    <span>{t("Delivery Method")}</span>
                                                                     <div className="ec-pro-variation-content">
                                                                         <ul>
                                                                             {
@@ -468,16 +726,24 @@ const SingleProduct = () => {
                                                         <a className="nav-link" data-bs-toggle="tab" data-bs-target="#ec-spt-nav-info"
                                                             role="tablist">{t("More Information")}</a>
                                                     </li>
+                                                     <li className="nav-item">
+                                                        <a className="nav-link" data-bs-toggle="tab" data-bs-target="#ec-spt-nav-contact"
+                                                            role="tablist">Contact</a>
+                                                    </li>
                                                     {/* <li className="nav-item">
                                                         <a className="nav-link" data-bs-toggle="tab" data-bs-target="#ec-spt-nav-review"
                                                             role="tablist">Reviews</a>
                                                     </li> */}
                                                 </ul>
                                             </div>
+
                                             <div className="tab-content  ec-single-pro-tab-content">
+
                                                 <div id="ec-spt-nav-details" className="tab-pane fade show active">
                                                     <div className="ec-single-pro-tab-desc">{Product.description} </div>
                                                 </div>
+
+
                                                 <div id="ec-spt-nav-info" className="tab-pane fade">
                                                     <div className="ec-single-pro-tab-moreinfo">
                                                         <ul>
@@ -485,6 +751,149 @@ const SingleProduct = () => {
                                                         </ul>
                                                     </div>
                                                 </div>
+
+
+
+
+
+
+                                          <div id="ec-spt-nav-contact" className="tab-pane fade">
+                                                    <div className="row">
+                                                        <div className="ec-t-review-wrapper">
+ 
+                                                           
+                                                             {message && message.length > 0 && message.map((ct, ci) => {
+                                                                    return (
+                                                                        <div key={ci} className={myClassNames("ec-t-review-item" , {"from-me" : ct.from === "user"})}>
+                                                                            <div className="ec-t-review-avtar">
+                                                                                <img src={ImageVIEW(ct.image)} alt="" />
+                                                                            </div>
+                                                                            <div className="ec-t-review-content">
+
+ 
+                                                                                <div className="ec-t-review-top ">
+                                                                                    <div className="ec-t-review-name">{ct.from === "user" ? ct.senderName : "admin"}</div>
+                                                                                    <div className="ec-t-review-rating">
+                                                                                        {
+                                                                                            // calculateRating(review.rate, false).map((star, i) => {
+                                                                                            //     return (
+                                                                                            //         <i key={i} className={star} style={{ color: "#eec317" }}></i>
+                                                                                            //     )
+                                                                                            // })
+                                                                                        }
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div className="ec-t-review-bottom">
+
+                                                                                    {ct.message.type === 'img' ?
+                                                                                        <div className="message-image">
+                                                                                            <img src={ImageVIEW(ct.message.image)} alt='image' />
+                                                                                        </div>
+
+                                                                                     : ct.message.type === 'file' ?
+                                                                                        <div className="ec-border-anim">
+                                                                                            <button className="corner-button" onClick={() => {{ImageDOWNLOAD(ct.message.image)}}}>
+                                                                                                <span>File..</span>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                     
+                                                                                    :  ct.message.text}
+
+                                                                                
+
+                                                                                </div>
+
+                                                                            </div>
+                                                                        </div>
+
+                                                                    )
+                                                                })
+                                                            }  
+
+
+                                                        </div>
+                                                        <div className="ec-ratting-content">
+                                                            <h3>Contacts Us</h3>
+                                                            <div className="ec-ratting-form">
+
+
+                                                            {
+                                                                <Formik
+                                                                    initialValues={initial}
+                                                                    onSubmit={onSubmit}
+                                                                    validationSchema={initialValidator}
+                                                                    enableReinitialize >
+
+                                                                    {
+                                                                        ({ touched, errors , setFieldValue}) => (
+
+                                                                            <Form>
+                                                                                { !("_id" in user ) && !("id" in ChatId ) && 
+                                                                                
+                                                                                    <div className="ec-ratting-input">
+                                                                                        <Field name="fullname" placeholder={t("Enter your Fullname")} type="text" />
+                                                                                        <small className="input-error" style={{ display: errors.fullname ? "block" : "none" }} >{touched.fullname && errors.fullname}</small>
+                                                                                    </div>
+
+                                                                                }
+
+                                                                                
+
+                                                                                <div className="ec-ratting-input form-submit">
+                                                                                    <Field as="textarea" name="message" placeholder="Enter Your Comment"  value={newMessage} onChange={ e => { setFieldValue("message" , e.target.value) ; inputHendle(e) } } />
+                                                                                    <small className="input-error" style={{ display: errors.message ? "block" : "none" }} >{touched.message && errors.message}</small>
+
+                                                                                        <div className="row">
+
+                                                                                            <div className=" col-sm-12 col-md-3">
+                                                                                            <button className="btn btn-primary" type="submit" defaultValue="Submit" disabled={(loading)}>Submit</button>
+                                                                                            </div>
+
+                                                                                        {( ("_id" in user || "id" in ChatId) && (message && message.length > 0)) &&
+
+                                                                                            <div className=" col-sm-12 col-md-9" style={{ display: "flex", alignItems: "flex-end" }}>
+                                                                                                <div className="ec-btn-bw">
+
+                                                                                                    <input onChange={(e) => {ImageSend(e , "img")}} type="file" id='pic' style={{display : "none"}} accept="image/*"/>
+                                                                                                    <input onChange={(e) => {ImageSend(e , "file")}} type="file" id='att' style={{display : "none"}}  accept=".pdf , .xlsx , .xls , .csv"/>
+                                                                                                    <button type="button" className="custom-btn btn-4" onClick={() => {document.getElementById('att').click()}}>File</button>
+                                                                                                    <button type="button" className="custom-btn btn-5" onClick={() => {document.getElementById('pic').click()}}>Image</button>
+
+                                                                                                </div>
+                                                                                            </div>
+
+                                                                                        }
+
+ 
+                                                                                        </div>
+
+                                                                                        
+                                                                                        </div>
+
+
+
+ 
+                                                                            </Form>
+
+                                                                        )
+
+                                                                    }</Formik>
+                                                            }
+
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            
+
+
+
+
+
+
 
                                                 {/* <div id="ec-spt-nav-review" className="tab-pane fade">
                                                     <div className="row">
@@ -597,7 +1006,7 @@ const SingleProduct = () => {
                                                                     if (!products.images || !products.images[0]) {
                                                                         img = "https://via.placeholder.com/500"
                                                                     } else {
-                                                                        img = ImageLink(products.images[0])
+                                                                        img = ImageVIEW(products.images[0])
                                                                     }
 
                                                                     return (
@@ -623,7 +1032,7 @@ const SingleProduct = () => {
                                                                                                         }
 
                                                                                                     </div>} */}
-                                                                                        {isAuth && <span className="ec-price">
+                                                                                        {(isAuth || !isAuth) && <span className="ec-price">
                                                                                             {products.oldprice && <span className="old-price">${products.oldprice}</span>}
                                                                                             <span className="new-price">${products.price}</span>
                                                                                         </span>}

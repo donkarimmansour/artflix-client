@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react"
 import { useTranslation } from 'react-i18next';
-import {  ImageLink } from '../../shared/funs';
+import {  ImageVIEW } from '../../shared/funs';
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { get_catyone } from "../../redux/actions/products";
@@ -102,7 +102,7 @@ const CatySlideOne = (props) => {
                                             if(!product.images || !product.images[0]){
                                                 img = "https://via.placeholder.com/500"
                                             }else {
-                                            img = ImageLink(product.images[0])
+                                            img = ImageVIEW(product.images[0])
                                             }
                                             return (
                                              
@@ -123,7 +123,7 @@ const CatySlideOne = (props) => {
                                                                 </div>
                                                                 <div className="ec-cat-desc">
                                                                     <span className="ec-section-btn"><Link to={`/product/${product.category}/${product._id}`} className="btn-primary"
-                                                                        tabIndex="0">{("lighting")}</Link></span>
+                                                                        tabIndex="0">{t("lighting")}</Link></span>
                                                                 </div>
                                                             </div>
                                                         </div>

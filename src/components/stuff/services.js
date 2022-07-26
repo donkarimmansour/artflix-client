@@ -46,8 +46,8 @@ const Services = () => {
                                       <img src={serv.icon} className="svg_img" alt="" />
                                   </div>
                                   <div className="ec-service-desc">
-                                      <h2>{serv.title}</h2>
-                                      <p>{serv.desc}</p>
+                                      <h2>{t(serv.title)}</h2>
+                                      <p>{t(serv.desc)}</p>
                                   </div>
                               </div>
                           </div>

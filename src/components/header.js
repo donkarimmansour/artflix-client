@@ -37,12 +37,13 @@ const Header = (props) => {
     }, [dispatch]);
 
 
+
     useEffect(() => {
         dispatch(get_catigories({}))
     }, [dispatch])
 
     // useEffect(() => {
-    //     if (inc && inc != "") { 
+    //     if (inc && inc != "") {  
     //         setqueryVal(inc)
     //     }
     // }, [inc])
@@ -307,8 +308,8 @@ const Header = (props) => {
                                 <div className="align-self-center">
                                     <div className="header-logo">
                                         <Link to="/">
-                                            <img src="/assets/imgs/ws-soldernet.png" alt="Site Logo" />
-                                            <img className="dark-logo" src="/assets/imgs/ws-soldernet.png" alt="Site Logo" style={{ display: "none" }} /></Link>
+                                            <img src="/assets/imgs/ws-logo.png" alt="Site Logo" />
+                                            <img className="dark-logo" src="/assets/imgs/ws-logo.png" alt="Site Logo" style={{ display: "none" }} /></Link>
                                     </div>
                                 </div>
                                 {/* <!-- Ec Header Logo End -->
@@ -411,10 +412,10 @@ const Header = (props) => {
                                 <div className="header-logo">
                                     <Link to="/">
                                         <img
-                                            src="/assets/imgs/ws-soldernet.png"
+                                            src="/assets/imgs/ws-logo.png"
                                             alt="Site Logo" />
                                         <img className="dark-logo"
-                                            src="/assets/imgs/ws-soldernet.png"
+                                            src="/assets/imgs/ws-logo.png"
                                             alt="Site Logo" style={{ display: "none" }} />
                                     </Link>
                                 </div>
@@ -450,7 +451,7 @@ const Header = (props) => {
 
                                     <ul>
                                         <li className={myClassName("", { "active": pathname === "/" })}><Link to="/">{t("Home")}</Link></li>
-                                        <li className={myClassName("", { "active": pathname === "/category" })}><Link to="/category">{t("All Categories")}</Link></li>
+                                        <li className={myClassName("", { "active": pathname === "/category" | pathname === "/category/all"  })}><Link to="/category">{t("All Categories")}</Link></li>
 
                                         {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 
@@ -523,7 +524,7 @@ const Header = (props) => {
 
 
                                 <li className={myClassName("", { "active": pathname === "" })}><Link to="/">{t("Home")}</Link></li>
-                                <li className={myClassName("", { "active": pathname === "/category" })}><Link to="/category">{t("All Categories")}</Link></li>
+                                <li className={myClassName("", { "active": pathname === "/category" | pathname === "/category/all" })}><Link to="/category">{t("All Categories")}</Link></li>
 
                                 {Categories && Categories.length > 0 && Categories.map((cats, csi) => {
 

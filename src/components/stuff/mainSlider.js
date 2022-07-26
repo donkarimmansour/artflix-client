@@ -1,16 +1,18 @@
 import React, { Fragment, useEffect, useState } from "react"
-import { ImageLink } from '../../shared/funs';
+import { ImageVIEW } from '../../shared/funs';
 import { get_main } from "../../redux/actions/main";
 import { useDispatch, useSelector } from "react-redux";
 import myClassNames from 'classnames';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay , Navigation, Pagination } from 'swiper';
 import 'swiper/css/pagination';
+import { useTranslation } from "react-i18next";
 
 
 const MainSlider = (props) => {
     const dispatch = useDispatch()
     const [Main, setMain] = useState([])
+    const { t } = useTranslation();
 
     const limit = props.limit
     const skip = props.skip
@@ -68,17 +70,17 @@ const MainSlider = (props) => {
                             return (
 
 
-                                <SwiperSlide key={mi} style={{ backgroundImage: `url(${ImageLink(main.image)})` }}
+                                <SwiperSlide key={mi} style={{ backgroundImage: `url(${ImageVIEW(main.image)})` }}
                                     className={myClassNames("ec-slide-item d-flex ec-slide-m", { "ec-slide-1": mi === 0 }, { "ec-slide-2": mi !== 0 })}>
 
                                     <div className="container align-self-center">
                                         <div className="row">
                                             <div className="col-xl-6 col-lg-7 col-md-7 col-sm-7 align-self-center">
                                                 <div className="ec-slide-content slider-animation">
-                                                    <h1 className="ec-slide-title">{main.name}</h1>
-                                                    <h2 className="ec-slide-stitle">{main.description}</h2>
-                                                    <p>{main.extra}</p>
-                                                    <a href={main.link} target="_blank" className="btn btn-lg btn-secondary">{main.btn}</a>
+                                                    <h1 className="ec-slide-title">{t(main.name)}</h1>
+                                                    <h2 className="ec-slide-stitle">{t(main.description)}</h2>
+                                                    <p>{t(main.extra)}</p>
+                                                    <a href={main.link} target="_blank" className="btn btn-lg btn-secondary">{t(main.btn)}</a>
                                                 </div>
                                             </div>
                                         </div>

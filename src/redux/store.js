@@ -12,6 +12,7 @@ import subscribeReducer from './reducers/subscribe';
 import contactReducer from './reducers/contact';
 import catigoriesReducer from './reducers/categories';
 import authReducer from './reducers/auth';
+import chatReducer from './reducers/chat';
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage' 
 
@@ -29,7 +30,8 @@ const reducer = combineReducers({
     subscribe : subscribeReducer ,
     contact : contactReducer ,
     catigories : catigoriesReducer ,
-    auth : authReducer
+    auth : authReducer ,
+    chat : chatReducer ,
 })
 
 const persistConfig = { 

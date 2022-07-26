@@ -8,7 +8,7 @@ const config = {
 }
 
 const Create = async (data , con) => {
-  return  await  axios.post(`${Host.BACKEND}${ApiEndpoints.FileEndpoints.route}${ApiEndpoints.FileEndpoints.createSingleImage}` 
+  return  await  axios.post(`${Host.BACKEND}${ApiEndpoints.FileEndpoints.route}${ApiEndpoints.FileEndpoints.createSingleFile}` 
   , data , { headers :  {...config.headers , ...con } })
 } 
 

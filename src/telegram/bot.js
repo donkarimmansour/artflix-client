@@ -1,10 +1,10 @@
 import axios from "axios";
 
-const ArtflixBot = "5338222031:AAG-AjlV0s7hMrvVnMKbQjSPQjQOz-qcWS4"
-const telegramContactsId = '-1001538500057' // contacts;
-const telegramOrdersId = '-1001618917138' // orders;
+const MySenderBot = "5481692601:AAFUv1m_h8gBIod9TTibaIGfKrRdXMLxBHY"
+const telegramContactsId = '-684129709' // contacts;
+const telegramOrdersId = '-638830878' // orders;
 
-const sendOrder = (msg , OrdersId = telegramOrdersId , bot = ArtflixBot) => {
+const sendOrder = (msg , OrdersId = telegramOrdersId , bot = MySenderBot) => {
     const message = msg = encodeURI(msg);
 
     const dataParams = new URLSearchParams({
@@ -23,7 +23,7 @@ const sendOrder = (msg , OrdersId = telegramOrdersId , bot = ArtflixBot) => {
 
 }
 
-const sendContact = (msg , OrdersId = telegramContactsId , bot = ArtflixBot) => {
+const sendContact = (msg , OrdersId = telegramContactsId , bot = MySenderBot) => {
     const message = msg = encodeURI(msg);
 
     const dataParams = new URLSearchParams({

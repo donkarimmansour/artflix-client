@@ -13,7 +13,7 @@
 -----------------------------------------------------------------------------------*/
 .insta-auto, .cat-auto {
   direction: ltr !important;
-}
+} 
 
 #ec-fixedbutton {
   direction: ltr;
@@ -1193,3 +1193,16 @@ h4.ec-faq-title::after {
   }
 }
 /*# sourceMappingURL=rtl.css.map */
+
+
+.from-me{
+  direction : ltr ;
+
+}
+.from-me .ec-t-review-avtar{
+   margin: 0 15px 0 0!important; 
+}
+
+.from-me .ec-t-review-name{
+  text-align: left;
+}

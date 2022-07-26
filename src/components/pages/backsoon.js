@@ -2,7 +2,6 @@ import { Field, Form, Formik } from "formik";
 import React , {Fragment, useEffect} from "react"
 import { useTranslation } from 'react-i18next';
 import { loader } from "../../shared/elements";
-import { ImageLink } from '../../shared/funs';
 import { CLEAR_MESSAGE } from "../../redux/constans/message"
 import { useDispatch, useSelector } from "react-redux";
 import { set_subscribe } from "../../redux/actions/subscribe";

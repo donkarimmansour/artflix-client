@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { get_carts } from "../../redux/actions/carts";
-import { ImageLink } from "../../shared/funs";
-import myClassname from "classnames";
+import { decimalNumber, ImageVIEW } from "../../shared/funs";
+import myClassname from "classnames"; 
 import { Form, Formik, Field } from "formik";
 import * as yup from "yup";
 import { create_orders } from "../../redux/actions/orders";
@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { CLEAR_MESSAGE } from "../../redux/constans/message";
 import { removeLocalStorage } from "../../shared/localStorage";
 import { DELETE_CART } from "../../redux/constans/carts";
+import { Calculate } from "../../services/orders";
  
 const Checkout = () => {
     const navigate = useNavigate()
@@ -34,12 +35,14 @@ const Checkout = () => {
         }
     }, [isAuth]);
 
-
+    
 
     const [Carts, setCarts] = useState([])
     const [DonationCost, setDonationCost] = useState(0)
     const [Comment, setComment] = useState("...")
     const [Amount, setAmount] = useState(0)
+    const [Charges, setCharges] = useState(0)
+    const [currentAddress, setCurrentAddress] = useState("new")
 
     const { carts } = useSelector(state => state.carts)
     const { loading } = useSelector(state => state.loading)
@@ -56,7 +59,10 @@ const Checkout = () => {
 
     useEffect(() => {
         if (Carts && Carts.length > 0)
-        setAmount(Carts.reduce((amount, cart) => amount + cart.amount, 0))
+
+        setAmount(Carts.reduce((amount, cart) => amount + (cart.price * cart.quantity), 0))
+        setCharges(Carts.reduce((amount, cart) => amount + (cart.product.shipping.find(s => s.name === cart.shipping).price * cart.quantity) , 0));
+
     }, [Carts])
 
     useEffect(() => {
@@ -87,6 +93,8 @@ const Checkout = () => {
 
 
     const changeAddress = (type) => {
+        setCurrentAddress(type)
+
         if (type === "new") {
             setInitial({
                 firstname: "",
@@ -126,92 +134,110 @@ const Checkout = () => {
     })
 
 
-    // useEffect(() => {
-    //     if (Carts && Carts.length > 0) {
-
-    //         const shipping = ShippingCost;
-    //         const products = Carts;
-
-    //         if (window.myPaypal) { window.myPaypal.close() }
-
-    //         window.myPaypal = window.paypal.Buttons({
-
-    //             // Sets up the transaction when a payment button is clicked
-    //             createOrder: function (d , a) {
-
-    //                 if (formiRef.current.isValid) {
-
-    //                     return Calculate({ shipping, products }, authorization).then(({ data }) => {
-    //                         if (!data.err) {
-    //                             return data.msg.result.id
-    //                         } else {
-    //                             console.log("set orders api err ", data.msg);
-    //                         }
-
-    //                     }).catch(err => {
-    //                         console.log("set orders api err ", err);
-    //                     })
-
-
-    //                 }
-
-
-    //             },
-
-    //             // Finalize the transaction after payer approval
-    //             onApprove: function (data, actions) {
-    //                 return actions.order.capture().then(function (orderData) {
-
-    //                     if (formiRef.current.isValid) {
-    //                         const transaction = orderData.purchase_units[0].payments.captures[0];
-
-    //                         const { firstname, lastname, email, phone, address, country, city, postcode, state } = formiRef.current.values;
-    //                         const comment = Comment;
-    //                         const transactionId = transaction.id;
-    //                         const transactionState = transaction.status;
-
-    //                         dispatch(create_orders(user._id, firstname, lastname, email, phone, address,
-    //                             country, city, postcode, state, comment, shipping, products, 
-    //                             transactionId , transactionState , authorization))
-    //                          alert("your payment was successful please check your orders")
-    //                    }else{
-    //                          alert("your payment was not successful please try again")
-
-    //                    }
-
-    //                 });
-    //             }
-    //         })
-
-    //         window.myPaypal.render('#paypal-button-container');
-    //     }
-
-    // }, [Carts, ShippingCost])
-
-    const orderOrder = () => {
-        if (Carts && Carts.length > 0 && formiRef.current.isValid) {
+    useEffect(() => {
+        if (Carts && Carts.length > 0) {
 
             const donation = DonationCost;
             const products = Carts;
 
-            const transaction = {id : "123" , status : "none"}
+            if (window.myPaypal) { window.myPaypal.close() }
 
-            const { firstname, lastname, email, phone, address, country, city, postcode, state } = formiRef.current.values;
-            const comment = Comment;
-            const transactionId = transaction.id;
-            const transactionState = transaction.status;
+            window.myPaypal = window.paypal.Buttons({
 
-            dispatch(create_orders(user._id, firstname, lastname, email, phone, address,
-                country, city, postcode, state, comment, donation, products, 
-                transactionId , transactionState , authorization))
+                // Sets up the transaction when a payment button is clicked
+                createOrder: function (d , a) {
 
-                toast.success(t("your payment was successful please check your orders"))
-                removeLocalStorage("cart")
-                dispatch({type : DELETE_CART})
-                navigate("/profile")
+                    if (formiRef.current.isValid) {
 
+                        return Calculate({ donation , products }, authorization).then(({ data }) => {
+                            if (!data.err) {
+                                return data.msg.result.id
+                            } else {
+                                console.log("set orders api err ", data.msg);
+                            }
+
+                        }).catch(err => {
+                            console.log("set orders api err ", err);
+                        })
+
+
+                    }else {
+                        toast.info(t("please enter your shipping address"))
+
+                    }
+
+
+                },
+
+                // Finalize the transaction after payer approval
+                onApprove: function (data, actions) {
+                    return actions.order.capture().then(function (orderData) {
+
+                    if (formiRef.current.isValid) {
+
+                             const transaction = orderData.purchase_units[0].payments.captures[0];
+
+                            const { firstname, lastname, email, phone, address, country, city, postcode, state } = formiRef.current.values;
+                            const comment = Comment;
+                            const transactionId = transaction.id;
+                            const transactionState = transaction.status;
+
+                    
+
+                            dispatch(create_orders(user._id, firstname, lastname, email, phone, address,
+                                country, city, postcode, state, comment, donation, products, 
+                                transactionId , transactionState , authorization))
+
+                            toast.success(t("your payment was successful please check your orders"))
+                            removeLocalStorage("cart")
+                            dispatch({type : DELETE_CART})
+                            navigate("/profile")
+
+                       }else{
+                             toast.info("your payment was not successful please try again")
+                       }
+
+                    });
+                }
+            })
+
+            window.myPaypal.render('#paypal-button-container');
         }
-    }
+        
+        // else if(carts && Carts && Carts.length === 0){
+        //     toast.info(t("There is no product in the cart"))
+        // }
+
+
+    }, [Carts, DonationCost])
+
+    // const orderOrder = () => {
+    //     if (!Carts || Carts.length === 0){
+    //         toast.info(t("There is no product in the cart"))
+    //     }else if( formiRef.current.isValid) {
+    //         toast.info(t("please enter your shipping address"))
+    //     }else{
+    //         const donation = DonationCost;
+    //         const products = Carts;
+
+    //         const transaction = {id : "123" , status : "none"}
+
+    //         const { firstname, lastname, email, phone, address, country, city, postcode, state } = formiRef.current.values;
+    //         const comment = Comment;
+    //         const transactionId = transaction.id;
+    //         const transactionState = transaction.status;
+
+    //         dispatch(create_orders(user._id, firstname, lastname, email, phone, address,
+    //             country, city, postcode, state, comment, donation, products, 
+    //             transactionId , transactionState , authorization))
+
+    //             toast.success(t("your payment was successful please check your orders"))
+    //             removeLocalStorage("cart")
+    //             dispatch({type : DELETE_CART})
+    //             navigate("/profile")
+    //     }
+
+    // }
 
     return (
         // <!-- Start checkout page -->
@@ -226,7 +252,7 @@ const Checkout = () => {
                     <div className="ec-checkout-leftside col-lg-8 col-md-12 ">
                         {/* <!-- checkout content Start --> */}
                         <div className="ec-checkout-content">
-                            <div className="ec-checkout-inner">
+                            <div className="ec-checkout-inner"> 
 
                                 <div className="ec-checkout-wrap margin-bottom-30 padding-bottom-3">
                                     
@@ -236,11 +262,11 @@ const Checkout = () => {
                                             <div className="ec-check-subtitle">{t("Checkout Options")}</div>
                                             <span className="ec-bill-option">
                                                 <span>
-                                                    <input type="radio" id="bill1" name="radio-group" onClick={() => { changeAddress("exist") }} />
+                                                    <input type="radio" id="bill1" name="address" checked={currentAddress === "old"} onClick={() => { changeAddress("old") }} />
                                                     <label htmlFor="bill1">{t("I want to use an existing address")}</label>
                                                 </span>
                                                 <span>
-                                                    <input type="radio" id="bill2" name="radio-group" onClick={() => { changeAddress("new") }} defaultChecked="" />
+                                                    <input type="radio" id="bill2" name="address" checked={currentAddress === "new"} onClick={() => { changeAddress("new") }}  />
                                                     <label htmlFor="bill2">{t("I want to use new address")}</label>
                                                 </span>
                                             </span>
@@ -335,8 +361,8 @@ const Checkout = () => {
 
                                 </div>
                                 <span className="ec-check-order-btn">
-                                    <button className="btn btn-primary" type="button" form="addressform" onClick={orderOrder}>{t("Place Order")}</button>
-                                    {/* <div id="paypal-button-container" style={{width : "100%"}}></div> */}
+                                    {/* <button className="btn btn-primary" type="button" form="addressform" onClick={orderOrder}>{t("Place Order")}</button> */}
+                                    <div id="paypal-button-container" style={{width : "100%"}}></div>
                                 </span>
                             </div>
                         </div>
@@ -355,16 +381,16 @@ const Checkout = () => {
 
                                         <div>
                                             <span className="text-left">{t("Sub-Total")}</span>
-                                            <span className="text-right">${Amount}</span>
+                                            <span className="text-right">${decimalNumber(Amount)}</span>
                                         </div>
                                         <div>
                                             <span className="text-left">{t("Delivery Chargesr")}</span>
-                                            <span className="text-right">${DonationCost}</span>
+                                            <span className="text-right">${decimalNumber(Charges)}</span>
                                         </div>
 
                                         <div className="ec-checkout-summary-total">
                                             <span className="text-left">{t("Total Amount")}</span>
-                                            <span className="text-right">${DonationCost + Amount}</span>
+                                            <span className="text-right">${decimalNumber(DonationCost + (Charges + Amount) )}</span>
                                         </div>
                                     </div>
                                     <div className="ec-checkout-pro">
@@ -376,7 +402,7 @@ const Checkout = () => {
                                                 if(!cart.product || !cart.product.images || !cart.product.images[0]){
                                                     img = "https://via.placeholder.com/500"
                                                 }else {
-                                                img = ImageLink(cart.product.images[0])
+                                                img = ImageVIEW(cart.product.images[0])
                                                 }
 
                                                 return (
@@ -403,7 +429,7 @@ const Checkout = () => {
 
                                                                 <span className="ec-price">
                                                                     {cart.product.oldprice && <span className="old-price">${cart.product.oldprice}</span>}
-                                                                    <span className="new-price">${cart.amount}</span>
+                                                                    <span className="new-price">${decimalNumber(cart.amount)}</span>
                                                                 </span>
                                                                 <div className="ec-pro-option">
                                                                     <div className="ec-pro-color">
@@ -425,7 +451,7 @@ const Checkout = () => {
 
                                                                             {cart.product.size.map((size, si) => {
                                                                                 return (
-                                                                                    <li key={si} className={myClassname({ "active": size.size == cart.size })}><a href="javascript:void(0);" className="ec-opt-sz" >{size.size}</a></li>
+                                                                                    <li key={si} className={myClassname({ "active": size.size == cart.size })}><a href="javascript:void(0);" className="ec-opt-sz" style={{height :"auto"}}>{size.size}</a></li>
                                                                                 )
                                                                             })}
 
@@ -433,12 +459,12 @@ const Checkout = () => {
                                                                     </div>
 
                                                                     <div className="ec-pro-size">
-                                                                        <span className="ec-pro-opt-label">{t("Size")}</span>
+                                                                        <span className="ec-pro-opt-label">{t("Shipping")}</span>
                                                                         <ul className="ec-opt-size">
 
                                                                             {cart.product.shipping.map((shipping, si) => {
                                                                                 return (
-                                                                                    <li key={si} className={myClassname({ "active": shipping.name === cart.shipping })}><a href="javascript:void(0);" className="ec-opt-sz" >{shipping.name}</a></li>
+                                                                                    <li key={si} className={myClassname({ "active": shipping.name === cart.shipping })}><a href="javascript:void(0);" className="ec-opt-sz" style={{height :"auto"}}>{shipping.name}</a></li>
                                                                                 )
                                                                             })}
 
@@ -466,7 +492,7 @@ const Checkout = () => {
                             {/* <!-- Sidebar Summary Block --> */}
                             <div className="ec-sidebar-block">
                                 <div className="ec-sb-title">
-                                    <h3 className="ec-sidebar-title">{t("Delivery Method")}<div className="ec-sidebar-res"><i className="ecicon eci-angle-down"></i></div></h3>
+                                    <h3 className="ec-sidebar-title">{t("Donation")}<div className="ec-sidebar-res"><i className="ecicon eci-angle-down"></i></div></h3>
                                 </div>
                                 <div className="ec-sb-block-content ec-sidebar-dropdown">
                                     <div className="ec-checkout-del">
@@ -475,14 +501,15 @@ const Checkout = () => {
 
                                             <span>
                                                 <span className="ec-del-opt-head">{t("I will not donate")}</span>
-                                                <input type="radio" id="del1" name="radio-group" onClick={() => { setDonationCost(0) }} />
+                                                <input type="radio" id="del1" name="donation" checked={DonationCost === 0} onClick={() => { setDonationCost(0) }} />
                                                 <label htmlFor="del1">$0 .00</label>
                                             </span>
                                             <span>
                                                 <span className="ec-del-opt-head">{t("I will donate")}</span>
-                                                <input type="radio" id="del2" name="radio-group" onClick={() => { setDonationCost(5) }} />
+                                                <input type="radio" id="del2" name="donation" checked={DonationCost === 5}  onClick={() => { setDonationCost(5) }} />
                                                 <label htmlFor="del2">$5.00</label>
                                             </span>
+
                                         </span>
 
                                     </div>

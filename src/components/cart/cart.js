@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { get_carts, increase_carts, decrease_carts, delete_carts,  color_carts, size_carts, shipping_carts } from "../../redux/actions/carts";
-import { ImageLink ,extractDesk } from "../../shared/funs";
+import { ImageVIEW ,extractDesk, decimalNumber } from "../../shared/funs";
 import { toast } from "react-toastify";
 import { isAuthentication } from "../../redux/actions/auth";
 import * as moment from 'moment';
@@ -41,7 +41,6 @@ const Cart = () => {
 
     const removeProduct = (id) => {
         dispatch(delete_carts(id))
-        toast.info(t("Removed"))
     }
     const changeColor = (id , color) => {
        dispatch(color_carts(id , color))
@@ -51,10 +50,10 @@ const Cart = () => {
         dispatch(size_carts(id , size , price))
     }
 
-    
+     
     const changeShipping = (id , shipping) => {
         dispatch(shipping_carts(id , shipping))
-    }
+    } 
 
     const toggleCoupan = () => {
       document.querySelector(".ec-cart-coupan-content").classList.toggle("show")
@@ -62,13 +61,17 @@ const Cart = () => {
 
     const submitCoupan = (e) => {
         e.preventDefault()
-        toast.info("there is no coupon")
-      }; 
+        toast.info(t("this coupon is not valid at the moment"))
+    }; 
+
+
+
+
 
     return (
 
         // <!-- Start cart page -->
-        <section className="ec-page-content section-space-p">
+        <section className="ec-page-content section-space-p" >
             <div className="container">
                 <div className="row">
                     <div className="ec-cart-leftside col-lg-8 col-md-12 ">
@@ -76,13 +79,14 @@ const Cart = () => {
                         <div className="ec-cart-content">
                             <div className="ec-cart-inner">
                                 <div className="row">
-                                    <form action="#">
+                                    <form action="#" style={{position : "relative"}}>
 
-                                        <div className="table-content cart-table-content" style={{overflowX: "scroll" , overflowY : "visible" , maxWidth: "100%"}}>
+                                        <div className="table-content cart-table-content" style={{overflowX: "scroll" , overflowY : "visible"  , maxWidth: "100%" }}>
                                             <table>
                                                 <thead>
                                                     <tr>
                                                         <th>{t("Product")}</th>
+                                                        <th></th>
                                                         <th></th>
                                                         <th></th>
                                                         <th>{t("Price")}</th>
@@ -103,22 +107,22 @@ const Cart = () => {
                                                     if(!cart.product || !cart.product.images || !cart.product.images[0]){
                                                         img = "https://via.placeholder.com/500"
                                                     }else {
-                                                    img = ImageLink(cart.product.images[0])
+                                                    img = ImageVIEW(cart.product.images[0])
                                                     }  
 
                                                     return (
 
                                                         <tr key={oi}>
-                                                            <td data-label={t("Product")} className="ec-cart-pro-name" colSpan="3">
+                                                            <td data-label={t("Product")} className="ec-cart-pro-name" colSpan="4">
                                                                 <Link to={`/product/${cart.product.categoty}/${cart.product._id}`}>
                                                                     <img className="ec-cart-pro-img mr-4" src={img} alt="" />
                                                                       {extractDesk(cart.product.name , 10) }</Link>
                                                                     </td>
 
-                                                            <td data-label={t("Price")} className="ec-cart-pro-price">{isAuth && <span className="amount">${cart.price}</span>}</td>
+                                                            <td data-label={t("Price")} className="ec-cart-pro-price">{(isAuth || !isAuth) && <span className="amount">${cart.price}</span>}</td>
 
                                                           
-                                                            <td data-label={t("Size")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
+                                                            <td data-label={t("Size")} className="ec-cart-pro-qty" style={{ textAlign: "center" }}>
 
                                                                 <button className="dropdown-toggle" data-bs-toggle="dropdown">
                                                                    {cart.size}
@@ -135,18 +139,20 @@ const Cart = () => {
 
                                                             </td>
 
-                                                            <td data-label={t("Color")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
+                                                            <td data-label={t("Color")} className="ec-cart-pro-qty" style={{ textAlign: "center" }}>
 
                                                                 <button className="dropdown-toggle" data-bs-toggle="dropdown">
-                                                                {/* { typeof cart.color === "undefined" ? (t("Default")) : ntc.name(cart.color)[2] ? ntc.name(cart.color)[1] : ntc.name(cart.color)[0] } */}
-                                                                { typeof cart.color === "undefined" ? (t("Default")) : ntc.name(cart.color)[1] }
+                                                                { typeof cart.color === "undefined" ? (t("Default")) : ntc.name(cart.color)[2] ? ntc.name(cart.color)[1] : ntc.name(cart.color)[0] }
+                                                                {/* { typeof cart.color === "undefined" ? (t("Default")) : ntc.name(cart.color)[1] } */}
                                                                 </button>
                                                                             
                                                                 <ul className="dropdown-menu dropdown-menu-right">
                                                                     {cart.product.color.length > 0 && cart.product.color.map((color , ci) => {
                                                                        
                                                                             return (
-                                                                                <li key={ci}><a style={{backgroundColor : color }}  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeColor(cart.product._id , color) }}>{ntc.name(color)[1] }</a> </li>
+                                                                                <li key={ci}><a style={{backgroundColor : color }}  className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeColor(cart.product._id , color) }}>
+                                                                                    { typeof color === "undefined" ? (t("Default")) : ntc.name(color)[2] ? ntc.name(color)[1] : ntc.name(color)[0] }
+                                                                                </a> </li>
                                                                             )
                                                                         })}
 
@@ -154,7 +160,7 @@ const Cart = () => {
 
                                                                 </td>
 
-                                                            <td data-label={t("Shipping")} className="ec-cart-pro-qty dropdown" style={{ textAlign: "center" }}>
+                                                            <td data-label={t("Shipping")} className="ec-cart-pro-qty" style={{ textAlign: "center" , position : "" }}>
 
                                                                 <button className="dropdown-toggle" data-bs-toggle="dropdown">
                                                                     {(cart.shipping)}
@@ -165,10 +171,10 @@ const Cart = () => {
 
                                                                         const now = new Date()
 
-                                                                        const from = moment(now).add(shipping.from, "days").format("LL")
-                                                                        const to = moment(now).add(shipping.to, "days").format("LL")
+                                                                        const from = moment(now).add(shipping.from, "days").format("MMM Do YY")
+                                                                        const to = moment(now).add(shipping.to, "days").format("MMM Do YY")
 
-                                                                        const info = `(${shipping.name} cost : $${shipping.price}) between ${from} and : ${to}`
+                                                                        const info = <> ({(shipping.name.length > 30) ? shipping.name.substr(0 , 30) + ".." : shipping.name} cost : <span style={{color : "red"}}>${shipping.price}</span>) bwn <span style={{color : "red"}}>{from}</span> and : <span style={{color : "red"}}>{to}</span> </>
 
                                                                         return (
                                                                             <li key={si}><a className="dropdown-item" href="javascript:void(0);" onClick={(e) => { changeShipping(cart.product._id, shipping) }}>{info}</a> </li>
@@ -191,14 +197,14 @@ const Cart = () => {
                                                                 </div>
                                                             </td>
 
-                                                            <td data-label={t("Total")} className="ec-cart-pro-subtotal">${isAuth && cart.amount}</td>
+                                                            <td data-label={t("Total")} className="ec-cart-pro-subtotal">${(isAuth || !isAuth) && decimalNumber(cart.amount) }</td>
                                                             <td data-label={t("Remove")} className="ec-cart-pro-remove" style={{ textAlign: "center" }}>
                                                                 <a href="javascript:void(0);" onClick={() => { removeProduct(cart.product._id) }}><i className="fa-solid fa-xmark"></i></a>
                                                             </td>
                                                         </tr>
                                                     
                                                         )
-                                                    })
+                                                    }) 
 
                                                   }
                                                 </tbody>
@@ -236,32 +242,34 @@ const Cart = () => {
                                         <div className="ec-cart-summary">
                                             {Carts && Carts.length > 0  &&
 
-                                                <>
+                                                <> 
 
-                                                    <div>
+                                                    <div> 
                                                         <span className="text-left">{t("Sub-Total")}</span>
-                                                        <span className="text-right">${ isAuth &&
-                                                            Carts.reduce((amount, cart) => amount + cart.amount, 0)
+                                                        <span className="text-right">${ (isAuth || !isAuth) &&
+                                                          decimalNumber(Carts.reduce((amount, cart) => amount + cart.amount, 0))  
                                                         }</span>
                                                     </div>
 
                                                     <div>
                                                         <span className="text-left">{t("Coupan Discount")}</span>
-                                                        <span className="text-right"><a className="ec-cart-coupan" onClick={toggleCoupan}>Apply Coupan</a></span>
+                                                        <span className="text-right"><a className="ec-cart-coupan" onClick={toggleCoupan}>{t("Apply Coupan")}</a></span>
                                                     </div>
+
                                                     <div className="ec-cart-coupan-content">
                                                         <form className="ec-cart-coupan-form" name="ec-cart-coupan-form" onSubmit={(e) => submitCoupan(e)}>
                                                             <input className="ec-coupan" type="text" required=""
-                                                                placeholder="Enter Your Coupan Code" name="ec-coupan"
+                                                                placeholder={t("Enter Your Coupan Code")} name="ec-coupan"
                                                                 value={coupon} onChange={(e) => setCoupon(e.target.value)} />
                                                             <button className="ec-coupan-btn button btn-primary" type="submit"
-                                                                name="subscribe" >Apply</button>
+                                                                name="subscribe" >{t("Apply")}</button>
                                                         </form>
                                                     </div>
+
                                                     <div className="ec-cart-summary-total">
                                                         <span className="text-left">{t("Total Amount")}</span>
-                                                        <span className="text-right">${ isAuth &&
-                                                            Carts.reduce((amount, cart) => amount + cart.amount, 0)
+                                                        <span className="text-right">${ (isAuth || !isAuth) &&
+                                                          decimalNumber(Carts.reduce((amount, cart) => amount + cart.amount, 0))  
                                                         }</span>
                                                     </div></>
 

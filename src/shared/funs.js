@@ -1,10 +1,10 @@
-import { Host } from "../common/apiEndPoints"
+import { ApiEndpoints, Host } from "../common/apiEndPoints"
 
 const calculateRating = (rates , multi = true) => {
     if(!rates || rates.length == 0){
         return ["fas fa-star", "fas fa-star", "fas fa-star", "fas fa-star", "fas fa-star"]
     }
-
+ 
     let stars
 
    if(multi){
@@ -27,9 +27,15 @@ const calculateRating = (rates , multi = true) => {
 
 }
 
-const ImageLink = (img) => {
-    return `${Host.BACKEND}${Host.PREFIX}/file/get-single-image/${img}/view`
+//ImageLink
+const ImageVIEW = (img) => {
+    return `${Host.BACKEND}${ApiEndpoints.FileEndpoints.route}${ApiEndpoints.FileEndpoints.getSingleFileView}/${img}/view`
 }
+
+const ImageDOWNLOAD = (img) => {
+    return `${Host.BACKEND}${ApiEndpoints.FileEndpoints.route}${ApiEndpoints.FileEndpoints.getSingleFileDownload}/${img}/download`
+}
+
 
 const countDown = (end) => {
     var today = new Date().getTime();
@@ -83,5 +89,19 @@ const extractDesk = (desk , length) => {
     }
 }
 
+function makeId(length) {
+    var result = '';
+    var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
-export {calculateRating , ImageLink , countDown , handleColor , handleSize , extractDesk}  
+    var charactersLength = characters.length;
+
+    for (var i = 0; i < length; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
+
+const decimalNumber = number => Number.isInteger(number) ? number : parseFloat(number.toFixed(2)) 
+
+export {calculateRating , ImageVIEW  , ImageDOWNLOAD , countDown , handleColor , handleSize , extractDesk , decimalNumber , makeId}  
